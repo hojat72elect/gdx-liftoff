@@ -1,5 +1,20 @@
 package gdx.liftoff.ui;
 
+import static com.badlogic.gdx.math.Interpolation.exp5;
+import static com.badlogic.gdx.scenes.scene2d.actions.Actions.delay;
+import static com.badlogic.gdx.scenes.scene2d.actions.Actions.fadeIn;
+import static com.badlogic.gdx.scenes.scene2d.actions.Actions.fadeOut;
+import static com.badlogic.gdx.scenes.scene2d.actions.Actions.parallel;
+import static com.badlogic.gdx.scenes.scene2d.actions.Actions.run;
+import static com.badlogic.gdx.scenes.scene2d.actions.Actions.sequence;
+import static com.badlogic.gdx.scenes.scene2d.actions.Actions.targeting;
+import static com.badlogic.gdx.scenes.scene2d.actions.Actions.visible;
+import static gdx.liftoff.Main.ROOT_TABLE_PREF_HEIGHT;
+import static gdx.liftoff.Main.ROOT_TABLE_PREF_WIDTH;
+import static gdx.liftoff.Main.SPACE_LARGE;
+import static gdx.liftoff.Main.resizingWindow;
+import static gdx.liftoff.Main.stage;
+
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -8,20 +23,22 @@ import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Array;
-import gdx.liftoff.ui.liftofftables.*;
 
-import static com.badlogic.gdx.math.Interpolation.exp5;
-import static com.badlogic.gdx.scenes.scene2d.actions.Actions.*;
-import static gdx.liftoff.Main.*;
+import gdx.liftoff.ui.liftofftables.AddOnsTable;
+import gdx.liftoff.ui.liftofftables.CompleteTable;
+import gdx.liftoff.ui.liftofftables.LandingTable;
+import gdx.liftoff.ui.liftofftables.LiftoffTable;
+import gdx.liftoff.ui.liftofftables.SettingsTable;
+import gdx.liftoff.ui.liftofftables.ThirdPartyTable;
 
 public class RootTable extends Table {
     private final Array<LiftoffTable> tables;
-    private int tableIndex;
     public LandingTable landingTable;
     public AddOnsTable addOnsTable;
     public ThirdPartyTable thirdPartyTable;
     public SettingsTable settingsTable;
     public CompleteTable completeTable;
+    private int tableIndex;
 
     public RootTable() {
         tables = new Array<>();
@@ -95,20 +112,20 @@ public class RootTable extends Table {
         float distance = rightToLeftTransition ? stage.getWidth() : -stage.getWidth();
 
         addAction(sequence(
-            //setup on first frame
-            targeting(newTable, Actions.moveBy(distance, 0)),
-            //move the tables horizontally
-            parallel(
-                targeting(table, Actions.moveBy(-distance, 0, .7f, exp5)),
-                targeting(newTable, Actions.moveBy(-distance, 0, .7f, exp5))
-            ),
-            //remove the old table
-            targeting(table, Actions.removeActor()),
-            //enable input on the new table
-            run(() -> {
-                newTable.setTouchable(Touchable.childrenOnly);
-                newTable.captureKeyboardFocus();
-            })
+                //setup on first frame
+                targeting(newTable, Actions.moveBy(distance, 0)),
+                //move the tables horizontally
+                parallel(
+                        targeting(table, Actions.moveBy(-distance, 0, .7f, exp5)),
+                        targeting(newTable, Actions.moveBy(-distance, 0, .7f, exp5))
+                ),
+                //remove the old table
+                targeting(table, Actions.removeActor()),
+                //enable input on the new table
+                run(() -> {
+                    newTable.setTouchable(Touchable.childrenOnly);
+                    newTable.captureKeyboardFocus();
+                })
         ));
     }
 
@@ -138,17 +155,17 @@ public class RootTable extends Table {
         LiftoffTable table = tables.get(tableIndex);
         table.finishAnimation();
         table.addAction(sequence(
-            fadeOut(.5f),
-            visible(false)
+                fadeOut(.5f),
+                visible(false)
         ));
     }
 
     public void fadeInTable() {
         Table table = tables.get(tableIndex);
         table.addAction(sequence(
-            delay(.1f),
-            visible(true),
-            fadeIn(.5f)
+                delay(.1f),
+                visible(true),
+                fadeIn(.5f)
         ));
     }
 }

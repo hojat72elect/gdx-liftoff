@@ -1,13 +1,15 @@
 package gdx.liftoff.ui.panels;
 
+import static gdx.liftoff.Main.SPACE_HUGE;
+import static gdx.liftoff.Main.prop;
+import static gdx.liftoff.Main.skin;
+
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.Align;
 import com.ray3k.stripe.CollapsibleGroup;
 import com.ray3k.stripe.CollapsibleGroup.CollapseType;
-
-import static gdx.liftoff.Main.*;
 
 /**
  * The loading animation displayed before the project is generated

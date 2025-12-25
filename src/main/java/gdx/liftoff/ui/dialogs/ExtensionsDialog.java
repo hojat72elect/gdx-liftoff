@@ -1,11 +1,31 @@
 package gdx.liftoff.ui.dialogs;
 
+import static gdx.liftoff.Main.SPACE_HUGE;
+import static gdx.liftoff.Main.SPACE_LARGE;
+import static gdx.liftoff.Main.SPACE_MEDIUM;
+import static gdx.liftoff.Main.SPACE_SMALL;
+import static gdx.liftoff.Main.addHandListener;
+import static gdx.liftoff.Main.addLabelHighlight;
+import static gdx.liftoff.Main.addScrollFocusListener;
+import static gdx.liftoff.Main.flushPref;
+import static gdx.liftoff.Main.onChange;
+import static gdx.liftoff.Main.pref;
+import static gdx.liftoff.Main.prop;
+import static gdx.liftoff.Main.skin;
+import static gdx.liftoff.Main.stage;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Event;
-import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.scenes.scene2d.ui.Button;
+import com.badlogic.gdx.scenes.scene2d.ui.CheckBox;
+import com.badlogic.gdx.scenes.scene2d.ui.Container;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Window.WindowStyle;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Scaling;
@@ -13,9 +33,8 @@ import com.ray3k.stripe.CollapsibleGroup;
 import com.ray3k.stripe.CollapsibleGroup.CollapseType;
 import com.ray3k.stripe.PopTable;
 import com.ray3k.stripe.ScaleContainer;
-import gdx.liftoff.ui.UserData;
 
-import static gdx.liftoff.Main.*;
+import gdx.liftoff.ui.UserData;
 
 /**
  * The extensions dialog displayed when the user clicks the extensions list in the add-ons panel.
@@ -51,6 +70,26 @@ public class ExtensionsDialog extends PopTable {
             add(contentTable);
             populate(contentTable);
         }
+    }
+
+    /**
+     * Convenience method to display the dialog on the stage
+     */
+    public static void show(boolean fullscreen, Runnable onHideRunnable) {
+        ExtensionsDialog dialog = new ExtensionsDialog(fullscreen);
+        dialog.setFillParent(fullscreen);
+        dialog.addListener(new PopTable.TableShowHideListener() {
+            @Override
+            public void tableHidden(Event event) {
+                onHideRunnable.run();
+            }
+
+            @Override
+            public void tableShown(Event event) {
+
+            }
+        });
+        dialog.show(stage);
     }
 
     private void populate(Table contentTable) {
@@ -170,25 +209,5 @@ public class ExtensionsDialog extends PopTable {
         subTable.add(button);
         addHandListener(button);
         onChange(button, () -> Gdx.net.openURI(url));
-    }
-
-    /**
-     * Convenience method to display the dialog on the stage
-     */
-    public static void show(boolean fullscreen, Runnable onHideRunnable) {
-        ExtensionsDialog dialog = new ExtensionsDialog(fullscreen);
-        dialog.setFillParent(fullscreen);
-        dialog.addListener(new PopTable.TableShowHideListener() {
-            @Override
-            public void tableHidden(Event event) {
-                onHideRunnable.run();
-            }
-
-            @Override
-            public void tableShown(Event event) {
-
-            }
-        });
-        dialog.show(stage);
     }
 }

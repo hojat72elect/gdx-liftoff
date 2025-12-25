@@ -1,5 +1,10 @@
 package gdx.liftoff.ui;
 
+import static gdx.liftoff.Main.SPACE_MEDIUM;
+import static gdx.liftoff.Main.addTooltip;
+import static gdx.liftoff.Main.prop;
+import static gdx.liftoff.Main.skin;
+
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Container;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -9,8 +14,6 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Scaling;
 import com.ray3k.stripe.CollapsibleGroup;
 import com.ray3k.stripe.CollapsibleGroup.CollapseType;
-
-import static gdx.liftoff.Main.*;
 
 /**
  * A table containing the logo image and version. It is resizable, hiding elements as necessary to fit in smaller

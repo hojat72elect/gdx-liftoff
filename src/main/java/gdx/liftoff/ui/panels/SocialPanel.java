@@ -1,11 +1,16 @@
 package gdx.liftoff.ui.panels;
 
+import static gdx.liftoff.Main.SPACE_MEDIUM;
+import static gdx.liftoff.Main.addHandListener;
+import static gdx.liftoff.Main.addTooltip;
+import static gdx.liftoff.Main.onChange;
+import static gdx.liftoff.Main.prop;
+import static gdx.liftoff.Main.skin;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.utils.Align;
-
-import static gdx.liftoff.Main.*;
 
 /**
  * A table to display libGDX related links including libgdx.com, Discord, the wiki, and a recommended JDK.

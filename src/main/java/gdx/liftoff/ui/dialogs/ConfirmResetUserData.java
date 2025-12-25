@@ -1,5 +1,20 @@
 package gdx.liftoff.ui.dialogs;
 
+import static com.badlogic.gdx.scenes.scene2d.actions.Actions.alpha;
+import static com.badlogic.gdx.scenes.scene2d.actions.Actions.fadeIn;
+import static com.badlogic.gdx.scenes.scene2d.actions.Actions.sequence;
+import static gdx.liftoff.Main.SPACE_HUGE;
+import static gdx.liftoff.Main.SPACE_LARGE;
+import static gdx.liftoff.Main.addHandListener;
+import static gdx.liftoff.Main.onChange;
+import static gdx.liftoff.Main.prop;
+import static gdx.liftoff.Main.resetUserData;
+import static gdx.liftoff.Main.root;
+import static gdx.liftoff.Main.skin;
+import static gdx.liftoff.Main.stage;
+import static gdx.liftoff.ui.dialogs.FullscreenCompleteDialog.fullscreenCompleteDialog;
+import static gdx.liftoff.ui.dialogs.FullscreenDialog.fullscreenDialog;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.scenes.scene2d.Action;
@@ -9,12 +24,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Window.WindowStyle;
 import com.ray3k.stripe.PopTable;
-import gdx.liftoff.Main;
-
-import static com.badlogic.gdx.scenes.scene2d.actions.Actions.*;
-import static gdx.liftoff.Main.*;
-import static gdx.liftoff.ui.dialogs.FullscreenCompleteDialog.*;
-import static gdx.liftoff.ui.dialogs.FullscreenDialog.*;
 
 public class ConfirmResetUserData extends PopTable {
     public ConfirmResetUserData() {
@@ -46,6 +55,12 @@ public class ConfirmResetUserData extends PopTable {
         key(Keys.ESCAPE, this::cancel);
     }
 
+    public static void showDialog() {
+        stage.setKeyboardFocus(null);
+        ConfirmResetUserData pop = new ConfirmResetUserData();
+        pop.show(stage);
+    }
+
     private void resetConfirmed() {
         hide();
         resetUserData();
@@ -69,11 +84,5 @@ public class ConfirmResetUserData extends PopTable {
     private void cancel() {
         hide();
         root.getCurrentTable().captureKeyboardFocus();
-    }
-
-    public static void showDialog() {
-        stage.setKeyboardFocus(null);
-        ConfirmResetUserData pop = new ConfirmResetUserData();
-        pop.show(stage);
     }
 }

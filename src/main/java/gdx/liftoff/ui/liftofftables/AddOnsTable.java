@@ -1,11 +1,20 @@
 package gdx.liftoff.ui.liftofftables;
 
+import static gdx.liftoff.Main.SPACE_HUGE;
+import static gdx.liftoff.Main.SPACE_LARGE;
+import static gdx.liftoff.Main.SPACE_SMALL;
+import static gdx.liftoff.Main.addHandListener;
+import static gdx.liftoff.Main.addTooltip;
+import static gdx.liftoff.Main.onChange;
+import static gdx.liftoff.Main.prop;
+import static gdx.liftoff.Main.root;
+import static gdx.liftoff.Main.skin;
+
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.utils.Align;
-import gdx.liftoff.ui.panels.AddOnsPanel;
 
-import static gdx.liftoff.Main.*;
+import gdx.liftoff.ui.panels.AddOnsPanel;
 
 /**
  * This table displays the AddOnsPanel for display in the normal view

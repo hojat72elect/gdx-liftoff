@@ -1,24 +1,47 @@
 package gdx.liftoff.ui.dialogs;
 
+import static com.badlogic.gdx.scenes.scene2d.actions.Actions.fadeOut;
+import static com.badlogic.gdx.scenes.scene2d.actions.Actions.run;
+import static com.badlogic.gdx.scenes.scene2d.actions.Actions.sequence;
+import static gdx.liftoff.Main.SPACE_HUGE;
+import static gdx.liftoff.Main.SPACE_LARGE;
+import static gdx.liftoff.Main.SPACE_MEDIUM;
+import static gdx.liftoff.Main.SPACE_SMALL;
+import static gdx.liftoff.Main.addHandListener;
+import static gdx.liftoff.Main.addScrollFocusListener;
+import static gdx.liftoff.Main.addTooltip;
+import static gdx.liftoff.Main.latestStableVersion;
+import static gdx.liftoff.Main.onChange;
+import static gdx.liftoff.Main.prop;
+import static gdx.liftoff.Main.skin;
+import static gdx.liftoff.Main.stage;
+import static gdx.liftoff.Main.validateUserData;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.Action;
-import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.scenes.scene2d.ui.Button;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.Value;
 import com.badlogic.gdx.scenes.scene2d.ui.Window.WindowStyle;
 import com.badlogic.gdx.utils.Align;
-import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Scaling;
 import com.ray3k.stripe.CollapsibleGroup;
 import com.ray3k.stripe.CollapsibleGroup.CollapseType;
 import com.ray3k.stripe.PopTable;
 import com.ray3k.stripe.ScaleContainer;
-import gdx.liftoff.Main;
-import gdx.liftoff.ui.LogoWidget;
-import gdx.liftoff.ui.panels.*;
 
 import java.util.ArrayList;
 
-import static com.badlogic.gdx.scenes.scene2d.actions.Actions.*;
-import static gdx.liftoff.Main.*;
+import gdx.liftoff.Main;
+import gdx.liftoff.ui.LogoWidget;
+import gdx.liftoff.ui.panels.AddOnsPanel;
+import gdx.liftoff.ui.panels.PathsPanel;
+import gdx.liftoff.ui.panels.ProjectPanel;
+import gdx.liftoff.ui.panels.SettingsPanel;
+import gdx.liftoff.ui.panels.ThirdPartyPanel;
 
 /**
  * Dialog shown when in fullscreen layout mode. This includes all the panels at once. The layout scales up if the
@@ -29,7 +52,7 @@ public class FullscreenDialog extends PopTable {
     private final ArrayList<TextButton> generateButtons = new ArrayList<>();
     private final ArrayList<Table> versionTables = new ArrayList<>();
     private final ArrayList<PathsPanel> pathsPanel = new ArrayList<>();
-  
+
     public FullscreenDialog() {
         super(skin.get("fullscreen", WindowStyle.class));
         fullscreenDialog = this;
@@ -37,6 +60,11 @@ public class FullscreenDialog extends PopTable {
         pad(SPACE_LARGE);
 
         populate();
+    }
+
+    public static void show() {
+        FullscreenDialog fullscreenDialog = new FullscreenDialog();
+        fullscreenDialog.show(stage);
     }
 
     public void populate() {
@@ -146,11 +174,11 @@ public class FullscreenDialog extends PopTable {
         addHandListener(generateButton);
         addTooltip(generateButton, Align.top, prop.getProperty("generateTip"));
         onChange(generateButton, () -> hide(sequence(
-            fadeOut(.3f),
-            run(() -> {
-                Main.generateProject();
-                FullscreenCompleteDialog.show();
-            })
+                fadeOut(.3f),
+                run(() -> {
+                    Main.generateProject();
+                    FullscreenCompleteDialog.show();
+                })
         )));
 
         //version
@@ -186,10 +214,5 @@ public class FullscreenDialog extends PopTable {
 
     public void updatePathsError() {
         pathsPanel.forEach(PathsPanel::updateError);
-    }
-
-    public static void show() {
-        FullscreenDialog fullscreenDialog = new FullscreenDialog();
-        fullscreenDialog.show(stage);
     }
 }

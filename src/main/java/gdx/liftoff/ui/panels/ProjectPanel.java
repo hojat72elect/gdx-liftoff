@@ -1,5 +1,19 @@
 package gdx.liftoff.ui.panels;
 
+import static gdx.liftoff.Main.SPACE_MEDIUM;
+import static gdx.liftoff.Main.TOOLTIP_WIDTH_LARGE;
+import static gdx.liftoff.Main.addIbeamListener;
+import static gdx.liftoff.Main.addTooltip;
+import static gdx.liftoff.Main.flushPref;
+import static gdx.liftoff.Main.isValidClassName;
+import static gdx.liftoff.Main.isValidPackageName;
+import static gdx.liftoff.Main.isValidProjectName;
+import static gdx.liftoff.Main.onChange;
+import static gdx.liftoff.Main.pref;
+import static gdx.liftoff.Main.prop;
+import static gdx.liftoff.Main.root;
+import static gdx.liftoff.Main.skin;
+
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
@@ -7,11 +21,10 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Align;
 import com.github.tommyettinger.textra.TypingLabel;
+
 import gdx.liftoff.Main;
 import gdx.liftoff.ui.UserData;
 import gdx.liftoff.ui.dialogs.FullscreenDialog;
-
-import static gdx.liftoff.Main.*;
 
 /**
  * A table including fields for project name, package, and main class. A label displaying an applicable error message is

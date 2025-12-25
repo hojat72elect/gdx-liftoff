@@ -1,15 +1,26 @@
 package gdx.liftoff.ui.liftofftables;
 
+import static com.badlogic.gdx.scenes.scene2d.actions.Actions.delay;
+import static com.badlogic.gdx.scenes.scene2d.actions.Actions.fadeIn;
+import static com.badlogic.gdx.scenes.scene2d.actions.Actions.fadeOut;
+import static com.badlogic.gdx.scenes.scene2d.actions.Actions.sequence;
+import static com.badlogic.gdx.scenes.scene2d.actions.Actions.targeting;
+import static com.badlogic.gdx.scenes.scene2d.actions.Actions.touchable;
+import static gdx.liftoff.Main.CLEAR_WHITE;
+import static gdx.liftoff.Main.SPACE_HUGE;
+import static gdx.liftoff.Main.SPACE_LARGE;
+import static gdx.liftoff.Main.SPACE_MEDIUM;
+import static gdx.liftoff.Main.generatingProject;
+import static gdx.liftoff.Main.skin;
+
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+
 import gdx.liftoff.ui.panels.CompleteButtonsPanel;
 import gdx.liftoff.ui.panels.CompletePanel;
 import gdx.liftoff.ui.panels.GeneratingPanel;
-
-import static com.badlogic.gdx.scenes.scene2d.actions.Actions.*;
-import static gdx.liftoff.Main.*;
 
 /**
  * The final table in the workflow. An animation begins by showing the generating panel first. Then it displays the
@@ -52,20 +63,20 @@ public class CompleteTable extends LiftoffTable {
 
         //animation
         addAction(sequence(
-            delay(1f),
-            new Action() {
-                @Override
-                public boolean act(float v) {
-                    if (generatingProject) return false;
-                    else {
-                        completePanel.populate(false);
-                        return true;
+                delay(1f),
+                new Action() {
+                    @Override
+                    public boolean act(float v) {
+                        if (generatingProject) return false;
+                        else {
+                            completePanel.populate(false);
+                            return true;
+                        }
                     }
-                }
-            },
-            targeting(generatingPanel, fadeOut(.3f)),
-            targeting(completeTable, fadeIn(.3f)),
-            targeting(completeTable, touchable(Touchable.enabled))
+                },
+                targeting(generatingPanel, fadeOut(.3f)),
+                targeting(completeTable, fadeIn(.3f)),
+                targeting(completeTable, touchable(Touchable.enabled))
         ));
     }
 

@@ -1,9 +1,31 @@
 package gdx.liftoff.ui.dialogs;
 
+import static gdx.liftoff.Main.SPACE_HUGE;
+import static gdx.liftoff.Main.SPACE_LARGE;
+import static gdx.liftoff.Main.SPACE_MEDIUM;
+import static gdx.liftoff.Main.SPACE_SMALL;
+import static gdx.liftoff.Main.addHandListener;
+import static gdx.liftoff.Main.addLabelHighlight;
+import static gdx.liftoff.Main.addScrollFocusListener;
+import static gdx.liftoff.Main.addTooltip;
+import static gdx.liftoff.Main.flushPref;
+import static gdx.liftoff.Main.onChange;
+import static gdx.liftoff.Main.onClick;
+import static gdx.liftoff.Main.pref;
+import static gdx.liftoff.Main.prop;
+import static gdx.liftoff.Main.skin;
+import static gdx.liftoff.Main.stage;
+
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.scenes.scene2d.Event;
-import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.scenes.scene2d.ui.ButtonGroup;
+import com.badlogic.gdx.scenes.scene2d.ui.CheckBox;
+import com.badlogic.gdx.scenes.scene2d.ui.Container;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Window.WindowStyle;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Scaling;
@@ -11,9 +33,8 @@ import com.ray3k.stripe.CollapsibleGroup;
 import com.ray3k.stripe.CollapsibleGroup.CollapseType;
 import com.ray3k.stripe.PopTable;
 import com.ray3k.stripe.ScaleContainer;
-import gdx.liftoff.ui.UserData;
 
-import static gdx.liftoff.Main.*;
+import gdx.liftoff.ui.UserData;
 
 /**
  * The dialog shown when the user clicks the platforms list in the add-ons panel
@@ -49,6 +70,26 @@ public class PlatformsDialog extends PopTable {
             add(contentTable);
             populate(contentTable);
         }
+    }
+
+    /**
+     * Convenience method to show the table on the stage
+     */
+    public static void show(boolean fullscreen, Runnable onHideRunnable) {
+        PlatformsDialog dialog = new PlatformsDialog(fullscreen);
+        dialog.setFillParent(fullscreen);
+        dialog.addListener(new PopTable.TableShowHideListener() {
+            @Override
+            public void tableHidden(Event event) {
+                onHideRunnable.run();
+            }
+
+            @Override
+            public void tableShown(Event event) {
+
+            }
+        });
+        dialog.show(stage);
     }
 
     private void populate(Table contentTable) {
@@ -145,13 +186,13 @@ public class PlatformsDialog extends PopTable {
             else UserData.platforms.remove(platformName);
             pref.putString("Platforms", String.join(",", UserData.platforms));
             flushPref();
-            if(checkBox.isChecked() && "ios".equals(platformName) && !"7".equals(UserData.javaVersion)){
+            if (checkBox.isChecked() && "ios".equals(platformName) && !"7".equals(UserData.javaVersion)) {
                 UserData.javaVersion = "8";
             }
-            if(checkBox.isChecked() && "ios-moe".equals(platformName)){
+            if (checkBox.isChecked() && "ios-moe".equals(platformName)) {
                 UserData.gradleTasks = UserData.gradleTasks == null
-                    ? "ios-moe:moeUpdateXcodeSettings \nios-moe:copyNatives \n"
-                    : "ios-moe:moeUpdateXcodeSettings \nios-moe:copyNatives \n" + UserData.gradleTasks;
+                        ? "ios-moe:moeUpdateXcodeSettings \nios-moe:copyNatives \n"
+                        : "ios-moe:moeUpdateXcodeSettings \nios-moe:copyNatives \n" + UserData.gradleTasks;
             }
         });
 
@@ -162,25 +203,5 @@ public class PlatformsDialog extends PopTable {
         table.add(label).growX().minWidth(0).prefWidth(layout.width + 5);
         addLabelHighlight(checkBox, label);
         return checkBox;
-    }
-
-    /**
-     * Convenience method to show the table on the stage
-     */
-    public static void show(boolean fullscreen, Runnable onHideRunnable) {
-        PlatformsDialog dialog = new PlatformsDialog(fullscreen);
-        dialog.setFillParent(fullscreen);
-        dialog.addListener(new PopTable.TableShowHideListener() {
-            @Override
-            public void tableHidden(Event event) {
-                onHideRunnable.run();
-            }
-
-            @Override
-            public void tableShown(Event event) {
-
-            }
-        });
-        dialog.show(stage);
     }
 }

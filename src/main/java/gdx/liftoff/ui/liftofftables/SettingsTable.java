@@ -1,14 +1,25 @@
 package gdx.liftoff.ui.liftofftables;
 
+import static gdx.liftoff.Main.SPACE_HUGE;
+import static gdx.liftoff.Main.SPACE_LARGE;
+import static gdx.liftoff.Main.SPACE_SMALL;
+import static gdx.liftoff.Main.addHandListener;
+import static gdx.liftoff.Main.addScrollFocusListener;
+import static gdx.liftoff.Main.addTooltip;
+import static gdx.liftoff.Main.onChange;
+import static gdx.liftoff.Main.prop;
+import static gdx.liftoff.Main.root;
+import static gdx.liftoff.Main.skin;
+import static gdx.liftoff.Main.validateUserData;
+
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.utils.Align;
+
 import gdx.liftoff.Main;
 import gdx.liftoff.ui.panels.PathsPanel;
 import gdx.liftoff.ui.panels.SettingsPanel;
-
-import static gdx.liftoff.Main.*;
 
 /**
  * The final table displayed before the user generates the project in the normal workflow. It includes the settings and

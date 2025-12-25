@@ -1,16 +1,33 @@
 package gdx.liftoff.ui.panels;
 
+import static gdx.liftoff.Main.SPACE_HUGE;
+import static gdx.liftoff.Main.SPACE_MEDIUM;
+import static gdx.liftoff.Main.SPACE_SMALL;
+import static gdx.liftoff.Main.TOOLTIP_WIDTH;
+import static gdx.liftoff.Main.addHandListener;
+import static gdx.liftoff.Main.addIbeamListener;
+import static gdx.liftoff.Main.addLabelHighlight;
+import static gdx.liftoff.Main.addTooltip;
+import static gdx.liftoff.Main.onChange;
+import static gdx.liftoff.Main.prop;
+import static gdx.liftoff.Main.root;
+import static gdx.liftoff.Main.skin;
+import static gdx.liftoff.Main.stage;
+
 import com.badlogic.gdx.scenes.scene2d.Event;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
-import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.utils.Align;
 import com.ray3k.stripe.PopTable;
 import com.ray3k.stripe.PopTable.TableShowHideListener;
+
 import gdx.liftoff.ui.UserData;
 import gdx.liftoff.ui.dialogs.FullscreenDialog;
 import gdx.liftoff.ui.dialogs.GradleDialog;
-
-import static gdx.liftoff.Main.*;
 
 /**
  * A table to display the project settings
@@ -36,13 +53,13 @@ public class SettingsPanel extends Table implements Panel {
         table.columnDefaults(1).expandX().left().prefWidth(100).minWidth(50);
         table.defaults().spaceTop(SPACE_SMALL).spaceLeft(SPACE_MEDIUM);
         TextField libgdxTextField = addField(prop.getProperty("gdxVersion"),
-            String.format(prop.getProperty("gdxVersionTip"), prop.getProperty("libgdxDefaultVersion")),
-            UserData.libgdxVersion, table, true);
+                String.format(prop.getProperty("gdxVersionTip"), prop.getProperty("libgdxDefaultVersion")),
+                UserData.libgdxVersion, table, true);
         onChange(libgdxTextField, () -> UserData.libgdxVersion = libgdxTextField.getText());
 
         //java version
         TextField javaTextField = addField(prop.getProperty("javaVersion"),
-            prop.getProperty("javaVersionTip"), UserData.javaVersion, table);
+                prop.getProperty("javaVersionTip"), UserData.javaVersion, table);
         onChange(javaTextField, () -> {
             UserData.javaVersion = javaTextField.getText();
             if (FullscreenDialog.fullscreenDialog != null) {
@@ -57,7 +74,7 @@ public class SettingsPanel extends Table implements Panel {
 
         //application version
         TextField applicationTextField = addField(prop.getProperty("version"),
-            prop.getProperty("versionTip"), UserData.appVersion, table);
+                prop.getProperty("versionTip"), UserData.appVersion, table);
         onChange(applicationTextField, () -> UserData.appVersion = applicationTextField.getText());
 
         //add gui assets

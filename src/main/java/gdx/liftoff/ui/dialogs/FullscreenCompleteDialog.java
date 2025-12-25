@@ -1,5 +1,22 @@
 package gdx.liftoff.ui.dialogs;
 
+import static com.badlogic.gdx.scenes.scene2d.actions.Actions.delay;
+import static com.badlogic.gdx.scenes.scene2d.actions.Actions.fadeIn;
+import static com.badlogic.gdx.scenes.scene2d.actions.Actions.fadeOut;
+import static com.badlogic.gdx.scenes.scene2d.actions.Actions.sequence;
+import static com.badlogic.gdx.scenes.scene2d.actions.Actions.targeting;
+import static com.badlogic.gdx.scenes.scene2d.actions.Actions.touchable;
+import static gdx.liftoff.Main.CLEAR_WHITE;
+import static gdx.liftoff.Main.SPACE_MEDIUM;
+import static gdx.liftoff.Main.addHandListener;
+import static gdx.liftoff.Main.addScrollFocusListener;
+import static gdx.liftoff.Main.addTooltip;
+import static gdx.liftoff.Main.generatingProject;
+import static gdx.liftoff.Main.onChange;
+import static gdx.liftoff.Main.prop;
+import static gdx.liftoff.Main.skin;
+import static gdx.liftoff.Main.stage;
+
 import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
@@ -13,12 +30,10 @@ import com.ray3k.stripe.CollapsibleGroup;
 import com.ray3k.stripe.CollapsibleGroup.CollapseType;
 import com.ray3k.stripe.PopTable;
 import com.ray3k.stripe.ScaleContainer;
+
 import gdx.liftoff.ui.panels.CompleteButtonsPanel;
 import gdx.liftoff.ui.panels.CompletePanel;
 import gdx.liftoff.ui.panels.GeneratingPanel;
-
-import static com.badlogic.gdx.scenes.scene2d.actions.Actions.*;
-import static gdx.liftoff.Main.*;
 
 /**
  * Dialog shown when in fullscreen layout mode and the user clicks the generate button. The layout scales up if the
@@ -54,6 +69,15 @@ public class FullscreenCompleteDialog extends PopTable {
         addScrollFocusListener(scrollPane);
     }
 
+    public static void show() {
+        show(true);
+    }
+
+    public static void show(boolean showGeneration) {
+        FullscreenCompleteDialog fullscreenDialog = new FullscreenCompleteDialog(showGeneration);
+        fullscreenDialog.show(stage);
+    }
+
     private void createPanels(Table contentTable, boolean showGeneration) {
         //generating panel is displayed first and is alternated with the complete panel upon completion of the animation
         GeneratingPanel generatingPanel = new GeneratingPanel(true);
@@ -87,40 +111,31 @@ public class FullscreenCompleteDialog extends PopTable {
         //animation
         if (showGeneration) {
             addAction(sequence(
-                targeting(generatingPanel, fadeIn(.5f)),
-                delay(1f),
-                new Action() {
-                    @Override
-                    public boolean act(float v) {
-                        if (generatingProject) return false;
-                        else {
-                            completePanel.populate(true);
-                            return true;
+                    targeting(generatingPanel, fadeIn(.5f)),
+                    delay(1f),
+                    new Action() {
+                        @Override
+                        public boolean act(float v) {
+                            if (generatingProject) return false;
+                            else {
+                                completePanel.populate(true);
+                                return true;
+                            }
                         }
-                    }
-                },
-                targeting(generatingPanel, fadeOut(.3f)),
-                targeting(table, fadeIn(.3f)),
-                targeting(table, touchable(Touchable.enabled))
+                    },
+                    targeting(generatingPanel, fadeOut(.3f)),
+                    targeting(table, fadeIn(.3f)),
+                    targeting(table, touchable(Touchable.enabled))
             ));
         } else {
             addAction(sequence(
-                targeting(table, fadeIn(.3f)),
-                targeting(table, touchable(Touchable.enabled))
+                    targeting(table, fadeIn(.3f)),
+                    targeting(table, touchable(Touchable.enabled))
             ));
         }
 
         contentTable.row();
         Label label = new Label("v" + prop.getProperty("liftoffVersion"), skin);
         contentTable.add(label).expandX().right();
-    }
-
-    public static void show() {
-        show(true);
-    }
-
-    public static void show(boolean showGeneration) {
-        FullscreenCompleteDialog fullscreenDialog = new FullscreenCompleteDialog(showGeneration);
-        fullscreenDialog.show(stage);
     }
 }

@@ -1,5 +1,28 @@
 package gdx.liftoff;
 
+import static org.lwjgl.system.MemoryUtil.memAllocPointer;
+import static org.lwjgl.system.MemoryUtil.memFree;
+import static gdx.liftoff.ui.UserData.addGuiAssets;
+import static gdx.liftoff.ui.UserData.addReadme;
+import static gdx.liftoff.ui.UserData.androidPath;
+import static gdx.liftoff.ui.UserData.appVersion;
+import static gdx.liftoff.ui.UserData.extensions;
+import static gdx.liftoff.ui.UserData.gradleTasks;
+import static gdx.liftoff.ui.UserData.gwtPluginVersion;
+import static gdx.liftoff.ui.UserData.javaVersion;
+import static gdx.liftoff.ui.UserData.languages;
+import static gdx.liftoff.ui.UserData.libgdxVersion;
+import static gdx.liftoff.ui.UserData.log;
+import static gdx.liftoff.ui.UserData.mainClassName;
+import static gdx.liftoff.ui.UserData.packageName;
+import static gdx.liftoff.ui.UserData.platforms;
+import static gdx.liftoff.ui.UserData.projectName;
+import static gdx.liftoff.ui.UserData.projectPath;
+import static gdx.liftoff.ui.UserData.template;
+import static gdx.liftoff.ui.UserData.thirdPartyLibs;
+import static gdx.liftoff.ui.dialogs.FullscreenCompleteDialog.fullscreenCompleteDialog;
+import static gdx.liftoff.ui.dialogs.FullscreenDialog.fullscreenDialog;
+
 import com.badlogic.gdx.Application;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
@@ -8,7 +31,11 @@ import com.badlogic.gdx.Net.HttpRequest;
 import com.badlogic.gdx.Net.HttpResponse;
 import com.badlogic.gdx.Net.HttpResponseListener;
 import com.badlogic.gdx.Preferences;
-import com.badlogic.gdx.backends.lwjgl3.*;
+import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
+import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
+import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Graphics;
+import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Window;
+import com.badlogic.gdx.backends.lwjgl3.Lwjgl3WindowListener;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Cursor.SystemCursor;
@@ -20,11 +47,18 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.scenes.scene2d.ui.Button;
+import com.badlogic.gdx.scenes.scene2d.ui.Cell;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.UIUtils;
-import com.badlogic.gdx.utils.*;
+import com.badlogic.gdx.utils.Align;
+import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.GdxRuntimeException;
+import com.badlogic.gdx.utils.Scaling;
+import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.github.tommyettinger.textra.FWSkin;
@@ -32,33 +66,58 @@ import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.widget.file.FileChooser;
 import com.kotcrab.vis.ui.widget.file.FileChooser.SelectionMode;
 import com.kotcrab.vis.ui.widget.file.FileChooserAdapter;
-import com.ray3k.stripe.*;
-import gdx.liftoff.config.LiftoffVersion;
-import gdx.liftoff.data.platforms.Platform;
-import gdx.liftoff.data.project.*;
-import gdx.liftoff.ui.OverlayTable;
-import gdx.liftoff.ui.RootTable;
-import gdx.liftoff.ui.UserData;
-import gdx.liftoff.ui.dialogs.FullscreenCompleteDialog;
-import gdx.liftoff.ui.dialogs.FullscreenDialog;
+import com.ray3k.stripe.PopTable;
+import com.ray3k.stripe.PopTableClickListener;
+import com.ray3k.stripe.PopTableTextHoverListener;
+import com.ray3k.stripe.ScrollFocusListener;
+import com.ray3k.stripe.SystemCursorListener;
+
 import org.jetbrains.annotations.NotNull;
 import org.lwjgl.PointerBuffer;
 import org.lwjgl.util.nfd.NativeFileDialog;
 
 import java.io.IOException;
-import java.lang.StringBuilder;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
+import java.util.Properties;
 
-import static gdx.liftoff.ui.UserData.*;
-import static gdx.liftoff.ui.dialogs.FullscreenCompleteDialog.*;
-import static gdx.liftoff.ui.dialogs.FullscreenDialog.fullscreenDialog;
-import static org.lwjgl.system.MemoryUtil.memAllocPointer;
-import static org.lwjgl.system.MemoryUtil.memFree;
+import gdx.liftoff.config.LiftoffVersion;
+import gdx.liftoff.data.platforms.Platform;
+import gdx.liftoff.data.project.AdvancedProjectData;
+import gdx.liftoff.data.project.BasicProjectData;
+import gdx.liftoff.data.project.ExtensionsData;
+import gdx.liftoff.data.project.LanguagesData;
+import gdx.liftoff.data.project.Project;
+import gdx.liftoff.data.project.ProjectLogger;
+import gdx.liftoff.ui.OverlayTable;
+import gdx.liftoff.ui.RootTable;
+import gdx.liftoff.ui.UserData;
+import gdx.liftoff.ui.dialogs.FullscreenCompleteDialog;
+import gdx.liftoff.ui.dialogs.FullscreenDialog;
 
 /**
  * Main launcher of the app. Contains utility methods and object instances for use throughout the program.
  */
 public class Main extends ApplicationAdapter {
+    public static final int MIN_WINDOW_WIDTH = 400;
+    public static final int MIN_WINDOW_HEIGHT = 410;
+    public static final int WINDOW_BORDER = 50;
+    public static final float FULLSCREEN_MIN_WIDTH = 1500;
+    public static final float FULLSCREEN_MIN_HEIGHT = 880;
+    public static final float ROOT_TABLE_PREF_WIDTH = 600;
+    public static final float ROOT_TABLE_PREF_HEIGHT = 700;
+    public static final float SPACE_SMALL = 5;
+    public static final float SPACE_MEDIUM = 10;
+    public static final float SPACE_LARGE = 20;
+    public static final float SPACE_HUGE = 30;
+    public static final float TOOLTIP_WIDTH = 200;
+    public static final float TOOLTIP_WIDTH_LARGE = 300;
+    private static final GlyphLayout layout = new GlyphLayout();
+    private final static HashSet<String> BLOCKED_TYPES = new HashSet<>(Arrays.asList("absolutefilehandleresolver", "abstractgraphics", "abstractinput", "action", "actions", "actor", "actorgesturelistener", "addaction", "addlisteneraction", "affine2", "afteraction", "align", "alphaaction", "ambientcubemap", "animatedtiledmaptile", "animation", "animation", "animationcontroller", "annotation", "application", "applicationadapter", "applicationlistener", "applicationlogger", "array", "arraymap", "arrayreflection", "arrayselection", "arraytexturespritebatch", "arrowshapebuilder", "assetdescriptor", "asseterrorlistener", "assetloader", "assetloaderparameters", "assetmanager", "asyncexecutor", "asynchronousassetloader", "asyncresult", "asynctask", "atlastmxmaploader", "atomicqueue", "attribute", "attributes", "audio", "audiodevice", "audiorecorder", "base", "base64coder", "baseanimationcontroller", "basedrawable", "basejsonreader", "baselight", "baseshader", "baseshaderprovider", "baseshapebuilder", "basetmxmaploader", "batch", "batchtiledmaprenderer", "bezier", "billboardcontrollerrenderdata", "billboardparticlebatch", "billboardrenderer", "binaryheap", "bintree", "bitmapfont", "bitmapfontcache", "bitmapfontloader", "bits", "bittreedecoder", "bittreeencoder", "blendingattribute", "booleanarray", "boundingbox", "boxshapebuilder", "bresenham2", "bspline", "bufferedparticlebatch", "bufferutils", "button", "buttongroup", "bytearray", "camera", "cameragroupstrategy", "camerainputcontroller", "capsuleshapebuilder", "catmullromspline", "cell", "changelistener", "chararray", "checkbox", "circle", "circlemapobject", "classpathfilehandleresolver", "classreflection", "clicklistener", "clipboard", "collections", "color", "coloraction", "colorattribute", "colorinfluencer", "colors", "coneshapebuilder", "constructor", "container", "convexhull", "countdowneventaction", "cpuspritebatch", "crc", "cubemap", "cubemapattribute", "cubemapdata", "cubemaploader", "cullable", "cumulativedistribution", "cursor", "customtexture3ddata", "cylindershapebuilder", "cylinderspawnshapevalue", "databuffer", "datainput", "dataoutput", "decal", "decalbatch", "decalmaterial", "decoder", "decoder", "defaultrenderablesorter", "defaultshader", "defaultshaderprovider", "defaulttexturebinder", "delaunaytriangulator", "delayaction", "delayedremovalarray", "delegateaction", "depthshader", "depthshaderprovider", "depthtestattribute", "dialog", "directionallight", "directionallightsattribute", "directionalshadowlight", "disableable", "disposable", "distancefieldfont", "draganddrop", "draglistener", "dragscrolllistener", "drawable", "dynamicsinfluencer", "dynamicsmodifier", "earclippingtriangulator", "ellipse", "ellipsemapobject", "ellipseshapebuilder", "ellipsespawnshapevalue", "emitter", "encoder", "encoder", "environment", "etc1", "etc1texturedata", "event", "eventaction", "eventlistener", "extendviewport", "externalfilehandleresolver", "facedcubemapdata", "field", "filehandle", "filehandleresolver", "filehandlestream", "files", "filetexturearraydata", "filetexturedata", "fillviewport", "firstpersoncameracontroller", "fitviewport", "floataction", "floatarray", "floatattribute", "floatcounter", "floatframebuffer", "floattexturedata", "flushablepool", "focuslistener", "fpslogger", "framebuffer", "framebuffercubemap", "frustum", "frustumshapebuilder", "g3dmodelloader", "game", "gdx", "gdx2dpixmap", "gdxnativesloader", "gdxruntimeexception", "geometryutils", "gesturedetector", "gl20", "gl20interceptor", "gl30", "gl30interceptor", "gl31", "gl31interceptor", "gl32", "gl32interceptor", "glerrorlistener", "glframebuffer", "glinterceptor", "glonlytexturedata", "glprofiler", "gltexture", "glversion", "glyphlayout", "gradientcolorvalue", "graphics", "gridpoint2", "gridpoint3", "group", "groupplug", "groupstrategy", "hdpimode", "hdpiutils", "hexagonaltiledmaprenderer", "horizontalgroup", "httpparametersutils", "httprequestbuilder", "httprequestheader", "httpresponseheader", "httpstatus", "i18nbundle", "i18nbundleloader", "icodeprogress", "identitymap", "image", "imagebutton", "imageresolver", "imagetextbutton", "immediatemoderenderer", "immediatemoderenderer20", "indexarray", "indexbufferobject", "indexbufferobjectsubdata", "indexdata", "influencer", "input", "inputadapter", "inputevent", "inputeventqueue", "inputlistener", "inputmultiplexer", "inputprocessor", "instancebufferobject", "instancebufferobjectsubdata", "instancedata", "intaction", "intarray", "intattribute", "internalfilehandleresolver", "interpolation", "intersector", "intfloatmap", "intintmap", "intmap", "intset", "inwindow", "isometricstaggeredtiledmaprenderer", "isometrictiledmaprenderer", "json", "jsonreader", "jsonvalue", "jsonwriter", "ktxtexturedata", "label", "layout", "layoutaction", "lifecyclelistener", "linespawnshapevalue", "list", "littleendianinputstream", "localfilehandleresolver", "logger", "longarray", "longmap", "longqueue", "lzma", "map", "mapgrouplayer", "maplayer", "maplayers", "mapobject", "mapobjects", "mapproperties", "maprenderer", "material", "mathutils", "matrix3", "matrix4", "mesh", "meshbuilder", "meshpart", "meshpartbuilder", "meshspawnshapevalue", "method", "mipmapgenerator", "mipmaptexturedata", "model", "modelanimation", "modelbatch", "modelbuilder", "modelcache", "modeldata", "modelinfluencer", "modelinstance", "modelinstancecontrollerrenderdata", "modelinstanceparticlebatch", "modelinstancerenderer", "modelloader", "modelmaterial", "modelmesh", "modelmeshpart", "modelnode", "modelnodeanimation", "modelnodekeyframe", "modelnodepart", "modeltexture", "movebyaction", "movetoaction", "music", "musicloader", "nativeinputconfiguration", "net", "netjavaimpl", "netjavaserversocketimpl", "netjavasocketimpl", "ninepatch", "ninepatchdrawable", "node", "nodeanimation", "nodekeyframe", "nodepart", "null", "numberutils", "numericvalue", "objectfloatmap", "objectintmap", "objectlongmap", "objectmap", "objectset", "objloader", "octree", "orderedmap", "orderedset", "orientedboundingbox", "orthocachedtiledmaprenderer", "orthogonaltiledmaprenderer", "orthographiccamera", "outwindow", "parallelaction", "parallelarray", "particlebatch", "particlechannels", "particlecontroller", "particlecontrollercomponent", "particlecontrollercontrollerrenderer", "particlecontrollerfinalizerinfluencer", "particlecontrollerinfluencer", "particlecontrollerrenderdata", "particlecontrollerrenderer", "particleeffect", "particleeffect", "particleeffectactor", "particleeffectloader", "particleeffectloader", "particleeffectpool", "particleemitter", "particleshader", "particlesorter", "particlesystem", "particlevalue", "patchshapebuilder", "path", "pauseablethread", "performancecounter", "performancecounters", "perspectivecamera", "pixmap", "pixmapio", "pixmaploader", "pixmappacker", "pixmappackerio", "pixmaptexturedata", "plane", "pluggablegroupstrategy", "pointlight", "pointlightsattribute", "pointspawnshapevalue", "pointspritecontrollerrenderdata", "pointspriteparticlebatch", "pointspriterenderer", "polygon", "polygonbatch", "polygonmapobject", "polygonregion", "polygonregionloader", "polygonsprite", "polygonspritebatch", "polyline", "polylinemapobject", "pool", "pooledlinkedlist", "pools", "predicate", "preferences", "prefixfilehandleresolver", "primitivespawnshapevalue", "progressbar", "propertiesutils", "quadtreefloat", "quaternion", "queue", "quickselect", "randomxs128", "rangednumericvalue", "ray", "rectangle", "rectanglemapobject", "rectanglespawnshapevalue", "reflectionexception", "reflectionpool", "regioninfluencer", "regularemitter", "relativetemporalaction", "remoteinput", "remotesender", "removeaction", "removeactoraction", "removelisteneraction", "renderable", "renderableprovider", "renderableshapebuilder", "renderablesorter", "rendercontext", "repeatablepolygonsprite", "repeataction", "resolutionfileresolver", "resourcedata", "rotatebyaction", "rotatetoaction", "runnableaction", "scalebyaction", "scalednumericvalue", "scaleinfluencer", "scaletoaction", "scaling", "scalingviewport", "scissorstack", "screen", "screenadapter", "screenutils", "screenviewport", "scrollpane", "segment", "select", "selectbox", "selection", "sequenceaction", "serializationexception", "serversocket", "serversockethints", "shader", "shaderprogram", "shaderprogramloader", "shaderprovider", "shadowmap", "shape2d", "shapecache", "shaperenderer", "shortarray", "simpleinfluencer", "simpleorthogroupstrategy", "sizebyaction", "sizetoaction", "skin", "skinloader", "slider", "snapshotarray", "socket", "sockethints", "sort", "sortedintlist", "sound", "soundloader", "spawninfluencer", "spawnshapevalue", "sphere", "sphereshapebuilder", "sphericalharmonics", "splitpane", "spotlight", "spotlightsattribute", "sprite", "spritebatch", "spritecache", "spritedrawable", "stack", "stage", "statictiledmaptile", "streamutils", "stretchviewport", "stringbuilder", "synchronousassetloader", "table", "temporalaction", "textarea", "textbutton", "textfield", "textinputwrapper", "texttooltip", "texture", "texture3d", "texture3ddata", "texturearray", "texturearraydata", "textureatlas", "textureatlasloader", "textureattribute", "texturebinder", "texturedata", "texturedescriptor", "textureloader", "texturemapobject", "textureprovider", "textureregion", "textureregiondrawable", "threadutils", "tidemaploader", "tileddrawable", "tiledmap", "tiledmapimagelayer", "tiledmaprenderer", "tiledmaptile", "tiledmaptilelayer", "tiledmaptilemapobject", "tiledmaptileset", "tiledmaptilesets", "timer", "timescaleaction", "timeutils", "tmxmaploader", "tooltip", "tooltipmanager", "touchable", "touchableaction", "touchpad", "transformdrawable", "tree", "ubjsonreader", "ubjsonwriter", "uiutils", "unweightedmeshspawnshapevalue", "value", "vector", "vector2", "vector3", "vector4", "version", "vertexarray", "vertexattribute", "vertexattributes", "vertexbufferobject", "vertexbufferobjectsubdata", "vertexbufferobjectwithvao", "vertexdata", "verticalgroup", "viewport", "visibleaction", "weightmeshspawnshapevalue", "widget", "widgetgroup", "window", "windowedmean", "xmlreader", "xmlwriter"));
+    private final static String FORBIDDEN_NAMES = "(abstract|assert|boolean|break|byte|case|catch|char|class|const|continue|default|double|do|else|enum|extends|false|final|finally|float|for|goto|if|implements|import|instanceof|int|interface|long|native|new|null|package|private|protected|public|return|short|static|strictfp|super|switch|synchronized|this|throw|throws|transient|true|try|void|volatile|while|_|con|prn|aux|nul|(com[1-9])|(lpt[1-9]))";
     public static FWSkin skin;
     public static Stage stage;
     public static ScreenViewport screenViewport;
@@ -76,21 +135,6 @@ public class Main extends ApplicationAdapter {
     public static String latestStableVersion;
     public static Properties prop;
     public static Preferences pref;
-    private static final GlyphLayout layout = new GlyphLayout();
-    public static final int MIN_WINDOW_WIDTH = 400;
-    public static final int MIN_WINDOW_HEIGHT = 410;
-    public static final int WINDOW_BORDER = 50;
-    public static final float FULLSCREEN_MIN_WIDTH = 1500;
-    public static final float FULLSCREEN_MIN_HEIGHT = 880;
-    public static final float ROOT_TABLE_PREF_WIDTH = 600;
-    public static final float ROOT_TABLE_PREF_HEIGHT = 700;
-
-    public static final float SPACE_SMALL = 5;
-    public static final float SPACE_MEDIUM = 10;
-    public static final float SPACE_LARGE = 20;
-    public static final float SPACE_HUGE = 30;
-    public static final float TOOLTIP_WIDTH = 200;
-    public static final float TOOLTIP_WIDTH_LARGE = 300;
 
     private static String exceptionToString(Throwable ex) {
         StringBuilder sb = new StringBuilder();
@@ -105,7 +149,7 @@ public class Main extends ApplicationAdapter {
             pref.flush();
         } catch (GdxRuntimeException e) {
             Gdx.app.error("Liftoff", "Could not save preferences; ensure you can write to the preferences file.\n  "
-                + e);
+                    + e);
         }
     }
 
@@ -115,13 +159,13 @@ public class Main extends ApplicationAdapter {
         config.setTitle("GDX-Liftoff");
         config.disableAudio(true);
         config.useVsync(true);
-        config.setForegroundFPS(Lwjgl3ApplicationConfiguration.getDisplayMode().refreshRate+1);
+        config.setForegroundFPS(Lwjgl3ApplicationConfiguration.getDisplayMode().refreshRate + 1);
         config.setIdleFPS(8);
         config.setOpenGLEmulation(Lwjgl3ApplicationConfiguration.GLEmulation.ANGLE_GLES20, 0, 0);
 
         DisplayMode primaryDesktopMode = Lwjgl3ApplicationConfiguration.getDisplayMode();
         int monitorWidth = primaryDesktopMode.width;
-        int monitorHeight=  primaryDesktopMode.height;
+        int monitorHeight = primaryDesktopMode.height;
         int windowWidth = Math.max(MathUtils.round(monitorWidth / 1920f * 800f), 800);
         int windowHeight = Math.max(MathUtils.round(monitorHeight / 1080f * 800f), 800);
         config.setWindowedMode(Math.min(windowWidth, monitorWidth - WINDOW_BORDER * 2), Math.min(windowHeight, monitorHeight - WINDOW_BORDER * 2));
@@ -142,9 +186,9 @@ public class Main extends ApplicationAdapter {
 
             @Override
             public void maximized(boolean isMax) {
-                if (isMax){
+                if (isMax) {
                     boolean fullscreenMode = Gdx.graphics.getBackBufferWidth() > FULLSCREEN_MIN_WIDTH &&
-                        Gdx.graphics.getBackBufferHeight() > FULLSCREEN_MIN_HEIGHT;
+                            Gdx.graphics.getBackBufferHeight() > FULLSCREEN_MIN_HEIGHT;
                     if (fullscreenMode && root != null) {
                         Gdx.app.postRunnable(() -> {
                             root.getCurrentTable().finishAnimation();
@@ -153,7 +197,7 @@ public class Main extends ApplicationAdapter {
                             root.fadeOutTable();
                         });
                     }
-                    if(fullscreenMode && overlayTable != null)
+                    if (fullscreenMode && overlayTable != null)
                         overlayTable.fadeOut();
                 } else {
                     if (fullscreenDialog != null) {
@@ -176,7 +220,6 @@ public class Main extends ApplicationAdapter {
                 }
                 pref.putBoolean("startMaximized", isMax);
                 flushPref();
-
             }
 
             @Override
@@ -206,83 +249,6 @@ public class Main extends ApplicationAdapter {
         };
         config.setWindowListener(windowListener);
         new Lwjgl3Application(new Main(), config);
-    }
-
-    @Override
-    public void create() {
-        Gdx.app.setLogLevel(Application.LOG_ERROR);
-        prop = new Properties();
-        try {
-            prop.load(Gdx.files.internal("ui-data/nls.properties").read());
-            prop.load(Gdx.files.internal("ui-data/urls.properties").read());
-            prop.load(Gdx.files.internal("ui-data/defaults.properties").read());
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-
-        pref = Gdx.app.getPreferences("gdx-liftoff-prefs");
-
-        setDefaultUserData();
-
-        skin = new FWSkin(Gdx.files.internal("ui-skin/skin.json"));
-
-        skin.getFont("font-label-tooltip").getData().breakChars = new char[]{'-'};
-
-        fitViewport = new FitViewport(1920, 1080);
-        screenViewport = new ScreenViewport();
-        batch = new SpriteBatch();
-        stage = new Stage(screenViewport, batch);
-
-
-        Gdx.input.setInputProcessor(stage);
-
-        handListener = new SystemCursorListener(SystemCursor.Hand);
-        ibeamListener = new SystemCursorListener(SystemCursor.Ibeam);
-        scrollFocusListener = new ScrollFocusListener(stage);
-
-        bgImage = new Image(skin, "bg");
-        bgImage.setFillParent(true);
-        bgImage.setScaling(Scaling.fill);
-        stage.addActor(bgImage);
-
-        root = new RootTable();
-        root.setFillParent(true);
-        stage.addActor(root);
-
-        overlayTable = new OverlayTable();
-        overlayTable.setFillParent(true);
-        stage.addActor(overlayTable);
-
-        checkSetupVersion();
-
-        DisplayMode primaryDesktopMode = Lwjgl3ApplicationConfiguration.getDisplayMode();
-        int width = primaryDesktopMode.width;
-        int height = primaryDesktopMode.height;
-        if (!pref.contains("startMaximized") && width > 1920 && height > 1080 || pref.getBoolean("startMaximized", false)) {
-            Main.maximizeWindow();
-        }
-    }
-
-    @Override
-    public void render() {
-        ScreenUtils.clear(Color.BLACK);
-
-        //draw stage
-        stage.getViewport().apply();
-        stage.act();
-        stage.draw();
-
-        resizingWindow = false;
-    }
-
-    @Override
-    public void resize(int width, int height) {
-        // If the window is minimized on a desktop (LWJGL3) platform, width and height are 0, which causes problems.
-        // In that case, we don't resize anything, and wait for the window to be a normal size before updating.
-        if(width <= 0 || height <= 0) return;
-
-        stage.getViewport().update(width, height, true);
-        resizingWindow = true;
     }
 
     public static void addHandListener(Actor actor) {
@@ -462,10 +428,10 @@ public class Main extends ApplicationAdapter {
             callback.selected(array);
         } catch (Throwable e) {
             Gdx.app.error(
-                "NFD",
-                "The Native File Dialog library could not be loaded.\n" +
-                    "Check if you have multiple LWJGL3 applications open simultaneously,\n" +
-                    "since that can cause this error."
+                    "NFD",
+                    "The Native File Dialog library could not be loaded.\n" +
+                            "Check if you have multiple LWJGL3 applications open simultaneously,\n" +
+                            "since that can cause this error."
             );
             Gdx.app.error("NFD", e.toString());
             VisUI.setSkipGdxVersionCheck(true);
@@ -521,7 +487,7 @@ public class Main extends ApplicationAdapter {
         ArrayList<String> languageVersions = splitCSV(pref.getString("LanguageVersions", prop.getProperty("languagesDefaultVersions")));
         UserData.languageVersions = new LinkedHashMap<>();
         int languageIndex = 0;
-        for(String language : languages){
+        for (String language : languages) {
             UserData.languageVersions.put(language, languageVersions.get(languageIndex++));
         }
 
@@ -553,7 +519,7 @@ public class Main extends ApplicationAdapter {
         ArrayList<String> languageVersions = splitCSV(prop.getProperty("languagesDefaultVersions"));
         UserData.languageVersions = new LinkedHashMap<>();
         int languageIndex = 0;
-        for(String language : languages){
+        for (String language : languages) {
             UserData.languageVersions.put(language, languageVersions.get(languageIndex++));
         }
 
@@ -595,7 +561,7 @@ public class Main extends ApplicationAdapter {
         ArrayList<String> languageVersions = splitCSV(prop.getProperty("languagesDefaultVersions"));
         UserData.languageVersions = new LinkedHashMap<>();
         int languageIndex = 0;
-        for(String language : languages){
+        for (String language : languages) {
             UserData.languageVersions.put(language, languageVersions.get(languageIndex++));
         }
 
@@ -641,11 +607,7 @@ public class Main extends ApplicationAdapter {
             return false;
         }
 
-        if (android && !Main.isAndroidSdkDirectory(UserData.androidPath)) {
-            return false;
-        }
-
-        return true;
+        return !android || Main.isAndroidSdkDirectory(UserData.androidPath);
     }
 
     public static boolean validateUserProjectData() {
@@ -669,11 +631,7 @@ public class Main extends ApplicationAdapter {
             return false;
         }
 
-        if (UserData.platforms.contains("ios") && !"7".equals(UserData.javaVersion) && !"8".equals(UserData.javaVersion)) {
-            return false;
-        }
-
-        return true;
+        return !UserData.platforms.contains("ios") || "7".equals(UserData.javaVersion) || "8".equals(UserData.javaVersion);
     }
 
     /**
@@ -684,14 +642,14 @@ public class Main extends ApplicationAdapter {
         Thread generateThread = new Thread(() -> {
             try {
                 BasicProjectData basicData = new BasicProjectData(
-                    UserData.projectName, UserData.packageName, UserData.mainClassName,
-                    Gdx.files.absolute(UserData.projectPath), Gdx.files.absolute(UserData.androidPath));
+                        UserData.projectName, UserData.packageName, UserData.mainClassName,
+                        Gdx.files.absolute(UserData.projectPath), Gdx.files.absolute(UserData.androidPath));
                 AdvancedProjectData advancedData = new AdvancedProjectData(appVersion, libgdxVersion, javaVersion,
-                    gwtPluginVersion, javaVersion, javaVersion, addGuiAssets, addReadme,
-                    gradleTasks != null && !gradleTasks.isEmpty()
-                        ? Maker.makeList(gradleTasks.split("\\s+"))
-                        : new ArrayList<>(0),
-                    true, 4);
+                        gwtPluginVersion, javaVersion, javaVersion, addGuiAssets, addReadme,
+                        gradleTasks != null && !gradleTasks.isEmpty()
+                                ? Maker.makeList(gradleTasks.split("\\s+"))
+                                : new ArrayList<>(0),
+                        true, 4);
 
                 LinkedHashMap<String, Platform> platforms = new LinkedHashMap<>(UserData.platforms.size());
                 for (String p : UserData.platforms) {
@@ -699,10 +657,10 @@ public class Main extends ApplicationAdapter {
                 }
                 LanguagesData languagesData = new LanguagesData(Listing.chooseLanguages(languages), UserData.languageVersions);
                 ExtensionsData extensionsData = new ExtensionsData(Listing.chooseOfficialLibraries(extensions),
-                    Listing.chooseUnofficialLibraries(thirdPartyLibs));
+                        Listing.chooseUnofficialLibraries(thirdPartyLibs));
 
                 Project project = new Project(basicData, platforms, advancedData, languagesData, extensionsData,
-                    Listing.templatesByName.getOrDefault(template, Listing.templates.get(0)));
+                        Listing.templatesByName.getOrDefault(template, Listing.templates.get(0)));
                 project.generate();
                 project.includeGradleWrapper(new ProjectLogger() {
                     @Override
@@ -725,12 +683,10 @@ public class Main extends ApplicationAdapter {
         generateThread.start();
     }
 
-    private final static HashSet<String> BLOCKED_TYPES = new HashSet<>(Arrays.asList("absolutefilehandleresolver", "abstractgraphics", "abstractinput", "action", "actions", "actor", "actorgesturelistener", "addaction", "addlisteneraction", "affine2", "afteraction", "align", "alphaaction", "ambientcubemap", "animatedtiledmaptile", "animation", "animation", "animationcontroller", "annotation", "application", "applicationadapter", "applicationlistener", "applicationlogger", "array", "arraymap", "arrayreflection", "arrayselection", "arraytexturespritebatch", "arrowshapebuilder", "assetdescriptor", "asseterrorlistener", "assetloader", "assetloaderparameters", "assetmanager", "asyncexecutor", "asynchronousassetloader", "asyncresult", "asynctask", "atlastmxmaploader", "atomicqueue", "attribute", "attributes", "audio", "audiodevice", "audiorecorder", "base", "base64coder", "baseanimationcontroller", "basedrawable", "basejsonreader", "baselight", "baseshader", "baseshaderprovider", "baseshapebuilder", "basetmxmaploader", "batch", "batchtiledmaprenderer", "bezier", "billboardcontrollerrenderdata", "billboardparticlebatch", "billboardrenderer", "binaryheap", "bintree", "bitmapfont", "bitmapfontcache", "bitmapfontloader", "bits", "bittreedecoder", "bittreeencoder", "blendingattribute", "booleanarray", "boundingbox", "boxshapebuilder", "bresenham2", "bspline", "bufferedparticlebatch", "bufferutils", "button", "buttongroup", "bytearray", "camera", "cameragroupstrategy", "camerainputcontroller", "capsuleshapebuilder", "catmullromspline", "cell", "changelistener", "chararray", "checkbox", "circle", "circlemapobject", "classpathfilehandleresolver", "classreflection", "clicklistener", "clipboard", "collections", "color", "coloraction", "colorattribute", "colorinfluencer", "colors", "coneshapebuilder", "constructor", "container", "convexhull", "countdowneventaction", "cpuspritebatch", "crc", "cubemap", "cubemapattribute", "cubemapdata", "cubemaploader", "cullable", "cumulativedistribution", "cursor", "customtexture3ddata", "cylindershapebuilder", "cylinderspawnshapevalue", "databuffer", "datainput", "dataoutput", "decal", "decalbatch", "decalmaterial", "decoder", "decoder", "defaultrenderablesorter", "defaultshader", "defaultshaderprovider", "defaulttexturebinder", "delaunaytriangulator", "delayaction", "delayedremovalarray", "delegateaction", "depthshader", "depthshaderprovider", "depthtestattribute", "dialog", "directionallight", "directionallightsattribute", "directionalshadowlight", "disableable", "disposable", "distancefieldfont", "draganddrop", "draglistener", "dragscrolllistener", "drawable", "dynamicsinfluencer", "dynamicsmodifier", "earclippingtriangulator", "ellipse", "ellipsemapobject", "ellipseshapebuilder", "ellipsespawnshapevalue", "emitter", "encoder", "encoder", "environment", "etc1", "etc1texturedata", "event", "eventaction", "eventlistener", "extendviewport", "externalfilehandleresolver", "facedcubemapdata", "field", "filehandle", "filehandleresolver", "filehandlestream", "files", "filetexturearraydata", "filetexturedata", "fillviewport", "firstpersoncameracontroller", "fitviewport", "floataction", "floatarray", "floatattribute", "floatcounter", "floatframebuffer", "floattexturedata", "flushablepool", "focuslistener", "fpslogger", "framebuffer", "framebuffercubemap", "frustum", "frustumshapebuilder", "g3dmodelloader", "game", "gdx", "gdx2dpixmap", "gdxnativesloader", "gdxruntimeexception", "geometryutils", "gesturedetector", "gl20", "gl20interceptor", "gl30", "gl30interceptor", "gl31", "gl31interceptor", "gl32", "gl32interceptor", "glerrorlistener", "glframebuffer", "glinterceptor", "glonlytexturedata", "glprofiler", "gltexture", "glversion", "glyphlayout", "gradientcolorvalue", "graphics", "gridpoint2", "gridpoint3", "group", "groupplug", "groupstrategy", "hdpimode", "hdpiutils", "hexagonaltiledmaprenderer", "horizontalgroup", "httpparametersutils", "httprequestbuilder", "httprequestheader", "httpresponseheader", "httpstatus", "i18nbundle", "i18nbundleloader", "icodeprogress", "identitymap", "image", "imagebutton", "imageresolver", "imagetextbutton", "immediatemoderenderer", "immediatemoderenderer20", "indexarray", "indexbufferobject", "indexbufferobjectsubdata", "indexdata", "influencer", "input", "inputadapter", "inputevent", "inputeventqueue", "inputlistener", "inputmultiplexer", "inputprocessor", "instancebufferobject", "instancebufferobjectsubdata", "instancedata", "intaction", "intarray", "intattribute", "internalfilehandleresolver", "interpolation", "intersector", "intfloatmap", "intintmap", "intmap", "intset", "inwindow", "isometricstaggeredtiledmaprenderer", "isometrictiledmaprenderer", "json", "jsonreader", "jsonvalue", "jsonwriter", "ktxtexturedata", "label", "layout", "layoutaction", "lifecyclelistener", "linespawnshapevalue", "list", "littleendianinputstream", "localfilehandleresolver", "logger", "longarray", "longmap", "longqueue", "lzma", "map", "mapgrouplayer", "maplayer", "maplayers", "mapobject", "mapobjects", "mapproperties", "maprenderer", "material", "mathutils", "matrix3", "matrix4", "mesh", "meshbuilder", "meshpart", "meshpartbuilder", "meshspawnshapevalue", "method", "mipmapgenerator", "mipmaptexturedata", "model", "modelanimation", "modelbatch", "modelbuilder", "modelcache", "modeldata", "modelinfluencer", "modelinstance", "modelinstancecontrollerrenderdata", "modelinstanceparticlebatch", "modelinstancerenderer", "modelloader", "modelmaterial", "modelmesh", "modelmeshpart", "modelnode", "modelnodeanimation", "modelnodekeyframe", "modelnodepart", "modeltexture", "movebyaction", "movetoaction", "music", "musicloader", "nativeinputconfiguration", "net", "netjavaimpl", "netjavaserversocketimpl", "netjavasocketimpl", "ninepatch", "ninepatchdrawable", "node", "nodeanimation", "nodekeyframe", "nodepart", "null", "numberutils", "numericvalue", "objectfloatmap", "objectintmap", "objectlongmap", "objectmap", "objectset", "objloader", "octree", "orderedmap", "orderedset", "orientedboundingbox", "orthocachedtiledmaprenderer", "orthogonaltiledmaprenderer", "orthographiccamera", "outwindow", "parallelaction", "parallelarray", "particlebatch", "particlechannels", "particlecontroller", "particlecontrollercomponent", "particlecontrollercontrollerrenderer", "particlecontrollerfinalizerinfluencer", "particlecontrollerinfluencer", "particlecontrollerrenderdata", "particlecontrollerrenderer", "particleeffect", "particleeffect", "particleeffectactor", "particleeffectloader", "particleeffectloader", "particleeffectpool", "particleemitter", "particleshader", "particlesorter", "particlesystem", "particlevalue", "patchshapebuilder", "path", "pauseablethread", "performancecounter", "performancecounters", "perspectivecamera", "pixmap", "pixmapio", "pixmaploader", "pixmappacker", "pixmappackerio", "pixmaptexturedata", "plane", "pluggablegroupstrategy", "pointlight", "pointlightsattribute", "pointspawnshapevalue", "pointspritecontrollerrenderdata", "pointspriteparticlebatch", "pointspriterenderer", "polygon", "polygonbatch", "polygonmapobject", "polygonregion", "polygonregionloader", "polygonsprite", "polygonspritebatch", "polyline", "polylinemapobject", "pool", "pooledlinkedlist", "pools", "predicate", "preferences", "prefixfilehandleresolver", "primitivespawnshapevalue", "progressbar", "propertiesutils", "quadtreefloat", "quaternion", "queue", "quickselect", "randomxs128", "rangednumericvalue", "ray", "rectangle", "rectanglemapobject", "rectanglespawnshapevalue", "reflectionexception", "reflectionpool", "regioninfluencer", "regularemitter", "relativetemporalaction", "remoteinput", "remotesender", "removeaction", "removeactoraction", "removelisteneraction", "renderable", "renderableprovider", "renderableshapebuilder", "renderablesorter", "rendercontext", "repeatablepolygonsprite", "repeataction", "resolutionfileresolver", "resourcedata", "rotatebyaction", "rotatetoaction", "runnableaction", "scalebyaction", "scalednumericvalue", "scaleinfluencer", "scaletoaction", "scaling", "scalingviewport", "scissorstack", "screen", "screenadapter", "screenutils", "screenviewport", "scrollpane", "segment", "select", "selectbox", "selection", "sequenceaction", "serializationexception", "serversocket", "serversockethints", "shader", "shaderprogram", "shaderprogramloader", "shaderprovider", "shadowmap", "shape2d", "shapecache", "shaperenderer", "shortarray", "simpleinfluencer", "simpleorthogroupstrategy", "sizebyaction", "sizetoaction", "skin", "skinloader", "slider", "snapshotarray", "socket", "sockethints", "sort", "sortedintlist", "sound", "soundloader", "spawninfluencer", "spawnshapevalue", "sphere", "sphereshapebuilder", "sphericalharmonics", "splitpane", "spotlight", "spotlightsattribute", "sprite", "spritebatch", "spritecache", "spritedrawable", "stack", "stage", "statictiledmaptile", "streamutils", "stretchviewport", "stringbuilder", "synchronousassetloader", "table", "temporalaction", "textarea", "textbutton", "textfield", "textinputwrapper", "texttooltip", "texture", "texture3d", "texture3ddata", "texturearray", "texturearraydata", "textureatlas", "textureatlasloader", "textureattribute", "texturebinder", "texturedata", "texturedescriptor", "textureloader", "texturemapobject", "textureprovider", "textureregion", "textureregiondrawable", "threadutils", "tidemaploader", "tileddrawable", "tiledmap", "tiledmapimagelayer", "tiledmaprenderer", "tiledmaptile", "tiledmaptilelayer", "tiledmaptilemapobject", "tiledmaptileset", "tiledmaptilesets", "timer", "timescaleaction", "timeutils", "tmxmaploader", "tooltip", "tooltipmanager", "touchable", "touchableaction", "touchpad", "transformdrawable", "tree", "ubjsonreader", "ubjsonwriter", "uiutils", "unweightedmeshspawnshapevalue", "value", "vector", "vector2", "vector3", "vector4", "version", "vertexarray", "vertexattribute", "vertexattributes", "vertexbufferobject", "vertexbufferobjectsubdata", "vertexbufferobjectwithvao", "vertexdata", "verticalgroup", "viewport", "visibleaction", "weightmeshspawnshapevalue", "widget", "widgetgroup", "window", "windowedmean", "xmlreader", "xmlwriter"));
-    private final static String FORBIDDEN_NAMES = "(abstract|assert|boolean|break|byte|case|catch|char|class|const|continue|default|double|do|else|enum|extends|false|final|finally|float|for|goto|if|implements|import|instanceof|int|interface|long|native|new|null|package|private|protected|public|return|short|static|strictfp|super|switch|synchronized|this|throw|throws|transient|true|try|void|volatile|while|_|con|prn|aux|nul|(com[1-9])|(lpt[1-9]))";
-
     public static boolean isValidProjectName(String input) {
         return !input.isEmpty() && !input.contains(":") && !input.matches("^\\W+$");
     }
+
     public static boolean isValidPackageName(String input) {
         if (input == null || input.isEmpty() || !Character.isJavaIdentifierStart(input.charAt(0)) || input.contains("..") || input.endsWith(".")) {
             return false;
@@ -775,9 +731,9 @@ public class Main extends ApplicationAdapter {
             FileHandle file = Gdx.files.absolute(path);
             if (file.isDirectory()) {
                 return (file.child("tools").isDirectory() ||
-                    file.child("cmdline-tools").isDirectory() ||
-                    file.child("build-tools").isDirectory()) &&
-                    file.child("platforms").isDirectory();
+                        file.child("cmdline-tools").isDirectory() ||
+                        file.child("build-tools").isDirectory()) &&
+                        file.child("platforms").isDirectory();
             }
         } catch (Exception exception) {
             // Probably not the Android SDK.
@@ -790,18 +746,18 @@ public class Main extends ApplicationAdapter {
         if (prop.getProperty("liftoffVersion").endsWith("SNAPSHOT")) return;
 
         HttpRequest request = new HttpRequestBuilder().newRequest()
-            .method("GET")
-            .url("https://raw.githubusercontent.com/libgdx/gdx-liftoff/master/version.txt")
-            .build();
+                .method("GET")
+                .url("https://raw.githubusercontent.com/libgdx/gdx-liftoff/master/version.txt")
+                .build();
 
         HttpResponseListener listener = new HttpResponseListener() {
             @Override
             public void handleHttpResponse(HttpResponse httpResponse) {
                 latestStableVersion = httpResponse.getResultAsString().trim();
                 LiftoffVersion mine = LiftoffVersion.Companion.parseLiftoffVersion(prop.getProperty("liftoffVersion"));
-                if(mine == null) return;
+                if (mine == null) return;
                 LiftoffVersion latest = LiftoffVersion.Companion.parseLiftoffVersion(latestStableVersion);
-                if(latest == null) return;
+                if (latest == null) return;
                 if (mine.compareTo(latest) < 0) {
                     Gdx.app.postRunnable(() -> {
                         root.landingTable.animateUpdateLabel();
@@ -822,5 +778,82 @@ public class Main extends ApplicationAdapter {
         };
 
         Gdx.net.sendHttpRequest(request, listener);
+    }
+
+    @Override
+    public void create() {
+        Gdx.app.setLogLevel(Application.LOG_ERROR);
+        prop = new Properties();
+        try {
+            prop.load(Gdx.files.internal("ui-data/nls.properties").read());
+            prop.load(Gdx.files.internal("ui-data/urls.properties").read());
+            prop.load(Gdx.files.internal("ui-data/defaults.properties").read());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        pref = Gdx.app.getPreferences("gdx-liftoff-prefs");
+
+        setDefaultUserData();
+
+        skin = new FWSkin(Gdx.files.internal("ui-skin/skin.json"));
+
+        skin.getFont("font-label-tooltip").getData().breakChars = new char[]{'-'};
+
+        fitViewport = new FitViewport(1920, 1080);
+        screenViewport = new ScreenViewport();
+        batch = new SpriteBatch();
+        stage = new Stage(screenViewport, batch);
+
+
+        Gdx.input.setInputProcessor(stage);
+
+        handListener = new SystemCursorListener(SystemCursor.Hand);
+        ibeamListener = new SystemCursorListener(SystemCursor.Ibeam);
+        scrollFocusListener = new ScrollFocusListener(stage);
+
+        bgImage = new Image(skin, "bg");
+        bgImage.setFillParent(true);
+        bgImage.setScaling(Scaling.fill);
+        stage.addActor(bgImage);
+
+        root = new RootTable();
+        root.setFillParent(true);
+        stage.addActor(root);
+
+        overlayTable = new OverlayTable();
+        overlayTable.setFillParent(true);
+        stage.addActor(overlayTable);
+
+        checkSetupVersion();
+
+        DisplayMode primaryDesktopMode = Lwjgl3ApplicationConfiguration.getDisplayMode();
+        int width = primaryDesktopMode.width;
+        int height = primaryDesktopMode.height;
+        if (!pref.contains("startMaximized") && width > 1920 && height > 1080 || pref.getBoolean("startMaximized", false)) {
+            Main.maximizeWindow();
+        }
+    }
+
+    @Override
+    public void render() {
+        ScreenUtils.clear(Color.BLACK);
+
+        //draw stage
+        stage.getViewport().apply();
+        stage.act();
+        stage.draw();
+
+        resizingWindow = false;
+    }
+
+    @Override
+    public void resize(int width, int height) {
+        // If the window is minimized on a desktop (LWJGL3) platform, width and height are 0, which causes problems.
+        // In that case, we don't resize anything, and wait for the window to be a normal size before updating.
+        if (width <= 0 || height <= 0) return;
+
+        stage.getViewport().update(width, height, true);
+        resizingWindow = true;
     }
 }

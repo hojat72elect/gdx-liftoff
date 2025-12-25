@@ -1,14 +1,19 @@
 package gdx.liftoff.ui.panels;
 
+import static gdx.liftoff.Main.SPACE_MEDIUM;
+import static gdx.liftoff.Main.SPACE_SMALL;
+import static gdx.liftoff.Main.addScrollFocusListener;
+import static gdx.liftoff.Main.prop;
+import static gdx.liftoff.Main.skin;
+
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.Align;
+
 import gdx.liftoff.ui.LogoWidget;
 import gdx.liftoff.ui.UserData;
-
-import static gdx.liftoff.Main.*;
 
 /**
  * The panel that displays the result of project generation

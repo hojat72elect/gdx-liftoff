@@ -1,5 +1,15 @@
 package gdx.liftoff.ui.dialogs;
 
+import static gdx.liftoff.Main.SPACE_HUGE;
+import static gdx.liftoff.Main.SPACE_LARGE;
+import static gdx.liftoff.Main.addHandListener;
+import static gdx.liftoff.Main.onChange;
+import static gdx.liftoff.Main.prop;
+import static gdx.liftoff.Main.root;
+import static gdx.liftoff.Main.skin;
+import static gdx.liftoff.Main.stage;
+import static gdx.liftoff.ui.dialogs.FullscreenDialog.fullscreenDialog;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.files.FileHandle;
@@ -9,10 +19,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Window.WindowStyle;
 import com.badlogic.gdx.utils.Align;
 import com.ray3k.stripe.PopTable;
-import gdx.liftoff.ui.UserData;
 
-import static gdx.liftoff.Main.*;
-import static gdx.liftoff.ui.dialogs.FullscreenDialog.*;
+import gdx.liftoff.ui.UserData;
 
 public class ConfirmDeleteProjectFolder extends PopTable {
     public ConfirmDeleteProjectFolder() {
@@ -50,6 +58,11 @@ public class ConfirmDeleteProjectFolder extends PopTable {
         key(Keys.ESCAPE, this::hide);
     }
 
+    public static void showDialog() {
+        ConfirmDeleteProjectFolder pop = new ConfirmDeleteProjectFolder();
+        pop.show(stage);
+    }
+
     private void deleteFolderContents() {
         FileHandle fileHandle = Gdx.files.absolute(UserData.projectPath);
         for (FileHandle child : fileHandle.list()) {
@@ -58,10 +71,5 @@ public class ConfirmDeleteProjectFolder extends PopTable {
         Gdx.app.postRunnable(() -> root.settingsTable.updateError());
         if (fullscreenDialog != null) fullscreenDialog.updatePathsError();
         hide();
-    }
-
-    public static void showDialog() {
-        ConfirmDeleteProjectFolder pop = new ConfirmDeleteProjectFolder();
-        pop.show(stage);
     }
 }

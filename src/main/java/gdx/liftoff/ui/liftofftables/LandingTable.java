@@ -1,22 +1,48 @@
 package gdx.liftoff.ui.liftofftables;
 
+import static com.badlogic.gdx.math.Interpolation.exp10Out;
+import static com.badlogic.gdx.scenes.scene2d.actions.Actions.delay;
+import static com.badlogic.gdx.scenes.scene2d.actions.Actions.fadeIn;
+import static com.badlogic.gdx.scenes.scene2d.actions.Actions.fadeOut;
+import static com.badlogic.gdx.scenes.scene2d.actions.Actions.parallel;
+import static com.badlogic.gdx.scenes.scene2d.actions.Actions.run;
+import static com.badlogic.gdx.scenes.scene2d.actions.Actions.sequence;
+import static com.badlogic.gdx.scenes.scene2d.actions.Actions.targeting;
+import static com.badlogic.gdx.scenes.scene2d.actions.Actions.visible;
+import static gdx.liftoff.Main.CLEAR_WHITE;
+import static gdx.liftoff.Main.SPACE_HUGE;
+import static gdx.liftoff.Main.SPACE_LARGE;
+import static gdx.liftoff.Main.TOOLTIP_WIDTH;
+import static gdx.liftoff.Main.addHandListener;
+import static gdx.liftoff.Main.addTooltip;
+import static gdx.liftoff.Main.bgImage;
+import static gdx.liftoff.Main.checkSetupVersion;
+import static gdx.liftoff.Main.onChange;
+import static gdx.liftoff.Main.prop;
+import static gdx.liftoff.Main.root;
+import static gdx.liftoff.Main.skin;
+import static gdx.liftoff.Main.stage;
+import static gdx.liftoff.Main.validateUserProjectData;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
-import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.scenes.scene2d.ui.Container;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Stack;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Scaling;
 import com.ray3k.stripe.CollapsibleGroup;
 import com.ray3k.stripe.CollapsibleGroup.CollapseType;
+
 import gdx.liftoff.ui.panels.ProjectPanel;
 import gdx.liftoff.ui.panels.SocialPanel;
-
-import static com.badlogic.gdx.math.Interpolation.exp10Out;
-import static com.badlogic.gdx.scenes.scene2d.actions.Actions.*;
-import static gdx.liftoff.Main.*;
 
 /**
  * This table is the first table visible in the app. All the elements animate into view, but may be skipped by the user
@@ -154,57 +180,57 @@ public class LandingTable extends LiftoffTable {
 
         //animation
         animationAction = sequence(
-            //setup on the first frame
-            run(() -> {
-                logoImage.moveBy(0, offsetAmount);
-                projectPanel.moveBy(offsetAmount, 0);
-                buttonsTable.moveBy(-offsetAmount, 0);
-                socialPanel.moveBy(offsetAmount, 0);
-            }),
-            //fade in bg image
-            targeting(bgImage, fadeIn(.5f, exp10Out)),
-            //fade in/translate logo image
-            parallel(
-                targeting(logoImage, fadeIn(1f)),
-                targeting(logoImage, Actions.moveBy(0, -offsetAmount, 1f, exp10Out))
-            ),
-            //fade in subtitle
-            targeting(subtitleLabel, fadeIn(.5f)),
-            delay(.25f),
-            parallel(
-                //fade in project panel
-                targeting(projectPanel, delay(0, parallel(
-                    targeting(projectPanel, fadeIn(.5f)),
-                    targeting(projectPanel, Actions.moveBy(-offsetAmount, 0, 1f, exp10Out))
-                ))),
+                //setup on the first frame
+                run(() -> {
+                    logoImage.moveBy(0, offsetAmount);
+                    projectPanel.moveBy(offsetAmount, 0);
+                    buttonsTable.moveBy(-offsetAmount, 0);
+                    socialPanel.moveBy(offsetAmount, 0);
+                }),
+                //fade in bg image
+                targeting(bgImage, fadeIn(.5f, exp10Out)),
+                //fade in/translate logo image
+                parallel(
+                        targeting(logoImage, fadeIn(1f)),
+                        targeting(logoImage, Actions.moveBy(0, -offsetAmount, 1f, exp10Out))
+                ),
+                //fade in subtitle
+                targeting(subtitleLabel, fadeIn(.5f)),
+                delay(.25f),
+                parallel(
+                        //fade in project panel
+                        targeting(projectPanel, delay(0, parallel(
+                                targeting(projectPanel, fadeIn(.5f)),
+                                targeting(projectPanel, Actions.moveBy(-offsetAmount, 0, 1f, exp10Out))
+                        ))),
 
-                //fade in buttons
-                targeting(buttonsTable, delay(.3f, parallel(
-                    targeting(buttonsTable, fadeIn(1f)),
-                    targeting(buttonsTable, Actions.moveBy(offsetAmount, 0, 1f, exp10Out))
-                ))),
+                        //fade in buttons
+                        targeting(buttonsTable, delay(.3f, parallel(
+                                targeting(buttonsTable, fadeIn(1f)),
+                                targeting(buttonsTable, Actions.moveBy(offsetAmount, 0, 1f, exp10Out))
+                        ))),
 
-                //fade in social panel
-                targeting(socialPanel, delay(.6f, parallel(
-                    targeting(socialPanel, fadeIn(1f)),
-                    targeting(socialPanel, Actions.moveBy(-offsetAmount, 0, 1f, exp10Out))
-                ))),
+                        //fade in social panel
+                        targeting(socialPanel, delay(.6f, parallel(
+                                targeting(socialPanel, fadeIn(1f)),
+                                targeting(socialPanel, Actions.moveBy(-offsetAmount, 0, 1f, exp10Out))
+                        ))),
 
-                //fade transition subtitle to version
-                targeting(subtitleLabel, delay(.5f, sequence(
-                    targeting(subtitleLabel, fadeOut(.5f)),
-                    targeting(subtitleLabel, visible(false)),
-                    parallel(
-                        targeting(versionLabel, fadeIn(.5f)),
-                        targeting(updateContainer, delay(.35f, targeting(updateContainer, fadeIn(.5f))))
-                    )
-                )))
-            ),
-            //reset input
-            run(() -> {
-                setTouchable(Touchable.childrenOnly);
-                projectPanel.captureKeyboardFocus();
-            })
+                        //fade transition subtitle to version
+                        targeting(subtitleLabel, delay(.5f, sequence(
+                                targeting(subtitleLabel, fadeOut(.5f)),
+                                targeting(subtitleLabel, visible(false)),
+                                parallel(
+                                        targeting(versionLabel, fadeIn(.5f)),
+                                        targeting(updateContainer, delay(.35f, targeting(updateContainer, fadeIn(.5f))))
+                                )
+                        )))
+                ),
+                //reset input
+                run(() -> {
+                    setTouchable(Touchable.childrenOnly);
+                    projectPanel.captureKeyboardFocus();
+                })
         );
         Gdx.app.postRunnable(() -> addAction(animationAction));
     }

@@ -1,18 +1,40 @@
 package gdx.liftoff.ui.panels;
 
+import static gdx.liftoff.Main.SPACE_HUGE;
+import static gdx.liftoff.Main.SPACE_LARGE;
+import static gdx.liftoff.Main.SPACE_MEDIUM;
+import static gdx.liftoff.Main.SPACE_SMALL;
+import static gdx.liftoff.Main.TOOLTIP_WIDTH;
+import static gdx.liftoff.Main.addHandListener;
+import static gdx.liftoff.Main.addScrollFocusListener;
+import static gdx.liftoff.Main.addTooltip;
+import static gdx.liftoff.Main.onChange;
+import static gdx.liftoff.Main.onClick;
+import static gdx.liftoff.Main.prop;
+import static gdx.liftoff.Main.skin;
+
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
-import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.scenes.scene2d.ui.Button;
+import com.badlogic.gdx.scenes.scene2d.ui.Container;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
+import com.badlogic.gdx.scenes.scene2d.ui.Stack;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.utils.Align;
 import com.ray3k.stripe.SmashGroup;
-import gdx.liftoff.ui.UserData;
-import gdx.liftoff.ui.dialogs.*;
 
 import java.util.Collection;
 
-import static gdx.liftoff.Main.*;
+import gdx.liftoff.ui.UserData;
+import gdx.liftoff.ui.dialogs.ExtensionsDialog;
+import gdx.liftoff.ui.dialogs.FullscreenDialog;
+import gdx.liftoff.ui.dialogs.LanguagesDialog;
+import gdx.liftoff.ui.dialogs.PlatformsDialog;
+import gdx.liftoff.ui.dialogs.TemplatesDialog;
 
 /**
  * The table including the lists of platforms, languages, and extensions as well as a button to choose the template

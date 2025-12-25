@@ -1,5 +1,16 @@
 package gdx.liftoff.ui.panels;
 
+import static gdx.liftoff.Main.SPACE_MEDIUM;
+import static gdx.liftoff.Main.addHandListener;
+import static gdx.liftoff.Main.addTooltip;
+import static gdx.liftoff.Main.flushPref;
+import static gdx.liftoff.Main.onChange;
+import static gdx.liftoff.Main.pref;
+import static gdx.liftoff.Main.prop;
+import static gdx.liftoff.Main.root;
+import static gdx.liftoff.Main.skin;
+import static gdx.liftoff.Main.stage;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Cursor.SystemCursor;
@@ -12,13 +23,12 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 import com.github.tommyettinger.textra.TypingLabel;
 import com.kotcrab.vis.ui.widget.file.FileChooserAdapter;
+
 import gdx.liftoff.Main;
 import gdx.liftoff.config.Configuration;
 import gdx.liftoff.ui.UserData;
 import gdx.liftoff.ui.dialogs.ConfirmDeleteProjectFolder;
 import gdx.liftoff.ui.dialogs.FullscreenDialog;
-
-import static gdx.liftoff.Main.*;
 
 /**
  * Table that displays the project path, and the Android SDK path if Android is selected as a platform.

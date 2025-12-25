@@ -1,25 +1,42 @@
 package gdx.liftoff.ui.panels;
 
+import static gdx.liftoff.Main.SPACE_SMALL;
+import static gdx.liftoff.Main.addHandListener;
+import static gdx.liftoff.Main.addIbeamListener;
+import static gdx.liftoff.Main.addLabelHighlight;
+import static gdx.liftoff.Main.addScrollFocusListener;
+import static gdx.liftoff.Main.flushPref;
+import static gdx.liftoff.Main.onChange;
+import static gdx.liftoff.Main.pref;
+import static gdx.liftoff.Main.prop;
+import static gdx.liftoff.Main.skin;
+import static gdx.liftoff.Main.stage;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.scenes.scene2d.ui.Button;
+import com.badlogic.gdx.scenes.scene2d.ui.CheckBox;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
+
+import java.util.Locale;
+
 import gdx.liftoff.Listing;
 import gdx.liftoff.NaturalTextComparator;
 import gdx.liftoff.data.libraries.Library;
 import gdx.liftoff.ui.UserData;
 
-import java.util.Locale;
-
-import static gdx.liftoff.Main.*;
-
 /**
  * A table with a searchable list of third party libraries
  */
 public class ThirdPartyPanel extends Table implements Panel {
-    private Actor keyboardFocus;
     private final Array<SearchEntry> searchEntries = new Array<>();
+    private Actor keyboardFocus;
     private Table scrollTable;
     private CheckBox filterCheckBox;
 
@@ -134,8 +151,8 @@ public class ThirdPartyPanel extends Table implements Panel {
             if (showOnlySelected && !UserData.thirdPartyLibs.contains(searchEntry.id)) continue;
 
             if (search != null && !search.isEmpty() &&
-                !searchEntry.name.toLowerCase(Locale.ROOT).contains(search) &&
-                !searchEntry.keywords.toLowerCase(Locale.ROOT).contains(search)) continue;
+                    !searchEntry.name.toLowerCase(Locale.ROOT).contains(search) &&
+                    !searchEntry.keywords.toLowerCase(Locale.ROOT).contains(search)) continue;
 
             //entry checkbox
             scrollTable.row();

@@ -1,39 +1,52 @@
 package gdx.liftoff.ui.panels;
 
+import static gdx.liftoff.Main.SPACE_MEDIUM;
+import static gdx.liftoff.Main.TOOLTIP_WIDTH;
+import static gdx.liftoff.Main.addHandListener;
+import static gdx.liftoff.Main.addTooltip;
+import static gdx.liftoff.Main.onChange;
+import static gdx.liftoff.Main.prop;
+import static gdx.liftoff.Main.root;
+import static gdx.liftoff.Main.skin;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.UIUtils;
 import com.badlogic.gdx.utils.Align;
 import com.ray3k.stripe.PopTable;
-import gdx.liftoff.ui.UserData;
-import gdx.liftoff.ui.dialogs.FullscreenDialog;
+
 import org.jetbrains.annotations.NotNull;
 
-import java.io.*;
-import java.util.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.List;
 import java.util.stream.Stream;
 
-import static gdx.liftoff.Main.*;
+import gdx.liftoff.ui.UserData;
+import gdx.liftoff.ui.dialogs.FullscreenDialog;
 
 /**
  * The table to display the buttons to create a new project, open the project in IDEA, or exit the application after
  * project generation is complete.
  */
 public class CompleteButtonsPanel extends Table implements Panel {
+    private static final List<String> manuallyInstalledLinuxIdeaNames = Arrays.asList(
+            "idea",
+            "intellij-idea-ultimate-edition",
+            "intellij-idea-community-edition"
+    );
     /**
      * The PopTable to hide after the user clicks a button
      */
     PopTable popTable;
-
     String intellijPath = null;
     boolean intellijIsFlatpak = false;
-
-    private static final List<String> manuallyInstalledLinuxIdeaNames = Arrays.asList(
-        "idea",
-        "intellij-idea-ultimate-edition",
-        "intellij-idea-community-edition"
-    );
 
     public CompleteButtonsPanel(boolean fullscreen) {
         this(null, fullscreen);
@@ -42,6 +55,42 @@ public class CompleteButtonsPanel extends Table implements Panel {
     public CompleteButtonsPanel(PopTable popTable, boolean fullscreen) {
         this.popTable = popTable;
         populate(fullscreen);
+    }
+
+    private static String findManuallyInstalledIntellijOnWindows() throws Exception {
+        String programFilesFolder = System.getenv("PROGRAMFILES");
+        File jetbrainsFolder = new File(programFilesFolder, "JetBrains");
+        File[] ideaFolders = jetbrainsFolder.listFiles((dir, name) -> name.contains("IDEA"));
+        if (ideaFolders == null) {
+            throw new Exception("IntelliJ not found");
+        }
+
+        File intellijFolder = Stream.of(ideaFolders)
+                .max(Comparator.comparingLong(File::lastModified))
+                .orElseThrow(() -> new Exception("IntelliJ not found"));
+
+        return new File(intellijFolder, "bin/idea64.exe").getAbsolutePath();
+    }
+
+    @NotNull
+    private static String findFlatpakIntellij() throws Exception {
+        List<String> findFlatpakIntelliJ = Arrays.asList("flatpak", "list", "--app", "--columns=application");
+
+        Process flatpakProcess = new ProcessBuilder(findFlatpakIntelliJ).start();
+        if (flatpakProcess.waitFor() != 0) {
+            throw new Exception("Flatpak not found");
+        }
+
+        List<String> intellijIds = Arrays.asList("com.jetbrains.IntelliJ-IDEA-Ultimate", "com.jetbrains.IntelliJ-IDEA-Community");
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(flatpakProcess.getInputStream()));
+
+        String line;
+        while ((line = bufferedReader.readLine()) != null) {
+            if (intellijIds.contains(line)) {
+                return line;
+            }
+        }
+        throw new Exception("Flatpak IntelliJ not installed");
     }
 
     @Override
@@ -127,42 +176,6 @@ public class CompleteButtonsPanel extends Table implements Panel {
         table.add(textButton);
         addHandListener(textButton);
         onChange(textButton, () -> Gdx.app.exit());
-    }
-
-    private static String findManuallyInstalledIntellijOnWindows() throws Exception {
-        String programFilesFolder = System.getenv("PROGRAMFILES");
-        File jetbrainsFolder = new File(programFilesFolder, "JetBrains");
-        File[] ideaFolders = jetbrainsFolder.listFiles((dir, name) -> name.contains("IDEA"));
-        if (ideaFolders == null) {
-            throw new Exception("IntelliJ not found");
-        }
-
-        File intellijFolder = Stream.of(ideaFolders)
-            .max(Comparator.comparingLong(File::lastModified))
-            .orElseThrow(() -> new Exception("IntelliJ not found"));
-
-        return new File(intellijFolder, "bin/idea64.exe").getAbsolutePath();
-    }
-
-    @NotNull
-    private static String findFlatpakIntellij() throws Exception {
-        List<String> findFlatpakIntelliJ = Arrays.asList("flatpak", "list", "--app", "--columns=application");
-
-        Process flatpakProcess = new ProcessBuilder(findFlatpakIntelliJ).start();
-        if (flatpakProcess.waitFor() != 0) {
-            throw new Exception("Flatpak not found");
-        }
-
-        List<String> intellijIds = Arrays.asList("com.jetbrains.IntelliJ-IDEA-Ultimate", "com.jetbrains.IntelliJ-IDEA-Community");
-        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(flatpakProcess.getInputStream()));
-
-        String line;
-        while ((line = bufferedReader.readLine()) != null) {
-            if (intellijIds.contains(line)) {
-                return line;
-            }
-        }
-        throw new Exception("Flatpak IntelliJ not installed");
     }
 
     @Override

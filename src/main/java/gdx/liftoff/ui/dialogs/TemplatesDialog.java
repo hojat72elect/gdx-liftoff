@@ -1,11 +1,33 @@
 package gdx.liftoff.ui.dialogs;
 
+import static gdx.liftoff.Main.SPACE_HUGE;
+import static gdx.liftoff.Main.SPACE_LARGE;
+import static gdx.liftoff.Main.SPACE_MEDIUM;
+import static gdx.liftoff.Main.SPACE_SMALL;
+import static gdx.liftoff.Main.addHandListener;
+import static gdx.liftoff.Main.addScrollFocusListener;
+import static gdx.liftoff.Main.addTooltip;
+import static gdx.liftoff.Main.onChange;
+import static gdx.liftoff.Main.prop;
+import static gdx.liftoff.Main.skin;
+import static gdx.liftoff.Main.stage;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
-import com.badlogic.gdx.scenes.scene2d.*;
-import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.Event;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
+import com.badlogic.gdx.scenes.scene2d.Touchable;
+import com.badlogic.gdx.scenes.scene2d.ui.ButtonGroup;
+import com.badlogic.gdx.scenes.scene2d.ui.CheckBox;
+import com.badlogic.gdx.scenes.scene2d.ui.Container;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Window.WindowStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
@@ -14,9 +36,8 @@ import com.ray3k.stripe.CollapsibleGroup;
 import com.ray3k.stripe.CollapsibleGroup.CollapseType;
 import com.ray3k.stripe.PopTable;
 import com.ray3k.stripe.ScaleContainer;
-import gdx.liftoff.ui.UserData;
 
-import static gdx.liftoff.Main.*;
+import gdx.liftoff.ui.UserData;
 
 /**
  * The dialog shown when the user clicks the template button in the add-ons panel
@@ -52,6 +73,23 @@ public class TemplatesDialog extends PopTable {
             add(contentTable);
             populate(contentTable);
         }
+    }
+
+    public static void show(boolean fullscreen, Runnable onHideRunnable) {
+        TemplatesDialog dialog = new TemplatesDialog(fullscreen);
+        dialog.setFillParent(fullscreen);
+        dialog.addListener(new PopTable.TableShowHideListener() {
+            @Override
+            public void tableHidden(Event event) {
+                onHideRunnable.run();
+            }
+
+            @Override
+            public void tableShown(Event event) {
+
+            }
+        });
+        dialog.show(stage);
     }
 
     private void populate(Table contentTable) {
@@ -184,8 +222,7 @@ public class TemplatesDialog extends PopTable {
 
             UserData.template = templateName;
             for (String requiredThirdPartyLib : requiredThirdPartyLibs) {
-                if (!UserData.thirdPartyLibs.contains(requiredThirdPartyLib))
-                    UserData.thirdPartyLibs.add(requiredThirdPartyLib);
+                UserData.thirdPartyLibs.add(requiredThirdPartyLib);
             }
         });
 
@@ -230,22 +267,5 @@ public class TemplatesDialog extends PopTable {
                 if (pointer == -1) label.setColor(skin.getColor("white"));
             }
         });
-    }
-
-    public static void show(boolean fullscreen, Runnable onHideRunnable) {
-        TemplatesDialog dialog = new TemplatesDialog(fullscreen);
-        dialog.setFillParent(fullscreen);
-        dialog.addListener(new PopTable.TableShowHideListener() {
-            @Override
-            public void tableHidden(Event event) {
-                onHideRunnable.run();
-            }
-
-            @Override
-            public void tableShown(Event event) {
-
-            }
-        });
-        dialog.show(stage);
     }
 }

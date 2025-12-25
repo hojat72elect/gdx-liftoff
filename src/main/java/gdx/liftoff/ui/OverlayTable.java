@@ -1,6 +1,14 @@
 package gdx.liftoff.ui;
 
-import com.badlogic.gdx.Gdx;
+import static gdx.liftoff.Main.ROOT_TABLE_PREF_HEIGHT;
+import static gdx.liftoff.Main.ROOT_TABLE_PREF_WIDTH;
+import static gdx.liftoff.Main.SPACE_MEDIUM;
+import static gdx.liftoff.Main.addHandListener;
+import static gdx.liftoff.Main.addTooltip;
+import static gdx.liftoff.Main.onChange;
+import static gdx.liftoff.Main.prop;
+import static gdx.liftoff.Main.skin;
+
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
@@ -10,10 +18,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.Align;
 import com.ray3k.stripe.CollapsibleGroup;
 import com.ray3k.stripe.CollapsibleGroup.CollapseType;
-import gdx.liftoff.Main;
-import gdx.liftoff.ui.dialogs.ConfirmResetUserData;
 
-import static gdx.liftoff.Main.*;
+import gdx.liftoff.ui.dialogs.ConfirmResetUserData;
 
 /**
  * A simple table to overlay the rest of the UI. This contains the maximize button and version. It implements a reactive
@@ -63,7 +69,7 @@ public class OverlayTable extends Table {
 
     private Table createMinimalistTable() {
         Table table = new Table();
-        
+
         Button button = new Button(skin, "reload");
         table.add(button).expand().top().right();
         addTooltip(button, Align.left, prop.getProperty("reset"));
