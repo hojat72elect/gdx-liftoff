@@ -58,7 +58,6 @@ abstract class ThirdPartyExtension : Library {
 /**
  * A high performance Entity-Component-System framework.
  * If you target GWT, this setup tool handles some of this library's complicated steps for you.
- * @author junkdog
  */
 @Extension
 class ArtemisOdb : ThirdPartyExtension() {
@@ -98,8 +97,6 @@ class ArtemisOdb : ThirdPartyExtension() {
 
 /**
  * General libGDX utilities.
- * @author Dermetfan
- * @author Maintained by Tommy Ettinger
  */
 @Extension
 class LibgdxUtils : ThirdPartyExtension() {
@@ -119,8 +116,6 @@ class LibgdxUtils : ThirdPartyExtension() {
 
 /**
  * Box2D libGDX utilities.
- * @author Dermetfan
- * @author Maintained by Tommy Ettinger
  */
 @Extension
 class LibgdxUtilsBox2D : ThirdPartyExtension() {
@@ -142,8 +137,7 @@ class LibgdxUtilsBox2D : ThirdPartyExtension() {
 
 /**
  * Facebook graph API wrapper. iOS-incompatible! Also, out-of-date.
- * @author Tom Grill
- */
+ *  */
 @Extension
 class Facebook : ThirdPartyExtension() {
     override val id = "facebook"
@@ -173,8 +167,7 @@ class Facebook : ThirdPartyExtension() {
 
 /**
  * Native dialogs support.
- * @author Tom Grill
- */
+ *  */
 @Extension
 class Dialogs : ThirdPartyExtension() {
     override val id = "dialogs"
@@ -200,7 +193,6 @@ class Dialogs : ThirdPartyExtension() {
 
 /**
  * Fast, lightweight Kotlin ECS framework; needs Java 11 or higher.
- * @author StrongJoshua
  */
 @Extension
 class Fleks : ThirdPartyExtension() {
@@ -217,8 +209,6 @@ class Fleks : ThirdPartyExtension() {
 
 /**
  * In-game console implementation; GWT-compatible with config.
- * @author StrongJoshua (original)
- * @author Tommy Ettinger (maintainer)
  */
 @Extension
 class InGameConsole : ThirdPartyExtension() {
@@ -238,8 +228,7 @@ class InGameConsole : ThirdPartyExtension() {
 /**
  * Java Annotation Console Interface. In-game console implementation, for non-GWT usage.
  * If you target GWT, use JaciGwt or InGameConsole instead.
- * @author Yevgeny Krasik
- */
+ *  */
 @Extension
 class Jaci : ThirdPartyExtension() {
     override val id = "jaci"
@@ -256,8 +245,7 @@ class Jaci : ThirdPartyExtension() {
 /**
  * Java Annotation Console Interface. GWT-compatible in-game console implementation.
  * Don't use this at the same time as JACI (the non-GWT version).
- * @author Yevgeny Krasik
- */
+ *  */
 @Extension
 class JaciGwt : ThirdPartyExtension() {
     override val id = "jaciGwt"
@@ -293,8 +281,7 @@ class KotlinxCoroutines : ThirdPartyExtension() {
 /**
  * Simple map generators. Noise4J can be used as a continuous noise generator, but you're better served by
  * joise or make-some-noise in that case. There are also many kinds of map generator in squidlib-util.
- * @author czyzby
- */
+ *  */
 @Extension
 class Noise4J : ThirdPartyExtension() {
     override val id = "noise4j"
@@ -313,7 +300,6 @@ class Noise4J : ThirdPartyExtension() {
 
 /**
  * Java implementation of Ink language: a scripting language for writing interactive narrative.
- * @author bladecoder
  */
 @Extension
 class BladeInk : ThirdPartyExtension() {
@@ -331,7 +317,6 @@ class BladeInk : ThirdPartyExtension() {
 /**
  * 2D, 3D, 4D and 6D modular noise library written in Java.
  * Joise can combine noise in versatile ways, and can serialize the "recipes" for a particular type of noise generator.
- * @author SudoPlayGames
  */
 @Extension
 class Joise : ThirdPartyExtension() {
@@ -354,8 +339,7 @@ class Joise : ThirdPartyExtension() {
  * The API is more "raw" than Joise, and is meant as a building block for things that use noise, rather
  * than something that generates immediately-usable content. It is still a more convenient API than
  * Noise4J when making fields of noise.
- * @author Tommy Ettinger
- */
+ *  */
 @Extension
 class MakeSomeNoise : ThirdPartyExtension() {
     override val id = "makeSomeNoise"
@@ -375,7 +359,6 @@ class MakeSomeNoise : ThirdPartyExtension() {
 /**
  * An animated Label equivalent that appears as if it was being typed in real time.
  * This is really just a wonderful set of effects for games to have.
- * @author Rafa Skoberg
  */
 @Extension
 class TypingLabel : ThirdPartyExtension() {
@@ -396,8 +379,6 @@ class TypingLabel : ThirdPartyExtension() {
 
 /**
  * Augmented text display, including styles and all of TypingLabel's features.
- * @author Tommy Ettinger
- * @author Rafa Skoberg
  */
 @Extension
 class TextraTypist : ThirdPartyExtension() {
@@ -418,8 +399,6 @@ class TextraTypist : ThirdPartyExtension() {
 
 /**
  * Combines FreeType with TextraTypist; allows a skin JSON to configure FreeType.
- * @author Tommy Ettinger
- * @author Raymond Buckley (wrote Stripe's FreeType code, which this incorporates)
  */
 @Extension
 class FreeTypist : ThirdPartyExtension() {
@@ -440,7 +419,6 @@ class FreeTypist : ThirdPartyExtension() {
  * A high-performance alternative to libGDX's built-in ShapeRenderer, with smoothing and more shapes.
  * Usually more practical when compared with ShapeRenderer, but ShapeRenderer may perform better when
  * rendering hair-thin lines or points.
- * @author earlygrey
  */
 @Extension
 class ShapeDrawer : ThirdPartyExtension() {
@@ -463,7 +441,6 @@ class ShapeDrawer : ThirdPartyExtension() {
  * Provides various frequently-used graph algorithms, aiming to be lightweight, fast, and intuitive.
  * A good substitute for the pathfinding in gdx-ai, but it doesn't include path smoothing or any of the
  * non-pathfinding AI tools in gdx-ai.
- * @author earlygrey
  */
 @Extension
 class SimpleGraphs : ThirdPartyExtension() {
@@ -485,8 +462,7 @@ class SimpleGraphs : ThirdPartyExtension() {
 /**
  * Provides a replacement for GWT's missing String.format() with its Stringf.format().
  * Only relevant if you target the HTML platform or intend to in the future.
- * @author Tommy Ettinger
- */
+ *  */
 @Extension
 class Formic : ThirdPartyExtension() {
     override val id = "formic"
@@ -505,8 +481,7 @@ class Formic : ThirdPartyExtension() {
 
 /**
  * Alternative color models for changing the colors of sprites and scenes, including brightening.
- * @author Tommy Ettinger
- */
+ *  */
 @Extension
 class Colorful : ThirdPartyExtension() {
     override val id = "colorful"
@@ -526,8 +501,7 @@ class Colorful : ThirdPartyExtension() {
 /**
  * Support for writing animated GIF and animated PNG images from libGDX, as well as 8-bit-palette PNGs.
  * This can be useful for making short captures of gameplay, or making animated characters into GIFs.
- * @author Tommy Ettinger
- */
+ *  */
 @Extension
 class Anim8 : ThirdPartyExtension() {
     override val id = "anim8"
@@ -546,7 +520,6 @@ class Anim8 : ThirdPartyExtension() {
 
 /**
  * Bonus features for 9-patch images, filling significant gaps in normal 9-patch functionality.
- * @author Raymond Buckley
  */
 @Extension
 class TenPatch : ThirdPartyExtension() {
@@ -566,7 +539,6 @@ class TenPatch : ThirdPartyExtension() {
 
 /**
  * Collected Scene2D widgets and utilities.
- * @author Raymond Buckley
  */
 @Extension
 class Stripe : ThirdPartyExtension() {
@@ -586,7 +558,6 @@ class Stripe : ThirdPartyExtension() {
 
 /**
  * Support for the GLTF format for 3D models and physically-based rendering; a huge time-saver for 3D handling.
- * @author mgsx
  */
 @Extension
 class GdxGltf : ThirdPartyExtension() {
@@ -606,7 +577,6 @@ class GdxGltf : ThirdPartyExtension() {
 
 /**
  * A simple framebuffer based lighting engine for libGDX. Adds sample light assets, so it can be used immediately.
- * @author Ali Asif Khan
  */
 @Extension
 class HackLights : ThirdPartyExtension() {
@@ -641,7 +611,6 @@ class HackLights : ThirdPartyExtension() {
 /**
  * The libGDX runtime for Spine, a commercial (and very powerful) skeletal-animation editor.
  * You must have a license for Spine to use the runtime in your code.
- * @author Esoteric Software
  */
 @Extension
 class SpineRuntime : ThirdPartyExtension() {
@@ -663,7 +632,6 @@ class SpineRuntime : ThirdPartyExtension() {
  * Legacy: MrStahlfelge's upgrades to controller support, now part of the official controllers extension.
  * This is here so older projects that don't use the official controllers can be ported more easily.
  * Change the version to 1.0.1 if you use libGDX 1.9.10 or earlier!
- * @author MrStahlfelge
  */
 @Extension
 class ControllerUtils : ThirdPartyExtension() {
@@ -698,7 +666,6 @@ class ControllerUtils : ThirdPartyExtension() {
  * MrStahlfelge's controller-imitating Scene2D widgets, for players who don't have a controller.
  * <a href="https://github.com/MrStahlfelge/gdx-controllerutils/wiki/Button-operable-Scene2d">See the docs before using</a>.
  * Change the version to 1.0.1 if you use libGDX 1.9.10 or earlier!
- * @author MrStahlfelge
  */
 @Extension
 class ControllerScene2D : ThirdPartyExtension() {
@@ -719,7 +686,6 @@ class ControllerScene2D : ThirdPartyExtension() {
 /**
  * MrStahlfelge's configurable mapping for game controllers.
  * Not compatible with libGDX 1.9.10 or older!
- * @author MrStahlfelge
  */
 @Extension
 class ControllerMapping : ThirdPartyExtension() {
@@ -739,8 +705,6 @@ class ControllerMapping : ThirdPartyExtension() {
 
 /**
  * Code for making post-processing effects without so much hassle.
- * @author crashinvaders
- * @author metaphore
  */
 @Extension
 class GdxVfxCore : ThirdPartyExtension() {
@@ -762,8 +726,6 @@ class GdxVfxCore : ThirdPartyExtension() {
 
 /**
  * A wide range of predefined post-processing effects using gdx-vfx core.
- * @author crashinvaders
- * @author metaphore
  */
 @Extension
 class GdxVfxStandardEffects : ThirdPartyExtension() {
@@ -785,8 +747,6 @@ class GdxVfxStandardEffects : ThirdPartyExtension() {
 /**
  * Cross-platform regex utilities that work the same on HTML as they do on desktop or mobile platforms.
  * This is not 100% the same as the java.util.regex package, but is similar, and sometimes offers more.
- * @author Tommy Ettinger
- * @author based on JRegex by Sergey A. Samokhodkin
  */
 @Extension
 class RegExodus : ThirdPartyExtension() {
@@ -809,8 +769,7 @@ class RegExodus : ThirdPartyExtension() {
  * Check the vis-ui changelog for what vis-ui versions are compatible
  * with which libGDX versions; vis-ui 1.5.6 is compatible with libGDX
  * 1.13.1, and vis-ui 1.5.7 is compatible with libGDX 1.13.5 .
- * @author Kotcrab
- */
+ *  */
 @Extension
 class VisUI : ThirdPartyExtension() {
     override val id = "visUi"
@@ -832,7 +791,6 @@ class VisUI : ThirdPartyExtension() {
 /**
  * A library to obtain a circular WidgetGroup or context menu using scene2d.ui.
  * Pie menus can be easier for players to navigate with a mouse than long lists.
- * @author Jérémi Grenier-Berthiaume
  */
 @Extension
 class PieMenu : ThirdPartyExtension() {
@@ -855,8 +813,6 @@ class PieMenu : ThirdPartyExtension() {
 /**
  * A 2D AABB collision detection and response library; like a basic/easy version of Box2D.
  * Note, AABB means this only handles non-rotated rectangular collision boxes.
- * @author implicit-invocation
- * @author Raymond Buckley
  */
 @Extension
 class JBump : ThirdPartyExtension() {
@@ -876,7 +832,6 @@ class JBump : ThirdPartyExtension() {
 
 /**
  * Extends or augments the Java Collections Framework. Java 8 or higher.
- * @author Apache Software Foundation
  */
 @Extension
 class CommonsCollections : ThirdPartyExtension() {
@@ -893,7 +848,6 @@ class CommonsCollections : ThirdPartyExtension() {
 
 /**
  * Very fast binary serialization. GWT-incompatible.
- * @author Apache Software Foundation
  */
 @Extension
 class Fory : ThirdPartyExtension() {
@@ -913,7 +867,6 @@ class Fory : ThirdPartyExtension() {
 
 /**
  * Efficient binary serialization framework for the JVM. GWT-incompatible.
- * @author Nathan Sweet
  */
 @Extension
 class Kryo : ThirdPartyExtension() {
@@ -979,7 +932,6 @@ class Guacamole : ThirdPartyExtension() {
 
 /**
  * Access the Oboe libraries for audio in Android.
- * @author barsoosayque
  */
 @Extension
 class LibgdxOboe : ThirdPartyExtension() {
@@ -1016,7 +968,6 @@ class LibgdxScreenManager : ThirdPartyExtension() {
 
 /**
  * Advanced audio features for LWJGL3. JDK 8+.
- * @author Hangman
  */
 @Extension
 class TuningFork : ThirdPartyExtension() {
@@ -1034,7 +985,6 @@ class TuningFork : ThirdPartyExtension() {
 
 /**
  * Load/render TinyVG vector graphics.
- * @author Lyze
  */
 @Extension
 class TinyVG : ThirdPartyExtension() {
@@ -1055,7 +1005,6 @@ class TinyVG : ThirdPartyExtension() {
 
 /**
  * LibGDX PSX-style render features. Not GWT-compatible.
- * @author bonenaut7
  */
 @Extension
 class GdxPsx : ThirdPartyExtension() {
@@ -1074,7 +1023,6 @@ class GdxPsx : ThirdPartyExtension() {
 
 /**
  * A layout engine which implements FlexBox.
- * @author Lyze
  */
 @Extension
 class GdxFlexBox : ThirdPartyExtension() {
@@ -1094,7 +1042,6 @@ class GdxFlexBox : ThirdPartyExtension() {
 
 /**
  * Couples Unity's behaviour system and execution order with Box2D.
- * @author Lyze
  */
 @Extension
 class GdxUnBox2D : ThirdPartyExtension() {
@@ -1120,7 +1067,6 @@ class GdxUnBox2D : ThirdPartyExtension() {
  * quite badly on pixel art. You might see big improvements in memory usage, you might not.
  * You may need to change the dependencies for Desktop, LWJGL3, Headless,
  * and/or iOS from `implementation` to `runtimeOnly`.
- * @author Anton Chekulaev/metaphore
  */
 @Extension
 class GdxBasisUniversal : ThirdPartyExtension() {
@@ -1155,7 +1101,6 @@ class GdxBasisUniversal : ThirdPartyExtension() {
 
 /**
  * Adds support for Lombok annotations in the core module; meant to reduce boilerplate code.
- * @author The Project Lombok Authors
  */
 @Extension
 class Lombok : ThirdPartyExtension() {
@@ -1175,7 +1120,6 @@ class Lombok : ThirdPartyExtension() {
 
 /**
  * Add support for HyperLap2D libGDX runtime.
- * @author fgnm
  */
 @Extension
 class HyperLap2DRuntime : ThirdPartyExtension() {
@@ -1198,7 +1142,6 @@ class HyperLap2DRuntime : ThirdPartyExtension() {
 
 /**
  * Add support for HyperLap2D Spine extension for libGDX runtime.
- * @author fgnm
  */
 @Extension
 class HyperLap2DSpineExtension : ThirdPartyExtension() {
@@ -1219,7 +1162,6 @@ class HyperLap2DSpineExtension : ThirdPartyExtension() {
 
 /**
  * Add support for HyperLap2D TinyVG extension for libGDX runtime.
- * @author fgnm
  */
 @Extension
 class HyperLap2DTinyVGExtension : ThirdPartyExtension() {
@@ -1239,7 +1181,6 @@ class HyperLap2DTinyVGExtension : ThirdPartyExtension() {
 
 /**
  * Add support for HyperLap2D TextraTypist (not the original Typing-Label) extension.
- * @author fgnm
  */
 @Extension
 class HyperLap2DTypingLabelExtension : ThirdPartyExtension() {
@@ -1259,7 +1200,6 @@ class HyperLap2DTypingLabelExtension : ThirdPartyExtension() {
 
 /**
  * Advanced Cross Platform Audio Engine for libGDX based on MiniAudio.
- * @author fgnm
  */
 @Extension
 class GdxMiniAudio : ThirdPartyExtension() {
@@ -1296,8 +1236,6 @@ class GdxMiniAudio : ThirdPartyExtension() {
 
 /**
  * Aurelien Ribon's Universal Tween Engine.
- * @author Aurelien Ribon
- * @author Tom Cashman
  */
 @Extension
 class UniversalTween : ThirdPartyExtension() {
@@ -1317,8 +1255,7 @@ class UniversalTween : ThirdPartyExtension() {
 
 /**
  * Shared interfaces for points, i.e. Vector2. 'gdcrux' implements this.
- * @author Tommy Ettinger
- */
+ *  */
 @Extension
 class Crux : ThirdPartyExtension() {
     override val id = "crux"
@@ -1337,8 +1274,7 @@ class Crux : ThirdPartyExtension() {
 
 /**
  * Extends libGDX Vector/GridPoint types and implements 'crux'.
- * @author Tommy Ettinger
- */
+ *  */
 @Extension
 class Gdcrux : ThirdPartyExtension() {
     override val id = "gdcrux"
@@ -1359,8 +1295,7 @@ class Gdcrux : ThirdPartyExtension() {
 
 /**
  * Pathfinding combining simple-graphs and gdx-ai.
- * @author Tommy Ettinger
- */
+ *  */
 @Extension
 class Gand : ThirdPartyExtension() {
     override val id = "gand"
@@ -1382,8 +1317,7 @@ class Gand : ThirdPartyExtension() {
 
 /**
  * Random generation, noise, "encarption..."
- * @author Tommy Ettinger
- */
+ *  */
 @Extension
 class Cringe : ThirdPartyExtension() {
     override val id = "cringe"
@@ -1403,8 +1337,7 @@ class Cringe : ThirdPartyExtension() {
 /**
  * Common code for math and showing numbers.
  * Optimal in projects that don't depend on libGDX, like server modules, because it duplicates some libGDX math code.
- * @author Tommy Ettinger
- */
+ *  */
 @Extension
 class Digital : ThirdPartyExtension() {
     override val id = "digital"
@@ -1423,8 +1356,7 @@ class Digital : ThirdPartyExtension() {
 
 /**
  * Many Java 8 FunctionalInterface-s for primitives.
- * @author Tommy Ettinger
- */
+ *  */
 @Extension
 class Funderby : ThirdPartyExtension() {
     override val id = "funderby"
@@ -1443,8 +1375,7 @@ class Funderby : ThirdPartyExtension() {
 
 /**
  * Random number generators/distributions with easy serialization.
- * @author Tommy Ettinger
- */
+ *  */
 @Extension
 class Juniper : ThirdPartyExtension() {
     override val id = "juniper"
@@ -1465,8 +1396,7 @@ class Juniper : ThirdPartyExtension() {
 
 /**
  * JDK interface support for GDX-style Data Structures. JDK 8+.
- * @author Tommy Ettinger
- */
+ *  */
 @Extension
 class Jdkgdxds : ThirdPartyExtension() {
     override val id = "jdkgdxds"
@@ -1488,8 +1418,7 @@ class Jdkgdxds : ThirdPartyExtension() {
 
 /**
  * JSON support for jdkgdxds/juniper to/from GDX. JDK 8+.
- * @author Tommy Ettinger
- */
+ *  */
 @Extension
 class JdkgdxdsInterop : ThirdPartyExtension() {
     override val id = "jdkgdxdsInterop"
@@ -1511,8 +1440,7 @@ class JdkgdxdsInterop : ThirdPartyExtension() {
 
 /**
  * Kryo support for RegExodus types.
- * @author Tommy Ettinger
- */
+ *  */
 @Extension
 class KryoRegExodus : ThirdPartyExtension() {
     override val id = "kryoRegExodus"
@@ -1531,8 +1459,7 @@ class KryoRegExodus : ThirdPartyExtension() {
 
 /**
  * Kryo support for digital's types.
- * @author Tommy Ettinger
- */
+ *  */
 @Extension
 class KryoDigital : ThirdPartyExtension() {
     override val id = "kryoDigital"
@@ -1551,8 +1478,7 @@ class KryoDigital : ThirdPartyExtension() {
 
 /**
  * Kryo support for juniper's types.
- * @author Tommy Ettinger
- */
+ *  */
 @Extension
 class KryoJuniper : ThirdPartyExtension() {
     override val id = "kryoJuniper"
@@ -1572,8 +1498,7 @@ class KryoJuniper : ThirdPartyExtension() {
 
 /**
  * Kryo support for jdkgdxds's types.
- * @author Tommy Ettinger
- */
+ *  */
 @Extension
 class KryoJdkgdxds : ThirdPartyExtension() {
     override val id = "kryoJdkgdxds"
@@ -1593,8 +1518,7 @@ class KryoJdkgdxds : ThirdPartyExtension() {
 
 /**
  * Kryo support for cringe's types.
- * @author Tommy Ettinger
- */
+ *  */
 @Extension
 class KryoCringe : ThirdPartyExtension() {
     override val id = "kryoCringe"
@@ -1613,8 +1537,7 @@ class KryoCringe : ThirdPartyExtension() {
 
 /**
  * Kryo support for gand's types.
- * @author Tommy Ettinger
- */
+ *  */
 @Extension
 class KryoGand : ThirdPartyExtension() {
     override val id = "kryoGand"
@@ -1633,8 +1556,7 @@ class KryoGand : ThirdPartyExtension() {
 
 /**
  * Kryo support for libGDX's types.
- * @author Tommy Ettinger
- */
+ *  */
 @Extension
 class KryoLibgdx : ThirdPartyExtension() {
     override val id = "kryoLibgdx"
@@ -1652,8 +1574,7 @@ class KryoLibgdx : ThirdPartyExtension() {
 
 /**
  * Tantrum support for libGDX types.
- * @author Tommy Ettinger
- */
+ *  */
 @Extension
 class TantrumLibgdx : ThirdPartyExtension() {
     override val id = "tantrumLibgdx"
@@ -1671,8 +1592,7 @@ class TantrumLibgdx : ThirdPartyExtension() {
 
 /**
  * Tantrum support for RegExodus types.
- * @author Tommy Ettinger
- */
+ *  */
 @Extension
 class TantrumRegExodus : ThirdPartyExtension() {
     override val id = "tantrumRegExodus"
@@ -1691,8 +1611,7 @@ class TantrumRegExodus : ThirdPartyExtension() {
 
 /**
  * Tantrum support for digital's types.
- * @author Tommy Ettinger
- */
+ *  */
 @Extension
 class TantrumDigital : ThirdPartyExtension() {
     override val id = "tantrumDigital"
@@ -1711,8 +1630,7 @@ class TantrumDigital : ThirdPartyExtension() {
 
 /**
  * Tantrum support for jdkgdxds's types.
- * @author Tommy Ettinger
- */
+ *  */
 @Extension
 class TantrumJdkgdxds : ThirdPartyExtension() {
     override val id = "tantrumJdkgdxds"
@@ -1732,7 +1650,6 @@ class TantrumJdkgdxds : ThirdPartyExtension() {
 
 /**
  * Utilities for accessing the Game Jolt API for highscores and data storage.
- * @author Raymond Buckley
  */
 @Extension
 class GameJoltApi : ThirdPartyExtension() {
@@ -1752,8 +1669,7 @@ class GameJoltApi : ThirdPartyExtension() {
 
 /**
  * LWJGL3-compatible version of the TexturePacker from gdx-tools.
- * @author Tommy Ettinger
- */
+ *  */
 @Extension
 class TexturePackerOnly : ThirdPartyExtension() {
     override val id = "texturePackerOnly"
@@ -1769,8 +1685,7 @@ class TexturePackerOnly : ThirdPartyExtension() {
 
 /**
  * LWJGL3-compatible version of the TextureUnpacker from gdx-tools.
- * @author Tommy Ettinger
- */
+ *  */
 @Extension
 class TextureUnpackerOnly : ThirdPartyExtension() {
     override val id = "textureUnpackerOnly"
@@ -1789,7 +1704,6 @@ class TextureUnpackerOnly : ThirdPartyExtension() {
 //     * An immediate-mode GUI library (LWJGL3-only!) that can be an alternative to scene2d.ui.
 //     * NOTE: this is only accessible from the lwjgl3 project, and may require unusual
 //     * project configuration to use.
-//     * @author SpaiR
 //     */
 //    @Extension
 //    class Imgui : ThirdPartyExtension() {

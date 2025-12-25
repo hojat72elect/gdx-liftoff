@@ -11,9 +11,7 @@ import gdx.liftoff.views.ProjectTemplate
 /**
  * A 2.5D isometric demo with a procedural map made of voxel terrain.
  * This is a tiny complete game, with win and loss conditions.
- * @author tommyettinger
- * @author bergice
- */
+ *  *  */
 @ProjectTemplate(official = true)
 @Suppress("unused") // Referenced via reflection.
 class IsometricVoxelTemplate : Template {

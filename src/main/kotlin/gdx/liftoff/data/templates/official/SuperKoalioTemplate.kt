@@ -9,8 +9,7 @@ import gdx.liftoff.views.ProjectTemplate
 
 /**
  * A 2D platformer test, with a Tiled map and sprites by <a href="http://www.vickiwenderlich.com/">Vicky Wenderlich</a>.
- * @author mzechner
- */
+ *  */
 @ProjectTemplate(official = true)
 @Suppress("unused") // Referenced via reflection.
 class SuperKoalioTemplate : Template {
@@ -64,7 +63,7 @@ import com.badlogic.gdx.utils.ScreenUtils;
  * tileset and sprites by <a href="http://www.vickiwenderlich.com/">Vicky Wenderlich</a></p>
  *
  * Shows simple platformer collision detection as well as on-the-fly map modifications through destructible blocks!
- * @author mzechner */
+ */
 public class ${project.basic.mainClass} extends InputAdapter implements ApplicationListener {
     /** The player character, has state and state time, */
     static class Koala {

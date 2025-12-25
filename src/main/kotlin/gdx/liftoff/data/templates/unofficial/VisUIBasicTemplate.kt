@@ -10,7 +10,6 @@ import gdx.liftoff.views.ProjectTemplate
 
 /**
  * Simple VisUI example showing how to actually include VisUI in user project
- * @author Kotcrab
  */
 @ProjectTemplate
 @Suppress("unused") // Referenced via reflection.

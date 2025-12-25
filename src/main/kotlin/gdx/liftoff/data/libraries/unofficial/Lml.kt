@@ -21,8 +21,6 @@ private const val FALLBACK_VERSION = "1.10.1.12.1"
 
 /**
  * Various utilities for libGDX APIs including GUI building and dependency injection.
- * @author czyzby
- * @author metaphore (Crashinvaders)
  */
 abstract class LmlExtension : Library {
     /**

@@ -10,9 +10,7 @@ import gdx.liftoff.views.Extension
 
 /**
  * Base class of SquidLib libraries.
- * @author Eben Howard
- * @author Tommy Ettinger
- */
+ *  *  */
 abstract class SquidLibExtension : ThirdPartyExtension() {
     override val defaultVersion = "3.0.6"
     override val group = "com.squidpony"
@@ -23,9 +21,7 @@ abstract class SquidLibExtension : ThirdPartyExtension() {
 
 /**
  * Base class of SquidSquad libraries.
- * @author Eben Howard
- * @author Tommy Ettinger
- */
+ *  *  */
 abstract class SquidSquadExtension : ThirdPartyExtension() {
     override val defaultVersion = "4.0.4"
     override val group = "com.squidpony"
@@ -36,9 +32,7 @@ abstract class SquidSquadExtension : ThirdPartyExtension() {
 
 /**
  * Utilities for grid-based games.
- * @author Eben Howard
- * @author Tommy Ettinger
- */
+ *  *  */
 @Extension
 class SquidLibUtil : SquidLibExtension() {
     override val id = "squidlibUtil"
@@ -55,9 +49,7 @@ class SquidLibUtil : SquidLibExtension() {
 
 /**
  * Text-based display for roguelike games.
- * @author Eben Howard
- * @author Tommy Ettinger
- */
+ *  *  */
 @Extension
 class SquidLib : SquidLibExtension() {
     override val id = "squidlib"
@@ -75,9 +67,7 @@ class SquidLib : SquidLibExtension() {
 
 /**
  * Extra save/load support for SquidLib objects.
- * @author Eben Howard
- * @author Tommy Ettinger
- */
+ *  *  */
 @Extension
 class SquidLibExtra : SquidLibExtension() {
     override val id = "squidlibExtra"
@@ -94,9 +84,7 @@ class SquidLibExtra : SquidLibExtension() {
 
 /**
  * Core utilities used by all SquidSquad extensions.
- * @author Eben Howard
- * @author Tommy Ettinger
- */
+ *  *  */
 @Extension
 class SquidSquadCore : SquidSquadExtension() {
     override val id = "squidCore"
@@ -115,9 +103,7 @@ class SquidSquadCore : SquidSquadExtension() {
 
 /**
  * SquidSquad's code for various 2D spatial "stuff."
- * @author Eben Howard
- * @author Tommy Ettinger
- */
+ *  *  */
 @Extension
 class SquidSquadGrid : SquidSquadExtension() {
     override val id = "squidGrid"
@@ -135,9 +121,7 @@ class SquidSquadGrid : SquidSquadExtension() {
 
 /**
  * SquidSquad's code for pathfinding, often copied from simple-graphs.
- * @author Eben Howard
- * @author Tommy Ettinger
- */
+ *  *  */
 @Extension
 class SquidSquadPath : SquidSquadExtension() {
     override val id = "squidPath"
@@ -154,9 +138,7 @@ class SquidSquadPath : SquidSquadExtension() {
 
 /**
  * SquidSquad's code for pathfinding, mostly delegating to Gand.
- * @author Eben Howard
- * @author Tommy Ettinger
- */
+ *  *  */
 @Extension
 class SquidSquadSeek : SquidSquadExtension() {
     override val id = "squidSeek"
@@ -174,9 +156,7 @@ class SquidSquadSeek : SquidSquadExtension() {
 
 /**
  * SquidSquad's code for walking-scale map generation; mostly dungeons.
- * @author Eben Howard
- * @author Tommy Ettinger
- */
+ *  *  */
 @Extension
 class SquidSquadPlace : SquidSquadExtension() {
     override val id = "squidPlace"
@@ -193,9 +173,7 @@ class SquidSquadPlace : SquidSquadExtension() {
 
 /**
  * SquidSquad's code for smoothly changing between positions/colors/etc.
- * @author Eben Howard
- * @author Tommy Ettinger
- */
+ *  *  */
 @Extension
 class SquidSquadSmooth : SquidSquadExtension() {
     override val id = "squidSmooth"
@@ -212,9 +190,7 @@ class SquidSquadSmooth : SquidSquadExtension() {
 
 /**
  * SquidSquad's code for world- and continent-scale map generation.
- * @author Eben Howard
- * @author Tommy Ettinger
- */
+ *  *  */
 @Extension
 class SquidSquadWorld : SquidSquadExtension() {
     override val id = "squidWorld"
@@ -231,9 +207,7 @@ class SquidSquadWorld : SquidSquadExtension() {
 
 /**
  * SquidSquad's code for text-based display on a grid.
- * @author Eben Howard
- * @author Tommy Ettinger
- */
+ *  *  */
 @Extension
 class SquidSquadGlyph : SquidSquadExtension() {
     override val id = "squidGlyph"
@@ -251,9 +225,7 @@ class SquidSquadGlyph : SquidSquadExtension() {
 
 /**
  * SquidSquad's compatibility code to maintain similar output to SquidLib.
- * @author Eben Howard
- * @author Tommy Ettinger
- */
+ *  *  */
 @Extension
 class SquidSquadOld : SquidSquadExtension() {
     override val id = "squidOld"
@@ -270,9 +242,7 @@ class SquidSquadOld : SquidSquadExtension() {
 
 /**
  * SquidSquad's code for natural language text imitation, adaptation, and/or generation.
- * @author Eben Howard
- * @author Tommy Ettinger
- */
+ *  *  */
 @Extension
 class SquidSquadText : SquidSquadExtension() {
     override val id = "squidText"
@@ -289,9 +259,7 @@ class SquidSquadText : SquidSquadExtension() {
 
 /**
  * SquidSquad's code for input handling and key rebinding.
- * @author Eben Howard
- * @author Tommy Ettinger
- */
+ *  *  */
 @Extension
 class SquidSquadPress : SquidSquadExtension() {
     override val id = "squidPress"
@@ -308,9 +276,7 @@ class SquidSquadPress : SquidSquadExtension() {
 
 /**
  * SquidSquad's JSON compatibility code for SquidCore.
- * @author Eben Howard
- * @author Tommy Ettinger
- */
+ *  *  */
 @Extension
 class SquidSquadStoreCore : SquidSquadExtension() {
     override val id = "squidStoreCore"
@@ -328,9 +294,7 @@ class SquidSquadStoreCore : SquidSquadExtension() {
 
 /**
  * SquidSquad's JSON compatibility code for SquidGrid.
- * @author Eben Howard
- * @author Tommy Ettinger
- */
+ *  *  */
 @Extension
 class SquidSquadStoreGrid : SquidSquadExtension() {
     override val id = "squidStoreGrid"
@@ -348,9 +312,7 @@ class SquidSquadStoreGrid : SquidSquadExtension() {
 
 /**
  * SquidSquad's JSON compatibility code for SquidOld.
- * @author Eben Howard
- * @author Tommy Ettinger
- */
+ *  *  */
 @Extension
 class SquidSquadStoreOld : SquidSquadExtension() {
     override val id = "squidStoreOld"
@@ -368,9 +330,7 @@ class SquidSquadStoreOld : SquidSquadExtension() {
 
 /**
  * SquidSquad's JSON compatibility code for SquidPath.
- * @author Eben Howard
- * @author Tommy Ettinger
- */
+ *  *  */
 @Extension
 class SquidSquadStorePath : SquidSquadExtension() {
     override val id = "squidStorePath"
@@ -389,9 +349,7 @@ class SquidSquadStorePath : SquidSquadExtension() {
 
 /**
  * SquidSquad's JSON compatibility code for SquidText.
- * @author Eben Howard
- * @author Tommy Ettinger
- */
+ *  *  */
 @Extension
 class SquidSquadStoreText : SquidSquadExtension() {
     override val id = "squidStoreText"
@@ -409,9 +367,7 @@ class SquidSquadStoreText : SquidSquadExtension() {
 
 /**
  * SquidSquad's JSON compatibility code for SquidWorld.
- * @author Eben Howard
- * @author Tommy Ettinger
- */
+ *  *  */
 @Extension
 class SquidSquadStoreWorld : SquidSquadExtension() {
     override val id = "squidStoreWorld"
@@ -430,9 +386,7 @@ class SquidSquadStoreWorld : SquidSquadExtension() {
 
 /**
  * SquidSquad's Kryo compatibility code for SquidCore.
- * @author Eben Howard
- * @author Tommy Ettinger
- */
+ *  *  */
 @Extension
 class SquidSquadFreezeCore : SquidSquadExtension() {
     override val id = "squidFreezeCore"
@@ -451,9 +405,7 @@ class SquidSquadFreezeCore : SquidSquadExtension() {
 
 /**
  * SquidSquad's Kryo compatibility code for SquidGrid.
- * @author Eben Howard
- * @author Tommy Ettinger
- */
+ *  *  */
 @Extension
 class SquidSquadFreezeGrid : SquidSquadExtension() {
     override val id = "squidFreezeGrid"
@@ -468,9 +420,7 @@ class SquidSquadFreezeGrid : SquidSquadExtension() {
 
 /**
  * SquidSquad's Kryo compatibility code for SquidOld.
- * @author Eben Howard
- * @author Tommy Ettinger
- */
+ *  *  */
 @Extension
 class SquidSquadFreezeOld : SquidSquadExtension() {
     override val id = "squidFreezeOld"
@@ -485,9 +435,7 @@ class SquidSquadFreezeOld : SquidSquadExtension() {
 
 /**
  * SquidSquad's Kryo compatibility code for SquidPath.
- * @author Eben Howard
- * @author Tommy Ettinger
- */
+ *  *  */
 @Extension
 class SquidSquadFreezePath : SquidSquadExtension() {
     override val id = "squidFreezePath"
@@ -503,9 +451,7 @@ class SquidSquadFreezePath : SquidSquadExtension() {
 
 /**
  * SquidSquad's Kryo compatibility code for SquidText.
- * @author Eben Howard
- * @author Tommy Ettinger
- */
+ *  *  */
 @Extension
 class SquidSquadFreezeText : SquidSquadExtension() {
     override val id = "squidFreezeText"
@@ -520,9 +466,7 @@ class SquidSquadFreezeText : SquidSquadExtension() {
 
 /**
  * SquidSquad's Kryo compatibility code for SquidWorld.
- * @author Eben Howard
- * @author Tommy Ettinger
- */
+ *  *  */
 @Extension
 class SquidSquadFreezeWorld : SquidSquadExtension() {
     override val id = "squidFreezeWorld"
@@ -538,9 +482,7 @@ class SquidSquadFreezeWorld : SquidSquadExtension() {
 
 /**
  * SquidSquad's Fory compatibility code for SquidCore.
- * @author Eben Howard
- * @author Tommy Ettinger
- */
+ *  *  */
 @Extension
 class SquidSquadWrathCore : SquidSquadExtension() {
     override val id = "squidWrathCore"
@@ -558,9 +500,7 @@ class SquidSquadWrathCore : SquidSquadExtension() {
 
 /**
  * SquidSquad's Fory compatibility code for SquidGrid.
- * @author Eben Howard
- * @author Tommy Ettinger
- */
+ *  *  */
 @Extension
 class SquidSquadWrathGrid : SquidSquadExtension() {
     override val id = "squidWrathGrid"
@@ -575,9 +515,7 @@ class SquidSquadWrathGrid : SquidSquadExtension() {
 
 /**
  * SquidSquad's Fory compatibility code for SquidOld.
- * @author Eben Howard
- * @author Tommy Ettinger
- */
+ *  *  */
 @Extension
 class SquidSquadWrathOld : SquidSquadExtension() {
     override val id = "squidWrathOld"
@@ -592,9 +530,7 @@ class SquidSquadWrathOld : SquidSquadExtension() {
 
 /**
  * SquidSquad's Fory compatibility code for SquidPath.
- * @author Eben Howard
- * @author Tommy Ettinger
- */
+ *  *  */
 @Extension
 class SquidSquadWrathPath : SquidSquadExtension() {
     override val id = "squidWrathPath"
@@ -610,9 +546,7 @@ class SquidSquadWrathPath : SquidSquadExtension() {
 
 /**
  * SquidSquad's Fory compatibility code for SquidText.
- * @author Eben Howard
- * @author Tommy Ettinger
- */
+ *  *  */
 @Extension
 class SquidSquadWrathText : SquidSquadExtension() {
     override val id = "squidWrathText"
@@ -627,9 +561,7 @@ class SquidSquadWrathText : SquidSquadExtension() {
 
 /**
  * SquidSquad's Fory compatibility code for SquidWorld.
- * @author Eben Howard
- * @author Tommy Ettinger
- */
+ *  *  */
 @Extension
 class SquidSquadWrathWorld : SquidSquadExtension() {
     override val id = "squidWrathWorld"

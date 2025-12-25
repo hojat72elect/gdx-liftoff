@@ -21,9 +21,7 @@ private const val FALLBACK_VERSION = "1.13.1-rc1"
 
 /**
  * Modular Kotlin utilities.
- * @author czyzby
- * @author libKTX group
- */
+ *  *  */
 abstract class KtxExtension : Library {
     override val defaultVersion = FALLBACK_VERSION
     override val official = false
@@ -108,7 +106,6 @@ class KtxAi : KtxExtension() {
 
 /**
  * Utilities for Artemis-odb entity component system.
- * @author deviodesign
  */
 @Extension
 class KtxArtemis : KtxExtension() {
@@ -121,7 +118,6 @@ class KtxArtemis : KtxExtension() {
 
 /**
  * Utilities for Ashley entity component system.
- * @author Jkly
  */
 @Extension
 class KtxAshley : KtxExtension() {
@@ -236,7 +232,6 @@ class KtxInject : KtxExtension() {
 
 /**
  * libGDX JSON serialization utilities for Kotlin applications.
- * @author maltaisn
  */
 @Extension
 class KtxJson : KtxExtension() {
@@ -261,8 +256,7 @@ class KtxMath : KtxExtension() {
 
 /**
  * libGDX preferences utilities for applications developed with Kotlin.
- * @author Quillraven
- */
+ *  */
 @Extension
 class KtxPreferences : KtxExtension() {
     override val id = "ktxPreferences"
@@ -294,8 +288,7 @@ class KtxStyle : KtxExtension() {
 
 /**
  * Tiled utilities for libGDX applications written with Kotlin.
- * @author Quillraven
- */
+ *  */
 @Extension
 class KtxTiled : KtxExtension() {
     override val id = "ktxTiled"

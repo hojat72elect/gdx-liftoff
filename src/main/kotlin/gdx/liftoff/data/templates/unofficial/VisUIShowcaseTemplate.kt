@@ -11,8 +11,7 @@ import gdx.liftoff.views.ProjectTemplate
 
 /**
  * VisUI application example with widget showcase and menu bar
- * @author Kotcrab
- */
+ *  */
 @ProjectTemplate
 @Suppress("unused") // Referenced via reflection.
 class VisUIShowcaseTemplate : Template {
