@@ -13,16 +13,16 @@ import gdx.liftoff.views.JvmLanguage
 @JvmLanguage
 @Suppress("unused") // Class accessed via reflection.
 class Groovy : Language {
-  override val id = "groovy"
-  override val version = "5.0.1"
+    override val id = "groovy"
+    override val version = "5.0.1"
 
-  override fun initiate(project: Project) {
-    project.rootGradle.plugins.add(id)
-    project.platforms.values.forEach { project.files.add(SourceDirectory(it.id, path("src", "main", "groovy"))) }
-    if (project.hasPlatform(Android.ID)) {
-      val gradleFile = project.getGradleFile(Android.ID) as AndroidGradleFile
-      gradleFile.srcFolders.add("'src/main/groovy'")
+    override fun initiate(project: Project) {
+        project.rootGradle.plugins.add(id)
+        project.platforms.values.forEach { project.files.add(SourceDirectory(it.id, path("src", "main", "groovy"))) }
+        if (project.hasPlatform(Android.ID)) {
+            val gradleFile = project.getGradleFile(Android.ID) as AndroidGradleFile
+            gradleFile.srcFolders.add("'src/main/groovy'")
+        }
+        addDependency(project, "org.apache.groovy:groovy-all:\$groovyVersion")
     }
-    addDependency(project, "org.apache.groovy:groovy-all:\$groovyVersion")
-  }
 }

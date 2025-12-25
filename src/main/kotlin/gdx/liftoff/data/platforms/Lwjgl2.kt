@@ -11,51 +11,51 @@ import gdx.liftoff.views.GdxPlatform
  */
 @GdxPlatform
 class Lwjgl2 : Platform {
-  companion object {
-    const val ID = "lwjgl2"
-    const val ORDER = TeaVM.ORDER + 1
-  }
+    companion object {
+        const val ID = "lwjgl2"
+        const val ORDER = TeaVM.ORDER + 1
+    }
 
-  override val id = ID
-  override val description = "Legacy desktop platform using LWJGL2."
-  override val order = ORDER
-  override val isStandard = false // use lwjgl3 instead
+    override val id = ID
+    override val description = "Legacy desktop platform using LWJGL2."
+    override val order = ORDER
+    override val isStandard = false // use lwjgl3 instead
 
-  override fun createGradleFile(project: Project): GradleFile = Lwjgl2GradleFile(project)
+    override fun createGradleFile(project: Project): GradleFile = Lwjgl2GradleFile(project)
 
-  override fun initiate(project: Project) {
-    // Adding game icons:
-    arrayOf(16, 32, 64, 128)
-      .map { "libgdx$it.png" }
-      .forEach { icon ->
-        project.files.add(
-          CopiedFile(
-            projectName = ID,
-            path = path("src", "main", "resources", icon),
-            original = path("icons", icon),
-          ),
-        )
-      }
+    override fun initiate(project: Project) {
+        // Adding game icons:
+        arrayOf(16, 32, 64, 128)
+            .map { "libgdx$it.png" }
+            .forEach { icon ->
+                project.files.add(
+                    CopiedFile(
+                        projectName = ID,
+                        path = path("src", "main", "resources", icon),
+                        original = path("icons", icon),
+                    ),
+                )
+            }
 
-    addGradleTaskDescription(project, "run", "starts the application.")
-    addGradleTaskDescription(project, "jar", "builds application's runnable jar, which can be found at `$id/build/libs`.")
-  }
+        addGradleTaskDescription(project, "run", "starts the application.")
+        addGradleTaskDescription(project, "jar", "builds application's runnable jar, which can be found at `$id/build/libs`.")
+    }
 }
 
 /**
  * Gradle file of the legacy desktop project.
  */
 class Lwjgl2GradleFile(
-  val project: Project,
+    val project: Project,
 ) : GradleFile(Lwjgl2.ID) {
-  init {
-    dependencies.add("project(':${Core.ID}')")
-    addDependency("com.badlogicgames.gdx:gdx-backend-lwjgl:\$gdxVersion")
-    addDependency("com.badlogicgames.gdx:gdx-platform:\$gdxVersion:natives-desktop")
-  }
+    init {
+        dependencies.add("project(':${Core.ID}')")
+        addDependency("com.badlogicgames.gdx:gdx-backend-lwjgl:\$gdxVersion")
+        addDependency("com.badlogicgames.gdx:gdx-platform:\$gdxVersion:natives-desktop")
+    }
 
-  override fun getContent(): String =
-    """apply plugin: 'application'
+    override fun getContent(): String =
+        """apply plugin: 'application'
 ${if (project.rootGradle.plugins.contains("kotlin")) "apply plugin: 'org.jetbrains.kotlin.jvm'\n" else ""}
 
 sourceSets.main.resources.srcDirs += [ rootProject.file('assets').path ]
@@ -66,14 +66,16 @@ java.targetCompatibility = ${project.advanced.desktopJavaVersion}
 if (JavaVersion.current().isJava9Compatible()) {
         compileJava.options.release.set(${project.advanced.desktopJavaVersion})
 }
-${if (project.rootGradle.plugins.contains(
-        "kotlin",
-      )
-    ) {
-      "kotlin.compilerOptions.jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_" + (if (project.advanced.desktopJavaVersion == "8") "1_8" else project.advanced.desktopJavaVersion) + ")\n"
-    } else {
-      ""
-    }}
+${
+            if (project.rootGradle.plugins.contains(
+                    "kotlin",
+                )
+            ) {
+                "kotlin.compilerOptions.jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_" + (if (project.advanced.desktopJavaVersion == "8") "1_8" else project.advanced.desktopJavaVersion) + ")\n"
+            } else {
+                ""
+            }
+        }
 dependencies {
 ${joinDependencies(dependencies)}}
 

@@ -14,14 +14,14 @@ import gdx.liftoff.views.ProjectTemplate
 @ProjectTemplate(official = true)
 @Suppress("unused") // Referenced via reflection.
 class GameTemplate : Template {
-  override val id = "gameTemplate"
-  override val description: String
-    get() =
-      "This project was generated with a template including simple application launchers and " +
-        "a main class extending `Game` that sets the first screen."
+    override val id = "gameTemplate"
+    override val description: String
+        get() =
+            "This project was generated with a template including simple application launchers and " +
+                    "a main class extending `Game` that sets the first screen."
 
-  override fun getApplicationListenerContent(project: Project): String =
-    """package ${project.basic.rootPackage};
+    override fun getApplicationListenerContent(project: Project): String =
+        """package ${project.basic.rootPackage};
 
 import com.badlogic.gdx.Game;
 
@@ -33,21 +33,21 @@ public class ${project.basic.mainClass} extends Game {
     }
 }"""
 
-  override fun apply(project: Project) {
-    super.apply(project)
-    project.files.add(
-      CopiedFile(
-        projectName = Assets.ID,
-        original = path("generator", "assets", ".gitkeep"),
-        path = ".gitkeep",
-      ),
-    )
-    addSourceFile(
-      project = project,
-      platform = Core.ID,
-      packageName = project.basic.rootPackage,
-      fileName = "FirstScreen.java",
-      content = """package ${project.basic.rootPackage};
+    override fun apply(project: Project) {
+        super.apply(project)
+        project.files.add(
+            CopiedFile(
+                projectName = Assets.ID,
+                original = path("generator", "assets", ".gitkeep"),
+                path = ".gitkeep",
+            ),
+        )
+        addSourceFile(
+            project = project,
+            platform = Core.ID,
+            packageName = project.basic.rootPackage,
+            fileName = "FirstScreen.java",
+            content = """package ${project.basic.rootPackage};
 
 import com.badlogic.gdx.Screen;
 
@@ -92,6 +92,6 @@ public class FirstScreen implements Screen {
         // Destroy screen's assets here.
     }
 }""",
-    )
-  }
+        )
+    }
 }

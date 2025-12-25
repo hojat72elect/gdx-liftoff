@@ -14,11 +14,11 @@ import gdx.liftoff.views.Extension
  * @author Tommy Ettinger
  */
 abstract class SquidLibExtension : ThirdPartyExtension() {
-  override val defaultVersion = "3.0.6"
-  override val group = "com.squidpony"
-  override val name: String
-    get() = id.camelCaseToKebabCase()
-  override val url = "https://github.com/yellowstonegames/SquidLib"
+    override val defaultVersion = "3.0.6"
+    override val group = "com.squidpony"
+    override val name: String
+        get() = id.camelCaseToKebabCase()
+    override val url = "https://github.com/yellowstonegames/SquidLib"
 }
 
 /**
@@ -27,11 +27,11 @@ abstract class SquidLibExtension : ThirdPartyExtension() {
  * @author Tommy Ettinger
  */
 abstract class SquidSquadExtension : ThirdPartyExtension() {
-  override val defaultVersion = "4.0.4"
-  override val group = "com.squidpony"
-  override val name: String
-    get() = id.lowercase()
-  override val url = "https://github.com/yellowstonegames/SquidSquad"
+    override val defaultVersion = "4.0.4"
+    override val group = "com.squidpony"
+    override val name: String
+        get() = id.lowercase()
+    override val url = "https://github.com/yellowstonegames/SquidSquad"
 }
 
 /**
@@ -41,16 +41,16 @@ abstract class SquidSquadExtension : ThirdPartyExtension() {
  */
 @Extension
 class SquidLibUtil : SquidLibExtension() {
-  override val id = "squidlibUtil"
+    override val id = "squidlibUtil"
 
-  override fun initiateDependencies(project: Project) {
-    addDependency(project, Core.ID, "$group:$name")
+    override fun initiateDependencies(project: Project) {
+        addDependency(project, Core.ID, "$group:$name")
 
-    addDependency(project, GWT.ID, "$group:$name:sources")
-    addGwtInherit(project, "squidpony.squidlib-util")
+        addDependency(project, GWT.ID, "$group:$name:sources")
+        addGwtInherit(project, "squidpony.squidlib-util")
 
-    RegExodus().initiate(project)
-  }
+        RegExodus().initiate(project)
+    }
 }
 
 /**
@@ -60,17 +60,17 @@ class SquidLibUtil : SquidLibExtension() {
  */
 @Extension
 class SquidLib : SquidLibExtension() {
-  override val id = "squidlib"
+    override val id = "squidlib"
 
-  override fun initiateDependencies(project: Project) {
-    addDependency(project, Core.ID, "$group:$name")
+    override fun initiateDependencies(project: Project) {
+        addDependency(project, Core.ID, "$group:$name")
 
-    addDependency(project, GWT.ID, "$group:$name:sources")
-    addGwtInherit(project, "squidpony.squidlib")
+        addDependency(project, GWT.ID, "$group:$name:sources")
+        addGwtInherit(project, "squidpony.squidlib")
 
-    SquidLibUtil().initiate(project)
-    Anim8().initiate(project)
-  }
+        SquidLibUtil().initiate(project)
+        Anim8().initiate(project)
+    }
 }
 
 /**
@@ -80,16 +80,16 @@ class SquidLib : SquidLibExtension() {
  */
 @Extension
 class SquidLibExtra : SquidLibExtension() {
-  override val id = "squidlibExtra"
+    override val id = "squidlibExtra"
 
-  override fun initiateDependencies(project: Project) {
-    addDependency(project, Core.ID, "$group:$name")
+    override fun initiateDependencies(project: Project) {
+        addDependency(project, Core.ID, "$group:$name")
 
-    addDependency(project, GWT.ID, "$group:$name:sources")
-    addGwtInherit(project, "squidpony.squidlib-extra")
+        addDependency(project, GWT.ID, "$group:$name:sources")
+        addGwtInherit(project, "squidpony.squidlib-extra")
 
-    SquidLibUtil().initiate(project)
-  }
+        SquidLibUtil().initiate(project)
+    }
 }
 
 /**
@@ -99,18 +99,18 @@ class SquidLibExtra : SquidLibExtension() {
  */
 @Extension
 class SquidSquadCore : SquidSquadExtension() {
-  override val id = "squidCore"
+    override val id = "squidCore"
 
-  override fun initiateDependencies(project: Project) {
-    addDependency(project, Core.ID, "$group:$name")
+    override fun initiateDependencies(project: Project) {
+        addDependency(project, Core.ID, "$group:$name")
 
-    addDependency(project, GWT.ID, "$group:$name:sources")
-    addGwtInherit(project, "com.github.yellowstonegames.squidcore")
+        addDependency(project, GWT.ID, "$group:$name:sources")
+        addGwtInherit(project, "com.github.yellowstonegames.squidcore")
 
-    Jdkgdxds().initiate(project)
-    Juniper().initiate(project)
-    RegExodus().initiate(project)
-  }
+        Jdkgdxds().initiate(project)
+        Juniper().initiate(project)
+        RegExodus().initiate(project)
+    }
 }
 
 /**
@@ -120,17 +120,17 @@ class SquidSquadCore : SquidSquadExtension() {
  */
 @Extension
 class SquidSquadGrid : SquidSquadExtension() {
-  override val id = "squidGrid"
+    override val id = "squidGrid"
 
-  override fun initiateDependencies(project: Project) {
-    addDependency(project, Core.ID, "$group:$name")
+    override fun initiateDependencies(project: Project) {
+        addDependency(project, Core.ID, "$group:$name")
 
-    addDependency(project, GWT.ID, "$group:$name:sources")
-    addGwtInherit(project, "com.github.yellowstonegames.squidgrid")
+        addDependency(project, GWT.ID, "$group:$name:sources")
+        addGwtInherit(project, "com.github.yellowstonegames.squidgrid")
 
-    SquidSquadCore().initiate(project)
-    Crux().initiate(project)
-  }
+        SquidSquadCore().initiate(project)
+        Crux().initiate(project)
+    }
 }
 
 /**
@@ -140,16 +140,16 @@ class SquidSquadGrid : SquidSquadExtension() {
  */
 @Extension
 class SquidSquadPath : SquidSquadExtension() {
-  override val id = "squidPath"
+    override val id = "squidPath"
 
-  override fun initiateDependencies(project: Project) {
-    addDependency(project, Core.ID, "$group:$name")
+    override fun initiateDependencies(project: Project) {
+        addDependency(project, Core.ID, "$group:$name")
 
-    addDependency(project, GWT.ID, "$group:$name:sources")
-    addGwtInherit(project, "com.github.yellowstonegames.squidpath")
+        addDependency(project, GWT.ID, "$group:$name:sources")
+        addGwtInherit(project, "com.github.yellowstonegames.squidpath")
 
-    SquidSquadGrid().initiate(project)
-  }
+        SquidSquadGrid().initiate(project)
+    }
 }
 
 /**
@@ -159,17 +159,17 @@ class SquidSquadPath : SquidSquadExtension() {
  */
 @Extension
 class SquidSquadSeek : SquidSquadExtension() {
-  override val id = "squidSeek"
+    override val id = "squidSeek"
 
-  override fun initiateDependencies(project: Project) {
-    addDependency(project, Core.ID, "$group:$name")
+    override fun initiateDependencies(project: Project) {
+        addDependency(project, Core.ID, "$group:$name")
 
-    addDependency(project, GWT.ID, "$group:$name:sources")
-    addGwtInherit(project, "com.github.yellowstonegames.squidseek")
+        addDependency(project, GWT.ID, "$group:$name:sources")
+        addGwtInherit(project, "com.github.yellowstonegames.squidseek")
 
-    SquidSquadGrid().initiate(project)
-    Gand().initiate(project)
-  }
+        SquidSquadGrid().initiate(project)
+        Gand().initiate(project)
+    }
 }
 
 /**
@@ -179,16 +179,16 @@ class SquidSquadSeek : SquidSquadExtension() {
  */
 @Extension
 class SquidSquadPlace : SquidSquadExtension() {
-  override val id = "squidPlace"
+    override val id = "squidPlace"
 
-  override fun initiateDependencies(project: Project) {
-    addDependency(project, Core.ID, "$group:$name")
+    override fun initiateDependencies(project: Project) {
+        addDependency(project, Core.ID, "$group:$name")
 
-    addDependency(project, GWT.ID, "$group:$name:sources")
-    addGwtInherit(project, "com.github.yellowstonegames.squidplace")
+        addDependency(project, GWT.ID, "$group:$name:sources")
+        addGwtInherit(project, "com.github.yellowstonegames.squidplace")
 
-    SquidSquadGrid().initiate(project)
-  }
+        SquidSquadGrid().initiate(project)
+    }
 }
 
 /**
@@ -198,16 +198,16 @@ class SquidSquadPlace : SquidSquadExtension() {
  */
 @Extension
 class SquidSquadSmooth : SquidSquadExtension() {
-  override val id = "squidSmooth"
+    override val id = "squidSmooth"
 
-  override fun initiateDependencies(project: Project) {
-    addDependency(project, Core.ID, "$group:$name")
+    override fun initiateDependencies(project: Project) {
+        addDependency(project, Core.ID, "$group:$name")
 
-    addDependency(project, GWT.ID, "$group:$name:sources")
-    addGwtInherit(project, "com.github.yellowstonegames.squidsmooth")
+        addDependency(project, GWT.ID, "$group:$name:sources")
+        addGwtInherit(project, "com.github.yellowstonegames.squidsmooth")
 
-    SquidSquadGrid().initiate(project)
-  }
+        SquidSquadGrid().initiate(project)
+    }
 }
 
 /**
@@ -217,16 +217,16 @@ class SquidSquadSmooth : SquidSquadExtension() {
  */
 @Extension
 class SquidSquadWorld : SquidSquadExtension() {
-  override val id = "squidWorld"
+    override val id = "squidWorld"
 
-  override fun initiateDependencies(project: Project) {
-    addDependency(project, Core.ID, "$group:$name")
+    override fun initiateDependencies(project: Project) {
+        addDependency(project, Core.ID, "$group:$name")
 
-    addDependency(project, GWT.ID, "$group:$name:sources")
-    addGwtInherit(project, "com.github.yellowstonegames.squidworld")
+        addDependency(project, GWT.ID, "$group:$name:sources")
+        addGwtInherit(project, "com.github.yellowstonegames.squidworld")
 
-    SquidSquadPlace().initiate(project)
-  }
+        SquidSquadPlace().initiate(project)
+    }
 }
 
 /**
@@ -236,17 +236,17 @@ class SquidSquadWorld : SquidSquadExtension() {
  */
 @Extension
 class SquidSquadGlyph : SquidSquadExtension() {
-  override val id = "squidGlyph"
+    override val id = "squidGlyph"
 
-  override fun initiateDependencies(project: Project) {
-    addDependency(project, Core.ID, "$group:$name")
+    override fun initiateDependencies(project: Project) {
+        addDependency(project, Core.ID, "$group:$name")
 
-    addDependency(project, GWT.ID, "$group:$name:sources")
-    addGwtInherit(project, "com.github.yellowstonegames.squidglyph")
+        addDependency(project, GWT.ID, "$group:$name:sources")
+        addGwtInherit(project, "com.github.yellowstonegames.squidglyph")
 
-    SquidSquadGrid().initiate(project)
-    TextraTypist().initiate(project)
-  }
+        SquidSquadGrid().initiate(project)
+        TextraTypist().initiate(project)
+    }
 }
 
 /**
@@ -256,16 +256,16 @@ class SquidSquadGlyph : SquidSquadExtension() {
  */
 @Extension
 class SquidSquadOld : SquidSquadExtension() {
-  override val id = "squidOld"
+    override val id = "squidOld"
 
-  override fun initiateDependencies(project: Project) {
-    addDependency(project, Core.ID, "$group:$name")
+    override fun initiateDependencies(project: Project) {
+        addDependency(project, Core.ID, "$group:$name")
 
-    addDependency(project, GWT.ID, "$group:$name:sources")
-    addGwtInherit(project, "com.github.yellowstonegames.squidold")
+        addDependency(project, GWT.ID, "$group:$name:sources")
+        addGwtInherit(project, "com.github.yellowstonegames.squidold")
 
-    SquidSquadCore().initiate(project)
-  }
+        SquidSquadCore().initiate(project)
+    }
 }
 
 /**
@@ -275,16 +275,16 @@ class SquidSquadOld : SquidSquadExtension() {
  */
 @Extension
 class SquidSquadText : SquidSquadExtension() {
-  override val id = "squidText"
+    override val id = "squidText"
 
-  override fun initiateDependencies(project: Project) {
-    addDependency(project, Core.ID, "$group:$name")
+    override fun initiateDependencies(project: Project) {
+        addDependency(project, Core.ID, "$group:$name")
 
-    addDependency(project, GWT.ID, "$group:$name:sources")
-    addGwtInherit(project, "com.github.yellowstonegames.squidtext")
+        addDependency(project, GWT.ID, "$group:$name:sources")
+        addGwtInherit(project, "com.github.yellowstonegames.squidtext")
 
-    SquidSquadCore().initiate(project)
-  }
+        SquidSquadCore().initiate(project)
+    }
 }
 
 /**
@@ -294,16 +294,16 @@ class SquidSquadText : SquidSquadExtension() {
  */
 @Extension
 class SquidSquadPress : SquidSquadExtension() {
-  override val id = "squidPress"
+    override val id = "squidPress"
 
-  override fun initiateDependencies(project: Project) {
-    addDependency(project, Core.ID, "$group:$name")
+    override fun initiateDependencies(project: Project) {
+        addDependency(project, Core.ID, "$group:$name")
 
-    addDependency(project, GWT.ID, "$group:$name:sources")
-    addGwtInherit(project, "com.github.yellowstonegames.squidpress")
+        addDependency(project, GWT.ID, "$group:$name:sources")
+        addGwtInherit(project, "com.github.yellowstonegames.squidpress")
 
-    SquidSquadCore().initiate(project)
-  }
+        SquidSquadCore().initiate(project)
+    }
 }
 
 /**
@@ -313,17 +313,17 @@ class SquidSquadPress : SquidSquadExtension() {
  */
 @Extension
 class SquidSquadStoreCore : SquidSquadExtension() {
-  override val id = "squidStoreCore"
+    override val id = "squidStoreCore"
 
-  override fun initiateDependencies(project: Project) {
-    addDependency(project, Core.ID, "$group:$name")
+    override fun initiateDependencies(project: Project) {
+        addDependency(project, Core.ID, "$group:$name")
 
-    addDependency(project, GWT.ID, "$group:$name:sources")
-    addGwtInherit(project, "com.github.yellowstonegames.squidstorecore")
+        addDependency(project, GWT.ID, "$group:$name:sources")
+        addGwtInherit(project, "com.github.yellowstonegames.squidstorecore")
 
-    SquidSquadCore().initiate(project)
-    JdkgdxdsInterop().initiate(project)
-  }
+        SquidSquadCore().initiate(project)
+        JdkgdxdsInterop().initiate(project)
+    }
 }
 
 /**
@@ -333,17 +333,17 @@ class SquidSquadStoreCore : SquidSquadExtension() {
  */
 @Extension
 class SquidSquadStoreGrid : SquidSquadExtension() {
-  override val id = "squidStoreGrid"
+    override val id = "squidStoreGrid"
 
-  override fun initiateDependencies(project: Project) {
-    addDependency(project, Core.ID, "$group:$name")
+    override fun initiateDependencies(project: Project) {
+        addDependency(project, Core.ID, "$group:$name")
 
-    addDependency(project, GWT.ID, "$group:$name:sources")
-    addGwtInherit(project, "com.github.yellowstonegames.squidstoregrid")
+        addDependency(project, GWT.ID, "$group:$name:sources")
+        addGwtInherit(project, "com.github.yellowstonegames.squidstoregrid")
 
-    SquidSquadStoreCore().initiate(project)
-    SquidSquadGrid().initiate(project)
-  }
+        SquidSquadStoreCore().initiate(project)
+        SquidSquadGrid().initiate(project)
+    }
 }
 
 /**
@@ -353,17 +353,17 @@ class SquidSquadStoreGrid : SquidSquadExtension() {
  */
 @Extension
 class SquidSquadStoreOld : SquidSquadExtension() {
-  override val id = "squidStoreOld"
+    override val id = "squidStoreOld"
 
-  override fun initiateDependencies(project: Project) {
-    addDependency(project, Core.ID, "$group:$name")
+    override fun initiateDependencies(project: Project) {
+        addDependency(project, Core.ID, "$group:$name")
 
-    addDependency(project, GWT.ID, "$group:$name:sources")
-    addGwtInherit(project, "com.github.yellowstonegames.squidstoreold")
+        addDependency(project, GWT.ID, "$group:$name:sources")
+        addGwtInherit(project, "com.github.yellowstonegames.squidstoreold")
 
-    SquidSquadStoreCore().initiate(project)
-    SquidSquadOld().initiate(project)
-  }
+        SquidSquadStoreCore().initiate(project)
+        SquidSquadOld().initiate(project)
+    }
 }
 
 /**
@@ -373,18 +373,18 @@ class SquidSquadStoreOld : SquidSquadExtension() {
  */
 @Extension
 class SquidSquadStorePath : SquidSquadExtension() {
-  override val id = "squidStorePath"
+    override val id = "squidStorePath"
 
-  override fun initiateDependencies(project: Project) {
-    addDependency(project, Core.ID, "$group:$name")
+    override fun initiateDependencies(project: Project) {
+        addDependency(project, Core.ID, "$group:$name")
 
-    addDependency(project, GWT.ID, "$group:$name:sources")
-    addGwtInherit(project, "com.github.yellowstonegames.squidstorepath")
+        addDependency(project, GWT.ID, "$group:$name:sources")
+        addGwtInherit(project, "com.github.yellowstonegames.squidstorepath")
 
-    SquidSquadStoreCore().initiate(project)
-    SquidSquadStoreGrid().initiate(project)
-    SquidSquadPath().initiate(project)
-  }
+        SquidSquadStoreCore().initiate(project)
+        SquidSquadStoreGrid().initiate(project)
+        SquidSquadPath().initiate(project)
+    }
 }
 
 /**
@@ -394,17 +394,17 @@ class SquidSquadStorePath : SquidSquadExtension() {
  */
 @Extension
 class SquidSquadStoreText : SquidSquadExtension() {
-  override val id = "squidStoreText"
+    override val id = "squidStoreText"
 
-  override fun initiateDependencies(project: Project) {
-    addDependency(project, Core.ID, "$group:$name")
+    override fun initiateDependencies(project: Project) {
+        addDependency(project, Core.ID, "$group:$name")
 
-    addDependency(project, GWT.ID, "$group:$name:sources")
-    addGwtInherit(project, "com.github.yellowstonegames.squidstoretext")
+        addDependency(project, GWT.ID, "$group:$name:sources")
+        addGwtInherit(project, "com.github.yellowstonegames.squidstoretext")
 
-    SquidSquadStoreCore().initiate(project)
-    SquidSquadText().initiate(project)
-  }
+        SquidSquadStoreCore().initiate(project)
+        SquidSquadText().initiate(project)
+    }
 }
 
 /**
@@ -414,18 +414,18 @@ class SquidSquadStoreText : SquidSquadExtension() {
  */
 @Extension
 class SquidSquadStoreWorld : SquidSquadExtension() {
-  override val id = "squidStoreWorld"
+    override val id = "squidStoreWorld"
 
-  override fun initiateDependencies(project: Project) {
-    addDependency(project, Core.ID, "$group:$name")
+    override fun initiateDependencies(project: Project) {
+        addDependency(project, Core.ID, "$group:$name")
 
-    addDependency(project, GWT.ID, "$group:$name:sources")
-    addGwtInherit(project, "com.github.yellowstonegames.squidstoreworld")
+        addDependency(project, GWT.ID, "$group:$name:sources")
+        addGwtInherit(project, "com.github.yellowstonegames.squidstoreworld")
 
-    SquidSquadStoreCore().initiate(project)
-    SquidSquadStoreGrid().initiate(project)
-    SquidSquadWorld().initiate(project)
-  }
+        SquidSquadStoreCore().initiate(project)
+        SquidSquadStoreGrid().initiate(project)
+        SquidSquadWorld().initiate(project)
+    }
 }
 
 /**
@@ -435,18 +435,18 @@ class SquidSquadStoreWorld : SquidSquadExtension() {
  */
 @Extension
 class SquidSquadFreezeCore : SquidSquadExtension() {
-  override val id = "squidFreezeCore"
+    override val id = "squidFreezeCore"
 
-  override fun initiateDependencies(project: Project) {
-    addDependency(project, Core.ID, "$group:$name")
+    override fun initiateDependencies(project: Project) {
+        addDependency(project, Core.ID, "$group:$name")
 
-    SquidSquadCore().initiate(project)
-    Kryo().initiate(project)
-    KryoRegExodus().initiate(project)
-    KryoDigital().initiate(project)
-    KryoJuniper().initiate(project)
-    KryoJdkgdxds().initiate(project)
-  }
+        SquidSquadCore().initiate(project)
+        Kryo().initiate(project)
+        KryoRegExodus().initiate(project)
+        KryoDigital().initiate(project)
+        KryoJuniper().initiate(project)
+        KryoJdkgdxds().initiate(project)
+    }
 }
 
 /**
@@ -456,14 +456,14 @@ class SquidSquadFreezeCore : SquidSquadExtension() {
  */
 @Extension
 class SquidSquadFreezeGrid : SquidSquadExtension() {
-  override val id = "squidFreezeGrid"
+    override val id = "squidFreezeGrid"
 
-  override fun initiateDependencies(project: Project) {
-    addDependency(project, Core.ID, "$group:$name")
+    override fun initiateDependencies(project: Project) {
+        addDependency(project, Core.ID, "$group:$name")
 
-    SquidSquadGrid().initiate(project)
-    SquidSquadFreezeCore().initiate(project)
-  }
+        SquidSquadGrid().initiate(project)
+        SquidSquadFreezeCore().initiate(project)
+    }
 }
 
 /**
@@ -473,14 +473,14 @@ class SquidSquadFreezeGrid : SquidSquadExtension() {
  */
 @Extension
 class SquidSquadFreezeOld : SquidSquadExtension() {
-  override val id = "squidFreezeOld"
+    override val id = "squidFreezeOld"
 
-  override fun initiateDependencies(project: Project) {
-    addDependency(project, Core.ID, "$group:$name")
+    override fun initiateDependencies(project: Project) {
+        addDependency(project, Core.ID, "$group:$name")
 
-    SquidSquadOld().initiate(project)
-    SquidSquadFreezeCore().initiate(project)
-  }
+        SquidSquadOld().initiate(project)
+        SquidSquadFreezeCore().initiate(project)
+    }
 }
 
 /**
@@ -490,15 +490,15 @@ class SquidSquadFreezeOld : SquidSquadExtension() {
  */
 @Extension
 class SquidSquadFreezePath : SquidSquadExtension() {
-  override val id = "squidFreezePath"
+    override val id = "squidFreezePath"
 
-  override fun initiateDependencies(project: Project) {
-    addDependency(project, Core.ID, "$group:$name")
+    override fun initiateDependencies(project: Project) {
+        addDependency(project, Core.ID, "$group:$name")
 
-    SquidSquadPath().initiate(project)
-    SquidSquadFreezeCore().initiate(project)
-    SquidSquadFreezeGrid().initiate(project)
-  }
+        SquidSquadPath().initiate(project)
+        SquidSquadFreezeCore().initiate(project)
+        SquidSquadFreezeGrid().initiate(project)
+    }
 }
 
 /**
@@ -508,14 +508,14 @@ class SquidSquadFreezePath : SquidSquadExtension() {
  */
 @Extension
 class SquidSquadFreezeText : SquidSquadExtension() {
-  override val id = "squidFreezeText"
+    override val id = "squidFreezeText"
 
-  override fun initiateDependencies(project: Project) {
-    addDependency(project, Core.ID, "$group:$name")
+    override fun initiateDependencies(project: Project) {
+        addDependency(project, Core.ID, "$group:$name")
 
-    SquidSquadText().initiate(project)
-    SquidSquadFreezeCore().initiate(project)
-  }
+        SquidSquadText().initiate(project)
+        SquidSquadFreezeCore().initiate(project)
+    }
 }
 
 /**
@@ -525,15 +525,15 @@ class SquidSquadFreezeText : SquidSquadExtension() {
  */
 @Extension
 class SquidSquadFreezeWorld : SquidSquadExtension() {
-  override val id = "squidFreezeWorld"
+    override val id = "squidFreezeWorld"
 
-  override fun initiateDependencies(project: Project) {
-    addDependency(project, Core.ID, "$group:$name")
+    override fun initiateDependencies(project: Project) {
+        addDependency(project, Core.ID, "$group:$name")
 
-    SquidSquadWorld().initiate(project)
-    SquidSquadFreezeCore().initiate(project)
-    SquidSquadFreezeGrid().initiate(project)
-  }
+        SquidSquadWorld().initiate(project)
+        SquidSquadFreezeCore().initiate(project)
+        SquidSquadFreezeGrid().initiate(project)
+    }
 }
 
 /**
@@ -543,17 +543,17 @@ class SquidSquadFreezeWorld : SquidSquadExtension() {
  */
 @Extension
 class SquidSquadWrathCore : SquidSquadExtension() {
-  override val id = "squidWrathCore"
+    override val id = "squidWrathCore"
 
-  override fun initiateDependencies(project: Project) {
-    addDependency(project, Core.ID, "$group:$name")
+    override fun initiateDependencies(project: Project) {
+        addDependency(project, Core.ID, "$group:$name")
 
-    SquidSquadCore().initiate(project)
-    Fory().initiate(project)
-    TantrumRegExodus().initiate(project)
-    TantrumDigital().initiate(project)
-    TantrumJdkgdxds().initiate(project)
-  }
+        SquidSquadCore().initiate(project)
+        Fory().initiate(project)
+        TantrumRegExodus().initiate(project)
+        TantrumDigital().initiate(project)
+        TantrumJdkgdxds().initiate(project)
+    }
 }
 
 /**
@@ -563,14 +563,14 @@ class SquidSquadWrathCore : SquidSquadExtension() {
  */
 @Extension
 class SquidSquadWrathGrid : SquidSquadExtension() {
-  override val id = "squidWrathGrid"
+    override val id = "squidWrathGrid"
 
-  override fun initiateDependencies(project: Project) {
-    addDependency(project, Core.ID, "$group:$name")
+    override fun initiateDependencies(project: Project) {
+        addDependency(project, Core.ID, "$group:$name")
 
-    SquidSquadGrid().initiate(project)
-    SquidSquadWrathCore().initiate(project)
-  }
+        SquidSquadGrid().initiate(project)
+        SquidSquadWrathCore().initiate(project)
+    }
 }
 
 /**
@@ -580,14 +580,14 @@ class SquidSquadWrathGrid : SquidSquadExtension() {
  */
 @Extension
 class SquidSquadWrathOld : SquidSquadExtension() {
-  override val id = "squidWrathOld"
+    override val id = "squidWrathOld"
 
-  override fun initiateDependencies(project: Project) {
-    addDependency(project, Core.ID, "$group:$name")
+    override fun initiateDependencies(project: Project) {
+        addDependency(project, Core.ID, "$group:$name")
 
-    SquidSquadOld().initiate(project)
-    SquidSquadWrathCore().initiate(project)
-  }
+        SquidSquadOld().initiate(project)
+        SquidSquadWrathCore().initiate(project)
+    }
 }
 
 /**
@@ -597,15 +597,15 @@ class SquidSquadWrathOld : SquidSquadExtension() {
  */
 @Extension
 class SquidSquadWrathPath : SquidSquadExtension() {
-  override val id = "squidWrathPath"
+    override val id = "squidWrathPath"
 
-  override fun initiateDependencies(project: Project) {
-    addDependency(project, Core.ID, "$group:$name")
+    override fun initiateDependencies(project: Project) {
+        addDependency(project, Core.ID, "$group:$name")
 
-    SquidSquadPath().initiate(project)
-    SquidSquadWrathCore().initiate(project)
-    SquidSquadWrathGrid().initiate(project)
-  }
+        SquidSquadPath().initiate(project)
+        SquidSquadWrathCore().initiate(project)
+        SquidSquadWrathGrid().initiate(project)
+    }
 }
 
 /**
@@ -615,14 +615,14 @@ class SquidSquadWrathPath : SquidSquadExtension() {
  */
 @Extension
 class SquidSquadWrathText : SquidSquadExtension() {
-  override val id = "squidWrathText"
+    override val id = "squidWrathText"
 
-  override fun initiateDependencies(project: Project) {
-    addDependency(project, Core.ID, "$group:$name")
+    override fun initiateDependencies(project: Project) {
+        addDependency(project, Core.ID, "$group:$name")
 
-    SquidSquadText().initiate(project)
-    SquidSquadWrathCore().initiate(project)
-  }
+        SquidSquadText().initiate(project)
+        SquidSquadWrathCore().initiate(project)
+    }
 }
 
 /**
@@ -632,13 +632,13 @@ class SquidSquadWrathText : SquidSquadExtension() {
  */
 @Extension
 class SquidSquadWrathWorld : SquidSquadExtension() {
-  override val id = "squidWrathWorld"
+    override val id = "squidWrathWorld"
 
-  override fun initiateDependencies(project: Project) {
-    addDependency(project, Core.ID, "$group:$name")
+    override fun initiateDependencies(project: Project) {
+        addDependency(project, Core.ID, "$group:$name")
 
-    SquidSquadWorld().initiate(project)
-    SquidSquadWrathCore().initiate(project)
-    SquidSquadWrathGrid().initiate(project)
-  }
+        SquidSquadWorld().initiate(project)
+        SquidSquadWrathCore().initiate(project)
+        SquidSquadWrathGrid().initiate(project)
+    }
 }

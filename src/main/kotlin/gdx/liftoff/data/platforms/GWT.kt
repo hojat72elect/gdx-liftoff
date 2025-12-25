@@ -12,53 +12,53 @@ import gdx.liftoff.views.GdxPlatform
  */
 @GdxPlatform
 class GWT : Platform {
-  companion object {
-    const val ID = "html"
-    const val ORDER = IOS.ORDER + 1
-    const val BASIC_INHERIT = "com.badlogic.gdx.backends.gdx_backends_gwt"
-    val INHERIT_COMPARATOR =
-      Comparator<String> { a, b ->
-        // Basic GWT inherit has to be first:
-        if (a == BASIC_INHERIT) {
-          -1
-        } else if (b == BASIC_INHERIT) {
-          1
-        } else {
-          a.compareTo(b)
-        }
-      }
-  }
+    companion object {
+        const val ID = "html"
+        const val ORDER = IOS.ORDER + 1
+        const val BASIC_INHERIT = "com.badlogic.gdx.backends.gdx_backends_gwt"
+        val INHERIT_COMPARATOR =
+            Comparator<String> { a, b ->
+                // Basic GWT inherit has to be first:
+                if (a == BASIC_INHERIT) {
+                    -1
+                } else if (b == BASIC_INHERIT) {
+                    1
+                } else {
+                    a.compareTo(b)
+                }
+            }
+    }
 
-  override val id = ID
-  override val description = "Web platform using GWT and WebGL. Supports only Java projects."
-  override val order = ORDER
-  override val isStandard = false
+    override val id = ID
+    override val description = "Web platform using GWT and WebGL. Supports only Java projects."
+    override val order = ORDER
+    override val isStandard = false
 
-  override fun createGradleFile(project: Project): GradleFile = GWTGradleFile(project)
+    override fun createGradleFile(project: Project): GradleFile = GWTGradleFile(project)
 
-  override fun initiate(project: Project) {
-    addGradleTaskDescription(
-      project,
-      "superDev",
-      "compiles GWT sources and runs the application in SuperDev mode. It will be available at [localhost:8080/$id](http://localhost:8080/$id). Use only during development.",
-    )
-    addGradleTaskDescription(
-      project,
-      "dist",
-      "compiles GWT sources. The compiled application can be found at `$id/build/dist`: you can use any HTTP server to deploy it.",
-    )
+    override fun initiate(project: Project) {
+        addGradleTaskDescription(
+            project,
+            "superDev",
+            "compiles GWT sources and runs the application in SuperDev mode. It will be available at [localhost:8080/$id](http://localhost:8080/$id). Use only during development.",
+        )
+        addGradleTaskDescription(
+            project,
+            "dist",
+            "compiles GWT sources. The compiled application can be found at `$id/build/dist`: you can use any HTTP server to deploy it.",
+        )
 
-    project.gwtInherits.add(BASIC_INHERIT)
-    project.properties["gwtFrameworkVersion"] = project.advanced.gwtVersion
-    project.properties["gwtPluginVersion"] = project.advanced.gwtPluginVersion
+        project.gwtInherits.add(BASIC_INHERIT)
+        project.properties["gwtFrameworkVersion"] = project.advanced.gwtVersion
+        project.properties["gwtPluginVersion"] = project.advanced.gwtPluginVersion
 
-    // Adding GWT definition to core project:
-    project.files.add(
-      SourceFile(
-        projectName = Core.ID,
-        packageName = project.basic.rootPackage,
-        fileName = "${project.basic.mainClass}.gwt.xml",
-        content = """<?xml version="1.0" encoding="UTF-8"?>
+        // Adding GWT definition to core project:
+        project.files.add(
+            SourceFile(
+                projectName = Core.ID,
+                packageName = project.basic.rootPackage,
+                fileName = "${project.basic.mainClass}.gwt.xml",
+                content = """<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE module PUBLIC "-//Google Inc.//DTD Google Web Toolkit 2.11.0//EN" "https://www.gwtproject.org/doctype/2.11.0/gwt-module.dtd">
 <module>
   <!-- Paths to source are relative to this file and separated by slashes ('/'). -->
@@ -66,23 +66,25 @@ class GWT : Platform {
 
   <!-- Reflection includes may be needed for your code or library code. Each value is separated by periods ('.'). -->
   <!-- You can include a full package by not including the name of a type at the end. -->
-${(project.reflectedClasses + project.reflectedPackages).joinToString(
-          separator = "\n",
-          prefix = "",
-        ) { "  <extend-configuration-property name=\"gdx.reflect.include\" value=\"$it\" />" }}
+${
+                    (project.reflectedClasses + project.reflectedPackages).joinToString(
+                        separator = "\n",
+                        prefix = "",
+                    ) { "  <extend-configuration-property name=\"gdx.reflect.include\" value=\"$it\" />" }
+                }
 </module>""",
-      ),
-    )
-    project.gwtInherits.add("${project.basic.rootPackage}.${project.basic.mainClass}")
+            ),
+        )
+        project.gwtInherits.add("${project.basic.rootPackage}.${project.basic.mainClass}")
 
-    // Adding GWT definition to shared project:
-    if (project.hasPlatform(Shared.ID)) {
-      project.files.add(
-        SourceFile(
-          projectName = Shared.ID,
-          packageName = project.basic.rootPackage,
-          fileName = "Shared.gwt.xml",
-          content = """<?xml version="1.0" encoding="UTF-8"?>
+        // Adding GWT definition to shared project:
+        if (project.hasPlatform(Shared.ID)) {
+            project.files.add(
+                SourceFile(
+                    projectName = Shared.ID,
+                    packageName = project.basic.rootPackage,
+                    fileName = "Shared.gwt.xml",
+                    content = """<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE module PUBLIC "-//Google Inc.//DTD Google Web Toolkit 2.11.0//EN" "https://www.gwtproject.org/doctype/2.11.0/gwt-module.dtd">
 <module>
   <!-- Paths to source are relative to this file and separated by slashes ('/'). -->
@@ -97,18 +99,18 @@ ${(project.reflectedClasses + project.reflectedPackages).joinToString(
   <!-- You can include individual files like this, and access them with Gdx.files.classpath("path/to/file.png") : -->
   <!-- <extend-configuration-property name="gdx.files.classpath" value="path/to/file.png" /> -->
 </module>""",
-        ),
-      )
-      project.gwtInherits.add("${project.basic.rootPackage}.Shared")
-    }
+                ),
+            )
+            project.gwtInherits.add("${project.basic.rootPackage}.Shared")
+        }
 
-    // Adding GWT definition:
-    project.files.add(
-      SourceFile(
-        projectName = ID,
-        packageName = project.basic.rootPackage,
-        fileName = "GdxDefinition.gwt.xml",
-        content = """<?xml version="1.0" encoding="UTF-8"?>
+        // Adding GWT definition:
+        project.files.add(
+            SourceFile(
+                projectName = ID,
+                packageName = project.basic.rootPackage,
+                fileName = "GdxDefinition.gwt.xml",
+                content = """<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE module PUBLIC "-//Google Inc.//DTD Google Web Toolkit 2.11.0//EN" "https://www.gwtproject.org/doctype/2.11.0/gwt-module.dtd">
 <module rename-to="html">
   <!-- Paths to source are relative to this file and separated by slashes ('/'). -->
@@ -144,16 +146,16 @@ ${project.gwtInherits.sortedWith(INHERIT_COMPARATOR).joinToString(separator = "\
   <collapse-property name="user.agent" values="*" />
   <!-- Remove the "user.agent" lines above if you encounter issues with Safari or other Gecko browsers. -->
 </module>""",
-      ),
-    )
+            ),
+        )
 
-    // Adding SuperDev definition:
-    project.files.add(
-      SourceFile(
-        projectName = ID,
-        packageName = project.basic.rootPackage,
-        fileName = "GdxDefinitionSuperdev.gwt.xml",
-        content = """<?xml version="1.0" encoding="UTF-8"?>
+        // Adding SuperDev definition:
+        project.files.add(
+            SourceFile(
+                projectName = ID,
+                packageName = project.basic.rootPackage,
+                fileName = "GdxDefinitionSuperdev.gwt.xml",
+                content = """<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE module PUBLIC "-//Google Inc.//DTD Google Web Toolkit 2.11.0//EN" "https://www.gwtproject.org/doctype/2.11.0/gwt-module.dtd">
 <module rename-to="html">
   <inherits name="${project.basic.rootPackage}.GdxDefinition" />
@@ -162,45 +164,45 @@ ${project.gwtInherits.sortedWith(INHERIT_COMPARATOR).joinToString(separator = "\
   <set-configuration-property name="devModeRedirectEnabled" value="true"/>
   <set-configuration-property name="xsiframe.failIfScriptTag" value="FALSE"/>
 </module>""",
-      ),
-    )
+            ),
+        )
 
-    // Copying webapp files:
-    addCopiedFile(project, "webapp", "refresh.png")
-    project.files.add(
-      SourceFile(
-        projectName = id,
-        fileName = "index.html",
-        sourceFolderPath = "webapp",
-        packageName = "",
-        content =
-          Gdx.files
-            .internal(path("generator", id, "webapp", "index.html"))
-            .readString("UTF8")
-            .replaceFirst("@@libGDX application@@", project.basic.name),
-      ),
-    )
+        // Copying webapp files:
+        addCopiedFile(project, "webapp", "refresh.png")
+        project.files.add(
+            SourceFile(
+                projectName = id,
+                fileName = "index.html",
+                sourceFolderPath = "webapp",
+                packageName = "",
+                content =
+                    Gdx.files
+                        .internal(path("generator", id, "webapp", "index.html"))
+                        .readString("UTF8")
+                        .replaceFirst("@@libGDX application@@", project.basic.name),
+            ),
+        )
 
-    addCopiedFile(project, "webapp", "styles.css")
-    addCopiedFile(project, "webapp", "WEB-INF", "web.xml")
-  }
+        addCopiedFile(project, "webapp", "styles.css")
+        addCopiedFile(project, "webapp", "WEB-INF", "web.xml")
+    }
 }
 
 class GWTGradleFile(
-  val project: Project,
+    val project: Project,
 ) : GradleFile(GWT.ID) {
-  init {
-    buildDependencies.add("project(':${Core.ID}')")
-    dependencies.add("project(':${Core.ID}')")
+    init {
+        buildDependencies.add("project(':${Core.ID}')")
+        dependencies.add("project(':${Core.ID}')")
 
-    addDependency("com.badlogicgames.gdx:gdx:\$gdxVersion:sources")
-    addDependency("com.badlogicgames.gdx:gdx-backend-gwt:\$gdxVersion")
-    addDependency("com.badlogicgames.gdx:gdx-backend-gwt:\$gdxVersion:sources")
-    addDependency("com.google.jsinterop:jsinterop-annotations:2.1.0:sources")
-  }
+        addDependency("com.badlogicgames.gdx:gdx:\$gdxVersion:sources")
+        addDependency("com.badlogicgames.gdx:gdx-backend-gwt:\$gdxVersion")
+        addDependency("com.badlogicgames.gdx:gdx-backend-gwt:\$gdxVersion:sources")
+        addDependency("com.google.jsinterop:jsinterop-annotations:2.1.0:sources")
+    }
 
-  override fun getContent(): String =
-    """
+    override fun getContent(): String =
+        """
 buildscript {
   repositories {
     mavenCentral()
@@ -338,8 +340,8 @@ sourceSets.main.java.srcDirs = [ "src/main/java/" ]
 
 eclipse.project.name = appName + "-html"
 """ + (
-      if (project.extensions.isSelected("lombok")) {
-        """
+                if (project.extensions.isSelected("lombok")) {
+                    """
 
 configurations { lom }
 dependencies {
@@ -366,8 +368,8 @@ superDev {
   }
 }
 """
-      } else {
-        ""
-      }
-    )
+                } else {
+                    ""
+                }
+                )
 }

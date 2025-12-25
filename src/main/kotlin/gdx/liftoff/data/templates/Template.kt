@@ -20,75 +20,75 @@ import gdx.liftoff.data.project.Project
  * Interface shared by all project templates. Templates should be annotated with ProjectTemplate.
  */
 interface Template {
-  val id: String
+    val id: String
 
-  // Sizes are kept as strings, so you can set the sizes to static values, for example: MainClass.WIDTH.
-  val width: String
-    get() = "640"
-  val height: String
-    get() = "480"
+    // Sizes are kept as strings, so you can set the sizes to static values, for example: MainClass.WIDTH.
+    val width: String
+        get() = "640"
+    val height: String
+        get() = "480"
 
-  /** Used as project description in README file. Optional. */
-  val description: String
-    get() = ""
+    /** Used as project description in README file. Optional. */
+    val description: String
+        get() = ""
 
-  /** File extension of the ApplicationListener implementation. */
-  val applicationListenerExtension: String
-    get() = "java"
+    /** File extension of the ApplicationListener implementation. */
+    val applicationListenerExtension: String
+        get() = "java"
 
-  /** File extension of the application launchers on each platform. */
-  val launcherExtension: String
-    get() = "java"
+    /** File extension of the application launchers on each platform. */
+    val launcherExtension: String
+        get() = "java"
 
-  val defaultSourceFolder: String
-    get() = path("src", "main", "java")
+    val defaultSourceFolder: String
+        get() = path("src", "main", "java")
 
-  /**
-   * @param project is being created. Should contain sources provided by this template.
-   */
-  fun apply(project: Project) {
-    addApplicationListener(project)
-    addAndroidLauncher(project)
-    addLwjgl2Launcher(project)
-    addGwtLauncher(project)
-    addHeadlessLauncher(project)
-    addIOSLauncher(project)
-    addIOSMOELauncher(project)
-    addIOSMOESVMRegistration(project)
-    addLwjgl3Launcher(project)
-    addServerLauncher(project)
-    addTeaVMLauncher(project)
-    project.readmeDescription = description
-  }
+    /**
+     * @param project is being created. Should contain sources provided by this template.
+     */
+    fun apply(project: Project) {
+        addApplicationListener(project)
+        addAndroidLauncher(project)
+        addLwjgl2Launcher(project)
+        addGwtLauncher(project)
+        addHeadlessLauncher(project)
+        addIOSLauncher(project)
+        addIOSMOELauncher(project)
+        addIOSMOESVMRegistration(project)
+        addLwjgl3Launcher(project)
+        addServerLauncher(project)
+        addTeaVMLauncher(project)
+        project.readmeDescription = description
+    }
 
-  fun addApplicationListener(project: Project) {
-    addSourceFile(
-      project = project,
-      platform = Core.ID,
-      packageName = project.basic.rootPackage,
-      fileName = "${project.basic.mainClass}.$applicationListenerExtension",
-      content = getApplicationListenerContent(project),
-    )
-  }
+    fun addApplicationListener(project: Project) {
+        addSourceFile(
+            project = project,
+            platform = Core.ID,
+            packageName = project.basic.rootPackage,
+            fileName = "${project.basic.mainClass}.$applicationListenerExtension",
+            content = getApplicationListenerContent(project),
+        )
+    }
 
-  /**
-   * @param project is being created.
-   * @return content of Java class implementing ApplicationListener.
-   */
-  fun getApplicationListenerContent(project: Project): String
+    /**
+     * @param project is being created.
+     * @return content of Java class implementing ApplicationListener.
+     */
+    fun getApplicationListenerContent(project: Project): String
 
-  fun addLwjgl2Launcher(project: Project) {
-    addSourceFile(
-      project = project,
-      platform = Lwjgl2.ID,
-      packageName = "${project.basic.rootPackage}.lwjgl2",
-      fileName = "Lwjgl2Launcher.$launcherExtension",
-      content = getLwjgl2LauncherContent(project),
-    )
-  }
+    fun addLwjgl2Launcher(project: Project) {
+        addSourceFile(
+            project = project,
+            platform = Lwjgl2.ID,
+            packageName = "${project.basic.rootPackage}.lwjgl2",
+            fileName = "Lwjgl2Launcher.$launcherExtension",
+            content = getLwjgl2LauncherContent(project),
+        )
+    }
 
-  fun getLwjgl2LauncherContent(project: Project): String =
-    """package ${project.basic.rootPackage}.lwjgl2;
+    fun getLwjgl2LauncherContent(project: Project): String =
+        """package ${project.basic.rootPackage}.lwjgl2;
 
 import com.badlogic.gdx.Files.FileType;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
@@ -120,20 +120,20 @@ public class Lwjgl2Launcher {
     }
 }"""
 
-  fun addGwtLauncher(project: Project) {
-    addSourceFile(
-      project = project,
-      platform = GWT.ID,
-      packageName = "${project.basic.rootPackage}.gwt",
-      content = getGwtLauncherContent(project),
-      // GWT supports only Java sources:
-      fileName = "GwtLauncher.java",
-      sourceFolderPath = path("src", "main", "java"),
-    )
-  }
+    fun addGwtLauncher(project: Project) {
+        addSourceFile(
+            project = project,
+            platform = GWT.ID,
+            packageName = "${project.basic.rootPackage}.gwt",
+            content = getGwtLauncherContent(project),
+            // GWT supports only Java sources:
+            fileName = "GwtLauncher.java",
+            sourceFolderPath = path("src", "main", "java"),
+        )
+    }
 
-  fun getGwtLauncherContent(project: Project): String =
-    """package ${project.basic.rootPackage}.gwt;
+    fun getGwtLauncherContent(project: Project): String =
+        """package ${project.basic.rootPackage}.gwt;
 
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.backends.gwt.GwtApplication;
@@ -142,8 +142,8 @@ import ${project.basic.rootPackage}.${project.basic.mainClass};
 
 /** Launches the GWT application. */
 public class GwtLauncher extends GwtApplication {""" + (
-      if (GdxVersion.parseGdxVersion(project.advanced.gdxVersion) != null && GdxVersion.parseGdxVersion(project.advanced.gdxVersion)!! < GdxVersion(1, 9, 12)) {
-        """
+                if (GdxVersion.parseGdxVersion(project.advanced.gdxVersion) != null && GdxVersion.parseGdxVersion(project.advanced.gdxVersion)!! < GdxVersion(1, 9, 12)) {
+                    """
         ////USE THIS CODE FOR A FIXED SIZE APPLICATION
         @Override
         public GwtApplicationConfiguration getConfig () {
@@ -181,8 +181,8 @@ public class GwtLauncher extends GwtApplication {""" + (
         //    }
         ////END OF CODE FOR RESIZABLE APPLICATION
 """
-      } else {
-        """
+                } else {
+                    """
         @Override
         public GwtApplicationConfiguration getConfig () {
             // Resizable application, uses available space in browser with no padding:
@@ -195,9 +195,9 @@ public class GwtLauncher extends GwtApplication {""" + (
             //return new GwtApplicationConfiguration($width, $height);
         }
 """
-      }
-    ) +
-"""
+                }
+                ) +
+                """
         @Override
         public ApplicationListener createApplicationListener () {
             return new ${project.basic.mainClass}();
@@ -205,18 +205,18 @@ public class GwtLauncher extends GwtApplication {""" + (
 }
 """
 
-  fun addAndroidLauncher(project: Project) {
-    addSourceFile(
-      project = project,
-      platform = Android.ID,
-      packageName = project.basic.rootPackage,
-      fileName = "android/AndroidLauncher.$launcherExtension",
-      content = getAndroidLauncherContent(project),
-    )
-  }
+    fun addAndroidLauncher(project: Project) {
+        addSourceFile(
+            project = project,
+            platform = Android.ID,
+            packageName = project.basic.rootPackage,
+            fileName = "android/AndroidLauncher.$launcherExtension",
+            content = getAndroidLauncherContent(project),
+        )
+    }
 
-  fun getAndroidLauncherContent(project: Project): String =
-    """package ${project.basic.rootPackage}.android;
+    fun getAndroidLauncherContent(project: Project): String =
+        """package ${project.basic.rootPackage}.android;
 
 import android.os.Bundle;
 
@@ -235,18 +235,18 @@ public class AndroidLauncher extends AndroidApplication {
     }
 }"""
 
-  fun addHeadlessLauncher(project: Project) {
-    addSourceFile(
-      project = project,
-      platform = Headless.ID,
-      packageName = "${project.basic.rootPackage}.headless",
-      fileName = "HeadlessLauncher.$launcherExtension",
-      content = getHeadlessLauncherContent(project),
-    )
-  }
+    fun addHeadlessLauncher(project: Project) {
+        addSourceFile(
+            project = project,
+            platform = Headless.ID,
+            packageName = "${project.basic.rootPackage}.headless",
+            fileName = "HeadlessLauncher.$launcherExtension",
+            content = getHeadlessLauncherContent(project),
+        )
+    }
 
-  fun getHeadlessLauncherContent(project: Project): String =
-    """package ${project.basic.rootPackage}.headless;
+    fun getHeadlessLauncherContent(project: Project): String =
+        """package ${project.basic.rootPackage}.headless;
 
 import com.badlogic.gdx.Application;
 import com.badlogic.gdx.backends.headless.HeadlessApplication;
@@ -274,18 +274,18 @@ public class HeadlessLauncher {
     }
 }"""
 
-  fun addIOSLauncher(project: Project) {
-    addSourceFile(
-      project = project,
-      platform = IOS.ID,
-      packageName = project.basic.rootPackage,
-      fileName = "IOSLauncher.$launcherExtension",
-      content = getIOSLauncherContent(project),
-    )
-  }
+    fun addIOSLauncher(project: Project) {
+        addSourceFile(
+            project = project,
+            platform = IOS.ID,
+            packageName = project.basic.rootPackage,
+            fileName = "IOSLauncher.$launcherExtension",
+            content = getIOSLauncherContent(project),
+        )
+    }
 
-  fun getIOSLauncherContent(project: Project): String =
-    """package ${project.basic.rootPackage};
+    fun getIOSLauncherContent(project: Project): String =
+        """package ${project.basic.rootPackage};
 
 import org.robovm.apple.foundation.NSAutoreleasePool;
 import org.robovm.apple.uikit.UIApplication;
@@ -309,18 +309,18 @@ public class IOSLauncher extends IOSApplication.Delegate {
     }
 }"""
 
-  fun addIOSMOELauncher(project: Project) {
-    addSourceFile(
-      project = project,
-      platform = IOSMOE.ID,
-      packageName = project.basic.rootPackage,
-      fileName = "IOSLauncher.$launcherExtension",
-      content = getIOSMOELauncherContent(project),
-    )
-  }
+    fun addIOSMOELauncher(project: Project) {
+        addSourceFile(
+            project = project,
+            platform = IOSMOE.ID,
+            packageName = project.basic.rootPackage,
+            fileName = "IOSLauncher.$launcherExtension",
+            content = getIOSMOELauncherContent(project),
+        )
+    }
 
-  fun getIOSMOELauncherContent(project: Project): String =
-    """package ${project.basic.rootPackage};
+    fun getIOSMOELauncherContent(project: Project): String =
+        """package ${project.basic.rootPackage};
 
 import apple.uikit.c.UIKit;
 import com.badlogic.gdx.backends.iosmoe.IOSApplication;
@@ -345,18 +345,18 @@ public class IOSLauncher extends IOSApplication.Delegate {
     }
 }"""
 
-  fun addIOSMOESVMRegistration(project: Project) {
-    addSourceFile(
-      project = project,
-      platform = IOSMOE.ID,
-      packageName = project.basic.rootPackage,
-      fileName = "SVMRegistrationFeature.$launcherExtension",
-      content = getIOSMOESVMRegistrationContent(project),
-    )
-  }
+    fun addIOSMOESVMRegistration(project: Project) {
+        addSourceFile(
+            project = project,
+            platform = IOSMOE.ID,
+            packageName = project.basic.rootPackage,
+            fileName = "SVMRegistrationFeature.$launcherExtension",
+            content = getIOSMOESVMRegistrationContent(project),
+        )
+    }
 
-  fun getIOSMOESVMRegistrationContent(project: Project): String =
-    """package ${project.basic.rootPackage};
+    fun getIOSMOESVMRegistrationContent(project: Project): String =
+        """package ${project.basic.rootPackage};
 
 import org.graalvm.nativeimage.hosted.Feature;
 import org.graalvm.nativeimage.hosted.RuntimeJNIAccess;
@@ -387,25 +387,25 @@ public class SVMRegistrationFeature implements Feature {
     }
 }"""
 
-  fun addLwjgl3Launcher(project: Project) {
-    addSourceFile(
-      project = project,
-      platform = Lwjgl3.ID,
-      packageName = "${project.basic.rootPackage}.lwjgl3",
-      fileName = "Lwjgl3Launcher.$launcherExtension",
-      content = getLwjgl3LauncherContent(project),
-    )
-    addSourceFile(
-      project = project,
-      platform = Lwjgl3.ID,
-      packageName = "${project.basic.rootPackage}.lwjgl3",
-      fileName = "StartupHelper.$launcherExtension",
-      content = getLwjgl3StartupContent(project),
-    )
-  }
+    fun addLwjgl3Launcher(project: Project) {
+        addSourceFile(
+            project = project,
+            platform = Lwjgl3.ID,
+            packageName = "${project.basic.rootPackage}.lwjgl3",
+            fileName = "Lwjgl3Launcher.$launcherExtension",
+            content = getLwjgl3LauncherContent(project),
+        )
+        addSourceFile(
+            project = project,
+            platform = Lwjgl3.ID,
+            packageName = "${project.basic.rootPackage}.lwjgl3",
+            fileName = "StartupHelper.$launcherExtension",
+            content = getLwjgl3StartupContent(project),
+        )
+    }
 
-  fun getLwjgl3LauncherContent(project: Project): String =
-    """package ${project.basic.rootPackage}.lwjgl3;
+    fun getLwjgl3LauncherContent(project: Project): String =
+        """package ${project.basic.rootPackage}.lwjgl3;
 
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
@@ -451,23 +451,8 @@ public class Lwjgl3Launcher {
     }
 }"""
 
-  fun getLwjgl3StartupContent(project: Project): String =
-    """/*
- * Copyright 2020 damios
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at:
- * https://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-//Note, the above license and copyright applies to this file only.
-
+    fun getLwjgl3StartupContent(project: Project): String =
+        """
 package ${project.basic.rootPackage}.lwjgl3;
 
 import com.badlogic.gdx.Version;
@@ -493,7 +478,6 @@ import static org.lwjgl.system.macosx.ObjCRuntime.sel_getUid;
  * outside the Latin alphabet, a common cause of startup crashes.
  * <br>
  * <a href="https://jvm-gaming.org/t/starting-jvm-on-mac-with-xstartonfirstthread-programmatically/57547">Based on this java-gaming.org post by kappa</a>
- * @author damios
  */
 public class StartupHelper {
 
@@ -657,18 +641,18 @@ public class StartupHelper {
     }
 }"""
 
-  fun addServerLauncher(project: Project) {
-    addSourceFile(
-      project = project,
-      platform = Server.ID,
-      packageName = "${project.basic.rootPackage}.server",
-      fileName = "ServerLauncher.$launcherExtension",
-      content = getServerLauncherContent(project),
-    )
-  }
+    fun addServerLauncher(project: Project) {
+        addSourceFile(
+            project = project,
+            platform = Server.ID,
+            packageName = "${project.basic.rootPackage}.server",
+            fileName = "ServerLauncher.$launcherExtension",
+            content = getServerLauncherContent(project),
+        )
+    }
 
-  fun getServerLauncherContent(project: Project): String =
-    """package ${project.basic.rootPackage}.server;
+    fun getServerLauncherContent(project: Project): String =
+        """package ${project.basic.rootPackage}.server;
 
 /** Launches the server application. */
 public class ServerLauncher {
@@ -677,25 +661,25 @@ public class ServerLauncher {
     }
 }"""
 
-  fun addTeaVMLauncher(project: Project) {
-    addSourceFile(
-      project = project,
-      platform = TeaVM.ID,
-      packageName = "${project.basic.rootPackage}.teavm",
-      fileName = "TeaVMLauncher.$launcherExtension",
-      content = getTeaVMLauncherContent(project),
-    )
-    addSourceFile(
-      project = project,
-      platform = TeaVM.ID,
-      packageName = "${project.basic.rootPackage}.teavm",
-      fileName = "TeaVMBuilder.$launcherExtension",
-      content = getTeaVMBuilderContent(project),
-    )
-  }
+    fun addTeaVMLauncher(project: Project) {
+        addSourceFile(
+            project = project,
+            platform = TeaVM.ID,
+            packageName = "${project.basic.rootPackage}.teavm",
+            fileName = "TeaVMLauncher.$launcherExtension",
+            content = getTeaVMLauncherContent(project),
+        )
+        addSourceFile(
+            project = project,
+            platform = TeaVM.ID,
+            packageName = "${project.basic.rootPackage}.teavm",
+            fileName = "TeaVMBuilder.$launcherExtension",
+            content = getTeaVMBuilderContent(project),
+        )
+    }
 
-  fun getTeaVMLauncherContent(project: Project): String =
-    """package ${project.basic.rootPackage}.teavm;
+    fun getTeaVMLauncherContent(project: Project): String =
+        """package ${project.basic.rootPackage}.teavm;
 
 import com.github.xpenatan.gdx.backends.teavm.TeaApplicationConfiguration;
 import com.github.xpenatan.gdx.backends.teavm.TeaApplication;
@@ -718,8 +702,8 @@ public class TeaVMLauncher {
 }
 """
 
-  fun getTeaVMBuilderContent(project: Project): String =
-    """package ${project.basic.rootPackage}.teavm;
+    fun getTeaVMBuilderContent(project: Project): String =
+        """package ${project.basic.rootPackage}.teavm;
 
 import com.github.xpenatan.gdx.backends.teavm.config.AssetFileHandle;
 import com.github.xpenatan.gdx.backends.teavm.config.TeaBuildConfiguration;
@@ -804,39 +788,39 @@ ${generateTeaVMReflectionIncludes(project)}
 }
 """
 
-  fun generateTeaVMReflectionIncludes(
-    project: Project,
-    indent: String = " ".repeat(8),
-    trailingSemicolon: Boolean = true,
-  ): String {
-    val semicolon = if (trailingSemicolon) ";" else ""
-    return if (project.reflectedPackages.isEmpty() && project.reflectedClasses.isEmpty()) {
-      "$indent// TeaReflectionSupplier.addReflectionClass(\"${project.basic.rootPackage}.reflect\")$semicolon"
-    } else {
-      (project.reflectedPackages + project.reflectedClasses).joinToString(separator = "\n") {
-        "${indent}TeaReflectionSupplier.addReflectionClass(\"$it\")$semicolon"
-      }
+    fun generateTeaVMReflectionIncludes(
+        project: Project,
+        indent: String = " ".repeat(8),
+        trailingSemicolon: Boolean = true,
+    ): String {
+        val semicolon = if (trailingSemicolon) ";" else ""
+        return if (project.reflectedPackages.isEmpty() && project.reflectedClasses.isEmpty()) {
+            "$indent// TeaReflectionSupplier.addReflectionClass(\"${project.basic.rootPackage}.reflect\")$semicolon"
+        } else {
+            (project.reflectedPackages + project.reflectedClasses).joinToString(separator = "\n") {
+                "${indent}TeaReflectionSupplier.addReflectionClass(\"$it\")$semicolon"
+            }
+        }
     }
-  }
 
-  fun addSourceFile(
-    project: Project,
-    platform: String,
-    packageName: String,
-    fileName: String,
-    content: String,
-    sourceFolderPath: String = defaultSourceFolder,
-  ) {
-    if (project.hasPlatform(platform)) {
-      project.files.add(
-        SourceFile(
-          projectName = platform,
-          sourceFolderPath = sourceFolderPath,
-          packageName = packageName,
-          fileName = fileName,
-          content = content,
-        ),
-      )
+    fun addSourceFile(
+        project: Project,
+        platform: String,
+        packageName: String,
+        fileName: String,
+        content: String,
+        sourceFolderPath: String = defaultSourceFolder,
+    ) {
+        if (project.hasPlatform(platform)) {
+            project.files.add(
+                SourceFile(
+                    projectName = platform,
+                    sourceFolderPath = sourceFolderPath,
+                    packageName = packageName,
+                    fileName = fileName,
+                    content = content,
+                ),
+            )
+        }
     }
-  }
 }

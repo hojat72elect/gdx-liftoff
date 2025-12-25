@@ -14,24 +14,24 @@ import gdx.liftoff.views.ProjectTemplate
 @ProjectTemplate(official = true)
 @Suppress("unused") // Referenced via reflection.
 class KotlinClassicTemplate : KotlinTemplate {
-  override val id = "kotlinClassicTemplate"
-  override val description =
-    "This project was generated with a template that includes Kotlin application " +
-      "launchers and draws the libGDX logo within the application listener."
+    override val id = "kotlinClassicTemplate"
+    override val description =
+        "This project was generated with a template that includes Kotlin application " +
+                "launchers and draws the libGDX logo within the application listener."
 
-  override fun apply(project: Project) {
-    super.apply(project)
-    project.files.add(
-      CopiedFile(
-        projectName = Assets.ID,
-        original = path("generator", "templates", "libgdx.png"),
-        path = "libgdx.png",
-      ),
-    )
-  }
+    override fun apply(project: Project) {
+        super.apply(project)
+        project.files.add(
+            CopiedFile(
+                projectName = Assets.ID,
+                original = path("generator", "templates", "libgdx.png"),
+                path = "libgdx.png",
+            ),
+        )
+    }
 
-  override fun getApplicationListenerContent(project: Project): String =
-    """package ${project.basic.rootPackage}
+    override fun getApplicationListenerContent(project: Project): String =
+        """package ${project.basic.rootPackage}
 
 import com.badlogic.gdx.ApplicationAdapter
 import com.badlogic.gdx.graphics.Texture

@@ -11,68 +11,68 @@ import gdx.liftoff.views.GdxPlatform
  */
 @GdxPlatform
 class Android : Platform {
-  companion object {
-    const val ID = "android"
-    const val ORDER = Lwjgl3.ORDER + 1
-  }
-
-  override val id = ID
-  override val description = "Android mobile platform. Needs Android SDK."
-  override val order = ORDER
-  override val isStandard = false // user should only jump through android hoops on request
-
-  override fun initiate(project: Project) {
-    project.rootGradle.buildDependencies.add("\"com.android.tools.build:gradle:${project.advanced.androidPluginVersion}\"")
-    project.properties["android.useAndroidX"] = "true"
-    project.properties["android.enableR8.fullMode"] = "false"
-    if (project.advanced.gdxVersion == "1.13.5") {
-      project.properties["systemProp.com.android.tools.r8.disableHorizontalClassMerging"] = "true"
+    companion object {
+        const val ID = "android"
+        const val ORDER = Lwjgl3.ORDER + 1
     }
-    addGradleTaskDescription(project, "lint", "performs Android project validation.")
 
-    addCopiedFile(project, "proguard-rules.pro")
-    addCopiedFile(project, "project.properties")
+    override val id = ID
+    override val description = "Android mobile platform. Needs Android SDK."
+    override val order = ORDER
+    override val isStandard = false // user should only jump through android hoops on request
 
-    addCopiedFile(project, "res", "drawable-mdpi", "ic_launcher.png")
-    addCopiedFile(project, "res", "drawable-hdpi", "ic_launcher.png")
-    addCopiedFile(project, "res", "drawable-xhdpi", "ic_launcher.png")
-    addCopiedFile(project, "res", "drawable-xxhdpi", "ic_launcher.png")
-    addCopiedFile(project, "res", "drawable-xxxhdpi", "ic_launcher.png")
-    addCopiedFile(project, "res", "drawable-anydpi-v26", "ic_launcher.xml")
-    addCopiedFile(project, "res", "drawable-anydpi-v26", "ic_launcher_foreground.xml")
-    addCopiedFile(project, "ic_launcher-web.png")
-    addCopiedFile(project, "res", "values", "color.xml")
-    addCopiedFile(project, "res", "values", "styles.xml")
+    override fun initiate(project: Project) {
+        project.rootGradle.buildDependencies.add("\"com.android.tools.build:gradle:${project.advanced.androidPluginVersion}\"")
+        project.properties["android.useAndroidX"] = "true"
+        project.properties["android.enableR8.fullMode"] = "false"
+        if (project.advanced.gdxVersion == "1.13.5") {
+            project.properties["systemProp.com.android.tools.r8.disableHorizontalClassMerging"] = "true"
+        }
+        addGradleTaskDescription(project, "lint", "performs Android project validation.")
 
-    project.files.add(
-      SourceFile(
-        projectName = "",
-        sourceFolderPath = "",
-        packageName = "",
-        fileName = "local.properties",
-        content = "# Location of the Android SDK:\nsdk.dir=${project.basic.androidSdk}",
-      ),
-    )
-    project.files.add(
-      SourceFile(
-        projectName = ID,
-        sourceFolderPath = "res",
-        packageName = "values",
-        fileName = "strings.xml",
-        content = """<?xml version="1.0" encoding="utf-8"?>
+        addCopiedFile(project, "proguard-rules.pro")
+        addCopiedFile(project, "project.properties")
+
+        addCopiedFile(project, "res", "drawable-mdpi", "ic_launcher.png")
+        addCopiedFile(project, "res", "drawable-hdpi", "ic_launcher.png")
+        addCopiedFile(project, "res", "drawable-xhdpi", "ic_launcher.png")
+        addCopiedFile(project, "res", "drawable-xxhdpi", "ic_launcher.png")
+        addCopiedFile(project, "res", "drawable-xxxhdpi", "ic_launcher.png")
+        addCopiedFile(project, "res", "drawable-anydpi-v26", "ic_launcher.xml")
+        addCopiedFile(project, "res", "drawable-anydpi-v26", "ic_launcher_foreground.xml")
+        addCopiedFile(project, "ic_launcher-web.png")
+        addCopiedFile(project, "res", "values", "color.xml")
+        addCopiedFile(project, "res", "values", "styles.xml")
+
+        project.files.add(
+            SourceFile(
+                projectName = "",
+                sourceFolderPath = "",
+                packageName = "",
+                fileName = "local.properties",
+                content = "# Location of the Android SDK:\nsdk.dir=${project.basic.androidSdk}",
+            ),
+        )
+        project.files.add(
+            SourceFile(
+                projectName = ID,
+                sourceFolderPath = "res",
+                packageName = "values",
+                fileName = "strings.xml",
+                content = """<?xml version="1.0" encoding="utf-8"?>
 <resources>
   <string name="app_name">${project.basic.name}</string>
 </resources>
 """,
-      ),
-    )
-    project.files.add(
-      SourceFile(
-        projectName = ID,
-        sourceFolderPath = "",
-        packageName = "",
-        fileName = "AndroidManifest.xml",
-        content = """<?xml version="1.0" encoding="utf-8"?>
+            ),
+        )
+        project.files.add(
+            SourceFile(
+                projectName = ID,
+                sourceFolderPath = "",
+                packageName = "",
+                fileName = "AndroidManifest.xml",
+                content = """<?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
   <uses-feature android:glEsVersion="0x00020000" android:required="true"/>
@@ -100,51 +100,51 @@ class Android : Platform {
 ${project.androidPermissions.joinToString(separator = "\n") { "  <uses-permission android:name=\"${it}\" />" }}
 </manifest>
 """,
-      ),
-    )
-  }
+            ),
+        )
+    }
 
-  override fun createGradleFile(project: Project): GradleFile = AndroidGradleFile(project)
+    override fun createGradleFile(project: Project): GradleFile = AndroidGradleFile(project)
 }
 
 /**
  * Gradle file of the Android project.
  */
 class AndroidGradleFile(
-  val project: Project,
+    val project: Project,
 ) : GradleFile(Android.ID) {
-  val plugins = mutableListOf<String>()
-  val srcFolders = mutableListOf("'src/main/java'")
-  val nativeDependencies = mutableSetOf<String>()
-  var latePlugin = false
+    val plugins = mutableListOf<String>()
+    val srcFolders = mutableListOf("'src/main/java'")
+    val nativeDependencies = mutableSetOf<String>()
+    var latePlugin = false
 
-  init {
-    dependencies.add("project(':${Core.ID}')")
-    addDependency("com.badlogicgames.gdx:gdx-backend-android:\$gdxVersion")
-    addNativeDependency("com.badlogicgames.gdx:gdx-platform:\$gdxVersion:natives-armeabi-v7a")
-    addNativeDependency("com.badlogicgames.gdx:gdx-platform:\$gdxVersion:natives-arm64-v8a")
-    addNativeDependency("com.badlogicgames.gdx:gdx-platform:\$gdxVersion:natives-x86")
-    addNativeDependency("com.badlogicgames.gdx:gdx-platform:\$gdxVersion:natives-x86_64")
-    // TODO: This may be best if it can be removed in the version after libGDX 1.13.0, or established as a GDX dep.
-    val ver: GdxVersion? = GdxVersion.parseGdxVersion(project.advanced.gdxVersion)
-    if (ver?.major == 1 && ver.minor == 13 && ver.revision == 0) {
-      addDependency("androidx.core:core:1.13.1")
+    init {
+        dependencies.add("project(':${Core.ID}')")
+        addDependency("com.badlogicgames.gdx:gdx-backend-android:\$gdxVersion")
+        addNativeDependency("com.badlogicgames.gdx:gdx-platform:\$gdxVersion:natives-armeabi-v7a")
+        addNativeDependency("com.badlogicgames.gdx:gdx-platform:\$gdxVersion:natives-arm64-v8a")
+        addNativeDependency("com.badlogicgames.gdx:gdx-platform:\$gdxVersion:natives-x86")
+        addNativeDependency("com.badlogicgames.gdx:gdx-platform:\$gdxVersion:natives-x86_64")
+        // TODO: This may be best if it can be removed in the version after libGDX 1.13.0, or established as a GDX dep.
+        val ver: GdxVersion? = GdxVersion.parseGdxVersion(project.advanced.gdxVersion)
+        if (ver?.major == 1 && ver.minor == 13 && ver.revision == 0) {
+            addDependency("androidx.core:core:1.13.1")
+        }
+
+        plugins.add("com.android.application")
     }
 
-    plugins.add("com.android.application")
-  }
+    fun insertLatePlugin() {
+        latePlugin = true
+    }
 
-  fun insertLatePlugin() {
-    latePlugin = true
-  }
+    /**
+     * @param dependency will be added as "natives" dependency, quoted.
+     */
+    fun addNativeDependency(dependency: String) = nativeDependencies.add("\"$dependency\"")
 
-  /**
-   * @param dependency will be added as "natives" dependency, quoted.
-   */
-  fun addNativeDependency(dependency: String) = nativeDependencies.add("\"$dependency\"")
-
-  override fun getContent(): String =
-    """
+    override fun getContent(): String =
+        """
 buildscript {
   repositories {
     mavenCentral()
@@ -152,7 +152,7 @@ buildscript {
   }
 }
 ${plugins.joinToString(separator = "\n") { "apply plugin: '$it'" }}
-${if (latePlugin)"apply plugin: \'kotlin-android\'" else ""}
+${if (latePlugin) "apply plugin: \'kotlin-android\'" else ""}
 
 android {
   namespace = "${project.basic.rootPackage}"
@@ -186,7 +186,7 @@ android {
   compileOptions {
     sourceCompatibility "${project.advanced.javaVersion}"
     targetCompatibility "${project.advanced.javaVersion}"
-    ${if (project.advanced.javaVersion != "1.6" && project.advanced.javaVersion != "1.7")"coreLibraryDesugaringEnabled = true" else ""}
+    ${if (project.advanced.javaVersion != "1.6" && project.advanced.javaVersion != "1.7") "coreLibraryDesugaringEnabled = true" else ""}
   }
   buildTypes {
     release {
@@ -194,19 +194,21 @@ android {
       proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
     }
   }${
-      if (latePlugin) {
-        """
+            if (latePlugin) {
+                """
 
   kotlin.compilerOptions.jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_${
-          if (project.advanced.javaVersion.removePrefix("1.") == "8") {
-            "1_8"
-          } else {
-            project.advanced.javaVersion.removePrefix("1.")
-          }})
+                    if (project.advanced.javaVersion.removePrefix("1.") == "8") {
+                        "1_8"
+                    } else {
+                        project.advanced.javaVersion.removePrefix("1.")
+                    }
+                })
   """
-      } else {
-        ""
-      }}
+            } else {
+                ""
+            }
+        }
 }
 
 repositories {
@@ -217,11 +219,13 @@ repositories {
 configurations { natives }
 
 dependencies {
-  ${if (project.advanced.javaVersion != "1.6" && project.advanced.javaVersion != "1.7") {
-      "coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:${project.advanced.androidDesugaringLibraryVersion}'"
-    } else {
-      ""
-    }}
+  ${
+            if (project.advanced.javaVersion != "1.6" && project.advanced.javaVersion != "1.7") {
+                "coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:${project.advanced.androidDesugaringLibraryVersion}'"
+            } else {
+                ""
+            }
+        }
 ${joinDependencies(dependencies)}
 ${joinDependencies(nativeDependencies, "natives")}
 }

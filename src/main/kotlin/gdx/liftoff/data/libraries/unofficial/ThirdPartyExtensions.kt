@@ -24,35 +24,35 @@ import gdx.liftoff.views.Extension
  * Abstract base for unofficial extensions.
  */
 abstract class ThirdPartyExtension : Library {
-  override val official = false
-  override val repository: Repository = Repository.MavenCentral
+    override val official = false
+    override val repository: Repository = Repository.MavenCentral
 
-  override fun initiate(project: Project) {
-    project.properties[id + "Version"] = version
-    initiateDependencies(project)
-  }
-
-  abstract fun initiateDependencies(project: Project)
-
-  override fun addDependency(
-    project: Project,
-    platform: String,
-    dependency: String,
-  ) {
-    if (dependency.count { it == ':' } > 1) {
-      super.addDependency(project, platform, dependency.substringBeforeLast(':') + ":\$${id}Version:" + dependency.substringAfterLast(':'))
-    } else {
-      super.addDependency(project, platform, dependency + ":\$${id}Version")
+    override fun initiate(project: Project) {
+        project.properties[id + "Version"] = version
+        initiateDependencies(project)
     }
-  }
 
-  fun addExternalDependency(
-    project: Project,
-    platform: String,
-    dependency: String,
-  ) {
-    super.addDependency(project, platform, dependency)
-  }
+    abstract fun initiateDependencies(project: Project)
+
+    override fun addDependency(
+        project: Project,
+        platform: String,
+        dependency: String,
+    ) {
+        if (dependency.count { it == ':' } > 1) {
+            super.addDependency(project, platform, dependency.substringBeforeLast(':') + ":\$${id}Version:" + dependency.substringAfterLast(':'))
+        } else {
+            super.addDependency(project, platform, dependency + ":\$${id}Version")
+        }
+    }
+
+    fun addExternalDependency(
+        project: Project,
+        platform: String,
+        dependency: String,
+    ) {
+        super.addDependency(project, platform, dependency)
+    }
 }
 
 /**
@@ -62,38 +62,38 @@ abstract class ThirdPartyExtension : Library {
  */
 @Extension
 class ArtemisOdb : ThirdPartyExtension() {
-  override val id = "artemisOdb"
-  override val defaultVersion = "2.3.0"
-  override val url = "https://github.com/junkdog/artemis-odb"
-  override val group = "net.onedaybeard.artemis"
-  override val name = "artemis-odb"
+    override val id = "artemisOdb"
+    override val defaultVersion = "2.3.0"
+    override val url = "https://github.com/junkdog/artemis-odb"
+    override val group = "net.onedaybeard.artemis"
+    override val name = "artemis-odb"
 
-  override fun initiateDependencies(project: Project) {
-    addDependency(project, Core.ID, "net.onedaybeard.artemis:artemis-odb")
+    override fun initiateDependencies(project: Project) {
+        addDependency(project, Core.ID, "net.onedaybeard.artemis:artemis-odb")
 
-    addSpecialDependency(
-      project,
-      GWT.ID,
-      "implementation(\"net.onedaybeard.artemis:artemis-odb-gwt:\$${id}Version\") {exclude group: \"com.google.gwt\", module: \"gwt-user\"}",
-    )
-    addSpecialDependency(
-      project,
-      GWT.ID,
-      "implementation(\"net.onedaybeard.artemis:artemis-odb-gwt:\$${id}Version:sources\") {exclude group: \"com.google.gwt\", module: \"gwt-user\"}",
-    )
-    addDependency(project, GWT.ID, "net.onedaybeard.artemis:artemis-odb:sources")
-    addGwtInherit(project, "com.artemis.backends.artemis_backends_gwt")
-    if (project.hasPlatform(GWT.ID)) {
-      project.files.add(
-        CopiedFile(
-          projectName = GWT.ID,
-          original = path("generator", GWT.ID, "jsr305.gwt.xml"),
-          path = path("src", "main", "java", "jsr305.gwt.xml"),
-        ),
-      )
-      addGwtInherit(project, "jsr305")
+        addSpecialDependency(
+            project,
+            GWT.ID,
+            "implementation(\"net.onedaybeard.artemis:artemis-odb-gwt:\$${id}Version\") {exclude group: \"com.google.gwt\", module: \"gwt-user\"}",
+        )
+        addSpecialDependency(
+            project,
+            GWT.ID,
+            "implementation(\"net.onedaybeard.artemis:artemis-odb-gwt:\$${id}Version:sources\") {exclude group: \"com.google.gwt\", module: \"gwt-user\"}",
+        )
+        addDependency(project, GWT.ID, "net.onedaybeard.artemis:artemis-odb:sources")
+        addGwtInherit(project, "com.artemis.backends.artemis_backends_gwt")
+        if (project.hasPlatform(GWT.ID)) {
+            project.files.add(
+                CopiedFile(
+                    projectName = GWT.ID,
+                    original = path("generator", GWT.ID, "jsr305.gwt.xml"),
+                    path = path("src", "main", "java", "jsr305.gwt.xml"),
+                ),
+            )
+            addGwtInherit(project, "jsr305")
+        }
     }
-  }
 }
 
 /**
@@ -103,18 +103,18 @@ class ArtemisOdb : ThirdPartyExtension() {
  */
 @Extension
 class LibgdxUtils : ThirdPartyExtension() {
-  override val id = "utils"
-  override val defaultVersion = "0.13.7"
-  override val url = "https://github.com/tommyettinger/gdx-utils"
-  override val group = "com.github.tommyettinger"
-  override val name = "libgdx-utils"
+    override val id = "utils"
+    override val defaultVersion = "0.13.7"
+    override val url = "https://github.com/tommyettinger/gdx-utils"
+    override val group = "com.github.tommyettinger"
+    override val name = "libgdx-utils"
 
-  override fun initiateDependencies(project: Project) {
-    addDependency(project, Core.ID, "com.github.tommyettinger:libgdx-utils")
+    override fun initiateDependencies(project: Project) {
+        addDependency(project, Core.ID, "com.github.tommyettinger:libgdx-utils")
 
-    addDependency(project, GWT.ID, "com.github.tommyettinger:libgdx-utils:sources")
-    addGwtInherit(project, "libgdx-utils")
-  }
+        addDependency(project, GWT.ID, "com.github.tommyettinger:libgdx-utils:sources")
+        addGwtInherit(project, "libgdx-utils")
+    }
 }
 
 /**
@@ -124,20 +124,20 @@ class LibgdxUtils : ThirdPartyExtension() {
  */
 @Extension
 class LibgdxUtilsBox2D : ThirdPartyExtension() {
-  override val id = "utilsBox2d"
-  override val defaultVersion = "0.13.7"
-  override val url = "https://github.com/tommyettinger/gdx-utils"
-  override val group = "com.github.tommyettinger"
-  override val name = "libgdx-utils-box2d"
+    override val id = "utilsBox2d"
+    override val defaultVersion = "0.13.7"
+    override val url = "https://github.com/tommyettinger/gdx-utils"
+    override val group = "com.github.tommyettinger"
+    override val name = "libgdx-utils-box2d"
 
-  override fun initiateDependencies(project: Project) {
-    addDependency(project, Core.ID, "com.github.tommyettinger:libgdx-utils-box2d")
+    override fun initiateDependencies(project: Project) {
+        addDependency(project, Core.ID, "com.github.tommyettinger:libgdx-utils-box2d")
 
-    addDependency(project, GWT.ID, "com.github.tommyettinger:libgdx-utils-box2d:sources")
-    addGwtInherit(project, "libgdx-utils-box2d")
+        addDependency(project, GWT.ID, "com.github.tommyettinger:libgdx-utils-box2d:sources")
+        addGwtInherit(project, "libgdx-utils-box2d")
 
-    LibgdxUtils().initiate(project)
-  }
+        LibgdxUtils().initiate(project)
+    }
 }
 
 /**
@@ -146,29 +146,29 @@ class LibgdxUtilsBox2D : ThirdPartyExtension() {
  */
 @Extension
 class Facebook : ThirdPartyExtension() {
-  override val id = "facebook"
-  override val defaultVersion = "1.5.0"
-  override val url = "https://github.com/TomGrill/gdx-facebook"
-  override val group = "de.tomgrill.gdxfacebook"
-  override val name = "gdx-facebook-core"
+    override val id = "facebook"
+    override val defaultVersion = "1.5.0"
+    override val url = "https://github.com/TomGrill/gdx-facebook"
+    override val group = "de.tomgrill.gdxfacebook"
+    override val name = "gdx-facebook-core"
 
-  override fun initiateDependencies(project: Project) {
-    addDependency(project, Core.ID, "de.tomgrill.gdxfacebook:gdx-facebook-core")
+    override fun initiateDependencies(project: Project) {
+        addDependency(project, Core.ID, "de.tomgrill.gdxfacebook:gdx-facebook-core")
 
-    addDependency(project, Android.ID, "de.tomgrill.gdxfacebook:gdx-facebook-android")
+        addDependency(project, Android.ID, "de.tomgrill.gdxfacebook:gdx-facebook-android")
 
-    addDesktopDependency(project, "de.tomgrill.gdxfacebook:gdx-facebook-desktop")
+        addDesktopDependency(project, "de.tomgrill.gdxfacebook:gdx-facebook-desktop")
 // // This is a problem for the App Store, removed.
 //        addDependency(project, iOS.ID, "de.tomgrill.gdxfacebook:gdx-facebook-ios")
 
-    addDependency(project, GWT.ID, "de.tomgrill.gdxfacebook:gdx-facebook-core:sources")
-    addSpecialDependency(
-      project,
-      GWT.ID,
-      "implementation(\"de.tomgrill.gdxfacebook:gdx-facebook-html:\$${id}Version:sources\"){exclude group: \"com.badlogicgames.gdx\", module: \"gdx-backend-gwt\"}",
-    )
-    addGwtInherit(project, "de.tomgrill.gdxfacebook.html.gdx_facebook_gwt")
-  }
+        addDependency(project, GWT.ID, "de.tomgrill.gdxfacebook:gdx-facebook-core:sources")
+        addSpecialDependency(
+            project,
+            GWT.ID,
+            "implementation(\"de.tomgrill.gdxfacebook:gdx-facebook-html:\$${id}Version:sources\"){exclude group: \"com.badlogicgames.gdx\", module: \"gdx-backend-gwt\"}",
+        )
+        addGwtInherit(project, "de.tomgrill.gdxfacebook.html.gdx_facebook_gwt")
+    }
 }
 
 /**
@@ -177,25 +177,25 @@ class Facebook : ThirdPartyExtension() {
  */
 @Extension
 class Dialogs : ThirdPartyExtension() {
-  override val id = "dialogs"
-  override val defaultVersion = "1.3.0"
-  override val url = "https://github.com/TomGrill/gdx-dialogs"
-  override val group = "de.tomgrill.gdxdialogs"
-  override val name = "gdx-dialogs-core"
+    override val id = "dialogs"
+    override val defaultVersion = "1.3.0"
+    override val url = "https://github.com/TomGrill/gdx-dialogs"
+    override val group = "de.tomgrill.gdxdialogs"
+    override val name = "gdx-dialogs-core"
 
-  override fun initiateDependencies(project: Project) {
-    addDependency(project, Core.ID, "de.tomgrill.gdxdialogs:gdx-dialogs-core")
+    override fun initiateDependencies(project: Project) {
+        addDependency(project, Core.ID, "de.tomgrill.gdxdialogs:gdx-dialogs-core")
 
-    addDependency(project, Android.ID, "de.tomgrill.gdxdialogs:gdx-dialogs-android")
+        addDependency(project, Android.ID, "de.tomgrill.gdxdialogs:gdx-dialogs-android")
 
-    addDesktopDependency(project, "de.tomgrill.gdxdialogs:gdx-dialogs-desktop")
+        addDesktopDependency(project, "de.tomgrill.gdxdialogs:gdx-dialogs-desktop")
 
-    addDependency(project, IOS.ID, "de.tomgrill.gdxdialogs:gdx-dialogs-ios")
+        addDependency(project, IOS.ID, "de.tomgrill.gdxdialogs:gdx-dialogs-ios")
 
-    addDependency(project, GWT.ID, "de.tomgrill.gdxdialogs:gdx-dialogs-core:sources")
-    addDependency(project, GWT.ID, "de.tomgrill.gdxdialogs:gdx-dialogs-html:sources")
-    addGwtInherit(project, "de.tomgrill.gdxdialogs.html.gdx_dialogs_html")
-  }
+        addDependency(project, GWT.ID, "de.tomgrill.gdxdialogs:gdx-dialogs-core:sources")
+        addDependency(project, GWT.ID, "de.tomgrill.gdxdialogs:gdx-dialogs-html:sources")
+        addGwtInherit(project, "de.tomgrill.gdxdialogs.html.gdx_dialogs_html")
+    }
 }
 
 /**
@@ -204,15 +204,15 @@ class Dialogs : ThirdPartyExtension() {
  */
 @Extension
 class Fleks : ThirdPartyExtension() {
-  override val id = "fleks"
-  override val defaultVersion = "2.11"
-  override val url = "https://github.com/Quillraven/Fleks"
-  override val group = "io.github.quillraven.fleks"
-  override val name = "Fleks"
+    override val id = "fleks"
+    override val defaultVersion = "2.11"
+    override val url = "https://github.com/Quillraven/Fleks"
+    override val group = "io.github.quillraven.fleks"
+    override val name = "Fleks"
 
-  override fun initiateDependencies(project: Project) {
-    addDependency(project, Core.ID, "io.github.quillraven.fleks:Fleks")
-  }
+    override fun initiateDependencies(project: Project) {
+        addDependency(project, Core.ID, "io.github.quillraven.fleks:Fleks")
+    }
 }
 
 /**
@@ -222,17 +222,17 @@ class Fleks : ThirdPartyExtension() {
  */
 @Extension
 class InGameConsole : ThirdPartyExtension() {
-  override val id = "inGameConsole"
-  override val defaultVersion = "1.0.1"
-  override val url = "https://github.com/tommyettinger/sjInGameConsole"
-  override val group = "com.github.tommyettinger"
-  override val name = "sjInGameConsole"
+    override val id = "inGameConsole"
+    override val defaultVersion = "1.0.1"
+    override val url = "https://github.com/tommyettinger/sjInGameConsole"
+    override val group = "com.github.tommyettinger"
+    override val name = "sjInGameConsole"
 
-  override fun initiateDependencies(project: Project) {
-    addDependency(project, Core.ID, "com.github.tommyettinger:sjInGameConsole")
-    addDependency(project, GWT.ID, "com.github.tommyettinger:sjInGameConsole:sources")
-    addGwtInherit(project, "com.strongjoshua.console")
-  }
+    override fun initiateDependencies(project: Project) {
+        addDependency(project, Core.ID, "com.github.tommyettinger:sjInGameConsole")
+        addDependency(project, GWT.ID, "com.github.tommyettinger:sjInGameConsole:sources")
+        addGwtInherit(project, "com.strongjoshua.console")
+    }
 }
 
 /**
@@ -242,15 +242,15 @@ class InGameConsole : ThirdPartyExtension() {
  */
 @Extension
 class Jaci : ThirdPartyExtension() {
-  override val id = "jaci"
-  override val defaultVersion = "0.4.0"
-  override val url = "https://github.com/ykrasik/jaci"
-  override val group = "com.github.ykrasik"
-  override val name = "jaci-libgdx-cli-java"
+    override val id = "jaci"
+    override val defaultVersion = "0.4.0"
+    override val url = "https://github.com/ykrasik/jaci"
+    override val group = "com.github.ykrasik"
+    override val name = "jaci-libgdx-cli-java"
 
-  override fun initiateDependencies(project: Project) {
-    addDependency(project, Core.ID, "com.github.ykrasik:jaci-libgdx-cli-java")
-  }
+    override fun initiateDependencies(project: Project) {
+        addDependency(project, Core.ID, "com.github.ykrasik:jaci-libgdx-cli-java")
+    }
 }
 
 /**
@@ -260,18 +260,18 @@ class Jaci : ThirdPartyExtension() {
  */
 @Extension
 class JaciGwt : ThirdPartyExtension() {
-  override val id = "jaciGwt"
-  override val defaultVersion = "0.4.0"
-  override val url = "https://github.com/ykrasik/jaci"
-  override val group = "com.github.ykrasik"
-  override val name = "jaci-libgdx-cli-gwt"
+    override val id = "jaciGwt"
+    override val defaultVersion = "0.4.0"
+    override val url = "https://github.com/ykrasik/jaci"
+    override val group = "com.github.ykrasik"
+    override val name = "jaci-libgdx-cli-gwt"
 
-  override fun initiateDependencies(project: Project) {
-    addDependency(project, Core.ID, "com.github.ykrasik:jaci-libgdx-cli-gwt")
+    override fun initiateDependencies(project: Project) {
+        addDependency(project, Core.ID, "com.github.ykrasik:jaci-libgdx-cli-gwt")
 
-    addDependency(project, GWT.ID, "com.github.ykrasik:jaci-libgdx-cli-gwt:sources")
-    addGwtInherit(project, "com.github.ykrasik.jaci")
-  }
+        addDependency(project, GWT.ID, "com.github.ykrasik:jaci-libgdx-cli-gwt:sources")
+        addGwtInherit(project, "com.github.ykrasik.jaci")
+    }
 }
 
 /**
@@ -279,15 +279,15 @@ class JaciGwt : ThirdPartyExtension() {
  */
 @Extension
 class KotlinxCoroutines : ThirdPartyExtension() {
-  override val id = "kotlinxCoroutines"
-  override val defaultVersion = "1.8.1"
-  override val url = "https://kotlinlang.org/docs/coroutines-overview.html"
-  override val group = "org.jetbrains.kotlinx"
-  override val name = "kotlinx-coroutines-core"
+    override val id = "kotlinxCoroutines"
+    override val defaultVersion = "1.8.1"
+    override val url = "https://kotlinlang.org/docs/coroutines-overview.html"
+    override val group = "org.jetbrains.kotlinx"
+    override val name = "kotlinx-coroutines-core"
 
-  override fun initiateDependencies(project: Project) {
-    addDependency(project, Core.ID, "org.jetbrains.kotlinx:kotlinx-coroutines-core")
-  }
+    override fun initiateDependencies(project: Project) {
+        addDependency(project, Core.ID, "org.jetbrains.kotlinx:kotlinx-coroutines-core")
+    }
 }
 
 /**
@@ -297,18 +297,18 @@ class KotlinxCoroutines : ThirdPartyExtension() {
  */
 @Extension
 class Noise4J : ThirdPartyExtension() {
-  override val id = "noise4j"
-  override val defaultVersion = "0.1.0"
-  override val url = "https://github.com/czyzby/noise4j"
-  override val group = "com.github.czyzby"
-  override val name = "noise4j"
+    override val id = "noise4j"
+    override val defaultVersion = "0.1.0"
+    override val url = "https://github.com/czyzby/noise4j"
+    override val group = "com.github.czyzby"
+    override val name = "noise4j"
 
-  override fun initiateDependencies(project: Project) {
-    addDependency(project, Core.ID, "com.github.czyzby:noise4j")
+    override fun initiateDependencies(project: Project) {
+        addDependency(project, Core.ID, "com.github.czyzby:noise4j")
 
-    addDependency(project, GWT.ID, "com.github.czyzby:noise4j:sources")
-    addGwtInherit(project, "com.github.czyzby.noise4j.Noise4J")
-  }
+        addDependency(project, GWT.ID, "com.github.czyzby:noise4j:sources")
+        addGwtInherit(project, "com.github.czyzby.noise4j.Noise4J")
+    }
 }
 
 /**
@@ -317,15 +317,15 @@ class Noise4J : ThirdPartyExtension() {
  */
 @Extension
 class BladeInk : ThirdPartyExtension() {
-  override val id = "bladeInk"
-  override val defaultVersion = "1.1.2"
-  override val url = "https://github.com/bladecoder/blade-ink"
-  override val group = "com.bladecoder.ink"
-  override val name = "blade-ink"
+    override val id = "bladeInk"
+    override val defaultVersion = "1.1.2"
+    override val url = "https://github.com/bladecoder/blade-ink"
+    override val group = "com.bladecoder.ink"
+    override val name = "blade-ink"
 
-  override fun initiateDependencies(project: Project) {
-    addDependency(project, Core.ID, "com.bladecoder.ink:blade-ink")
-  }
+    override fun initiateDependencies(project: Project) {
+        addDependency(project, Core.ID, "com.bladecoder.ink:blade-ink")
+    }
 }
 
 /**
@@ -335,18 +335,18 @@ class BladeInk : ThirdPartyExtension() {
  */
 @Extension
 class Joise : ThirdPartyExtension() {
-  override val id = "joise"
-  override val defaultVersion = "1.1.0"
-  override val url = "https://github.com/SudoPlayGames/Joise"
-  override val group = "com.sudoplay.joise"
-  override val name = "joise"
+    override val id = "joise"
+    override val defaultVersion = "1.1.0"
+    override val url = "https://github.com/SudoPlayGames/Joise"
+    override val group = "com.sudoplay.joise"
+    override val name = "joise"
 
-  override fun initiateDependencies(project: Project) {
-    addDependency(project, Core.ID, "com.sudoplay.joise:joise")
+    override fun initiateDependencies(project: Project) {
+        addDependency(project, Core.ID, "com.sudoplay.joise:joise")
 
-    addDependency(project, GWT.ID, "com.sudoplay.joise:joise:sources")
-    addGwtInherit(project, "joise")
-  }
+        addDependency(project, GWT.ID, "com.sudoplay.joise:joise:sources")
+        addGwtInherit(project, "joise")
+    }
 }
 
 /**
@@ -358,18 +358,18 @@ class Joise : ThirdPartyExtension() {
  */
 @Extension
 class MakeSomeNoise : ThirdPartyExtension() {
-  override val id = "makeSomeNoise"
-  override val defaultVersion = "0.3"
-  override val url = "https://github.com/tommyettinger/make-some-noise"
-  override val group = "com.github.tommyettinger"
-  override val name = "make_some_noise"
+    override val id = "makeSomeNoise"
+    override val defaultVersion = "0.3"
+    override val url = "https://github.com/tommyettinger/make-some-noise"
+    override val group = "com.github.tommyettinger"
+    override val name = "make_some_noise"
 
-  override fun initiateDependencies(project: Project) {
-    addDependency(project, Core.ID, "com.github.tommyettinger:make_some_noise")
+    override fun initiateDependencies(project: Project) {
+        addDependency(project, Core.ID, "com.github.tommyettinger:make_some_noise")
 
-    addDependency(project, GWT.ID, "com.github.tommyettinger:make_some_noise:sources")
-    addGwtInherit(project, "make.some.noise")
-  }
+        addDependency(project, GWT.ID, "com.github.tommyettinger:make_some_noise:sources")
+        addGwtInherit(project, "make.some.noise")
+    }
 }
 
 /**
@@ -379,19 +379,19 @@ class MakeSomeNoise : ThirdPartyExtension() {
  */
 @Extension
 class TypingLabel : ThirdPartyExtension() {
-  override val id = "typingLabel"
-  override val defaultVersion = "1.4.0"
-  override val url = "https://github.com/rafaskb/typing-label"
-  override val group = "com.rafaskoberg.gdx"
-  override val name = "typing-label"
+    override val id = "typingLabel"
+    override val defaultVersion = "1.4.0"
+    override val url = "https://github.com/rafaskb/typing-label"
+    override val group = "com.rafaskoberg.gdx"
+    override val name = "typing-label"
 
-  override fun initiateDependencies(project: Project) {
-    addDependency(project, Core.ID, "com.rafaskoberg.gdx:typing-label")
+    override fun initiateDependencies(project: Project) {
+        addDependency(project, Core.ID, "com.rafaskoberg.gdx:typing-label")
 
-    addDependency(project, GWT.ID, "com.rafaskoberg.gdx:typing-label:sources")
-    addGwtInherit(project, "com.rafaskoberg.gdx.typinglabel.typinglabel")
-    RegExodus().initiate(project)
-  }
+        addDependency(project, GWT.ID, "com.rafaskoberg.gdx:typing-label:sources")
+        addGwtInherit(project, "com.rafaskoberg.gdx.typinglabel.typinglabel")
+        RegExodus().initiate(project)
+    }
 }
 
 /**
@@ -401,19 +401,19 @@ class TypingLabel : ThirdPartyExtension() {
  */
 @Extension
 class TextraTypist : ThirdPartyExtension() {
-  override val id = "textratypist"
-  override val defaultVersion = "2.2.8"
-  override val url = "https://github.com/tommyettinger/textratypist"
-  override val group = "com.github.tommyettinger"
-  override val name = "textratypist"
+    override val id = "textratypist"
+    override val defaultVersion = "2.2.8"
+    override val url = "https://github.com/tommyettinger/textratypist"
+    override val group = "com.github.tommyettinger"
+    override val name = "textratypist"
 
-  override fun initiateDependencies(project: Project) {
-    addDependency(project, Core.ID, "com.github.tommyettinger:textratypist")
+    override fun initiateDependencies(project: Project) {
+        addDependency(project, Core.ID, "com.github.tommyettinger:textratypist")
 
-    addDependency(project, GWT.ID, "com.github.tommyettinger:textratypist:sources")
-    addGwtInherit(project, "com.github.tommyettinger.textratypist")
-    RegExodus().initiate(project)
-  }
+        addDependency(project, GWT.ID, "com.github.tommyettinger:textratypist:sources")
+        addGwtInherit(project, "com.github.tommyettinger.textratypist")
+        RegExodus().initiate(project)
+    }
 }
 
 /**
@@ -423,17 +423,17 @@ class TextraTypist : ThirdPartyExtension() {
  */
 @Extension
 class FreeTypist : ThirdPartyExtension() {
-  override val id = "freetypist"
-  override val defaultVersion = "2.2.8.0"
-  override val url = "https://github.com/tommyettinger/freetypist"
-  override val group = "com.github.tommyettinger"
-  override val name = "freetypist"
+    override val id = "freetypist"
+    override val defaultVersion = "2.2.8.0"
+    override val url = "https://github.com/tommyettinger/freetypist"
+    override val group = "com.github.tommyettinger"
+    override val name = "freetypist"
 
-  override fun initiateDependencies(project: Project) {
-    addDependency(project, Core.ID, "com.github.tommyettinger:freetypist")
-    Freetype().initiate(project)
-    TextraTypist().initiate(project)
-  }
+    override fun initiateDependencies(project: Project) {
+        addDependency(project, Core.ID, "com.github.tommyettinger:freetypist")
+        Freetype().initiate(project)
+        TextraTypist().initiate(project)
+    }
 }
 
 /**
@@ -444,19 +444,19 @@ class FreeTypist : ThirdPartyExtension() {
  */
 @Extension
 class ShapeDrawer : ThirdPartyExtension() {
-  override val id = "shapeDrawer"
-  override val defaultVersion = "2.6.0"
-  override val url = "https://github.com/earlygrey/shapedrawer"
-  override val repository = Repository.JitPack
-  override val group = "space.earlygrey"
-  override val name = "shapedrawer"
+    override val id = "shapeDrawer"
+    override val defaultVersion = "2.6.0"
+    override val url = "https://github.com/earlygrey/shapedrawer"
+    override val repository = Repository.JitPack
+    override val group = "space.earlygrey"
+    override val name = "shapedrawer"
 
-  override fun initiateDependencies(project: Project) {
-    addDependency(project, Core.ID, "space.earlygrey:shapedrawer")
+    override fun initiateDependencies(project: Project) {
+        addDependency(project, Core.ID, "space.earlygrey:shapedrawer")
 
-    addDependency(project, GWT.ID, "space.earlygrey:shapedrawer:sources")
-    addGwtInherit(project, "space.earlygrey.shapedrawer")
-  }
+        addDependency(project, GWT.ID, "space.earlygrey:shapedrawer:sources")
+        addGwtInherit(project, "space.earlygrey.shapedrawer")
+    }
 }
 
 /**
@@ -467,19 +467,19 @@ class ShapeDrawer : ThirdPartyExtension() {
  */
 @Extension
 class SimpleGraphs : ThirdPartyExtension() {
-  override val id = "simpleGraphs"
-  override val defaultVersion = "5.1.1"
-  override val url = "https://github.com/earlygrey/simple-graphs"
-  override val repository = Repository.JitPack
-  override val group = "space.earlygrey"
-  override val name = "simple-graphs"
+    override val id = "simpleGraphs"
+    override val defaultVersion = "5.1.1"
+    override val url = "https://github.com/earlygrey/simple-graphs"
+    override val repository = Repository.JitPack
+    override val group = "space.earlygrey"
+    override val name = "simple-graphs"
 
-  override fun initiateDependencies(project: Project) {
-    addDependency(project, Core.ID, "space.earlygrey:simple-graphs")
+    override fun initiateDependencies(project: Project) {
+        addDependency(project, Core.ID, "space.earlygrey:simple-graphs")
 
-    addDependency(project, GWT.ID, "space.earlygrey:simple-graphs:sources")
-    addGwtInherit(project, "simple_graphs")
-  }
+        addDependency(project, GWT.ID, "space.earlygrey:simple-graphs:sources")
+        addGwtInherit(project, "simple_graphs")
+    }
 }
 
 /**
@@ -489,18 +489,18 @@ class SimpleGraphs : ThirdPartyExtension() {
  */
 @Extension
 class Formic : ThirdPartyExtension() {
-  override val id = "formic"
-  override val defaultVersion = "0.1.5"
-  override val url = "https://github.com/tommyettinger/formic"
-  override val group = "com.github.tommyettinger"
-  override val name = "formic"
+    override val id = "formic"
+    override val defaultVersion = "0.1.5"
+    override val url = "https://github.com/tommyettinger/formic"
+    override val group = "com.github.tommyettinger"
+    override val name = "formic"
 
-  override fun initiateDependencies(project: Project) {
-    addDependency(project, Core.ID, "com.github.tommyettinger:formic")
+    override fun initiateDependencies(project: Project) {
+        addDependency(project, Core.ID, "com.github.tommyettinger:formic")
 
-    addDependency(project, GWT.ID, "com.github.tommyettinger:formic:sources")
-    addGwtInherit(project, "formic")
-  }
+        addDependency(project, GWT.ID, "com.github.tommyettinger:formic:sources")
+        addGwtInherit(project, "formic")
+    }
 }
 
 /**
@@ -509,18 +509,18 @@ class Formic : ThirdPartyExtension() {
  */
 @Extension
 class Colorful : ThirdPartyExtension() {
-  override val id = "colorful"
-  override val defaultVersion = "0.10.0"
-  override val url = "https://github.com/tommyettinger/colorful-gdx"
-  override val group = "com.github.tommyettinger"
-  override val name = "colorful"
+    override val id = "colorful"
+    override val defaultVersion = "0.10.0"
+    override val url = "https://github.com/tommyettinger/colorful-gdx"
+    override val group = "com.github.tommyettinger"
+    override val name = "colorful"
 
-  override fun initiateDependencies(project: Project) {
-    addDependency(project, Core.ID, "com.github.tommyettinger:colorful")
+    override fun initiateDependencies(project: Project) {
+        addDependency(project, Core.ID, "com.github.tommyettinger:colorful")
 
-    addDependency(project, GWT.ID, "com.github.tommyettinger:colorful:sources")
-    addGwtInherit(project, "com.github.tommyettinger.colorful.colorful")
-  }
+        addDependency(project, GWT.ID, "com.github.tommyettinger:colorful:sources")
+        addGwtInherit(project, "com.github.tommyettinger.colorful.colorful")
+    }
 }
 
 /**
@@ -530,18 +530,18 @@ class Colorful : ThirdPartyExtension() {
  */
 @Extension
 class Anim8 : ThirdPartyExtension() {
-  override val id = "anim8"
-  override val defaultVersion = "0.6.1"
-  override val url = "https://github.com/tommyettinger/anim8-gdx"
-  override val group = "com.github.tommyettinger"
-  override val name = "anim8-gdx"
+    override val id = "anim8"
+    override val defaultVersion = "0.6.1"
+    override val url = "https://github.com/tommyettinger/anim8-gdx"
+    override val group = "com.github.tommyettinger"
+    override val name = "anim8-gdx"
 
-  override fun initiateDependencies(project: Project) {
-    addDependency(project, Core.ID, "com.github.tommyettinger:anim8-gdx")
+    override fun initiateDependencies(project: Project) {
+        addDependency(project, Core.ID, "com.github.tommyettinger:anim8-gdx")
 
-    addDependency(project, GWT.ID, "com.github.tommyettinger:anim8-gdx:sources")
-    addGwtInherit(project, "com.github.tommyettinger.anim8")
-  }
+        addDependency(project, GWT.ID, "com.github.tommyettinger:anim8-gdx:sources")
+        addGwtInherit(project, "com.github.tommyettinger.anim8")
+    }
 }
 
 /**
@@ -550,18 +550,18 @@ class Anim8 : ThirdPartyExtension() {
  */
 @Extension
 class TenPatch : ThirdPartyExtension() {
-  override val id = "tenPatch"
-  override val defaultVersion = "5.2.3"
-  override val url = "https://github.com/raeleus/TenPatch"
-  override val group = "com.github.raeleus"
-  override val name = "TenPatch"
+    override val id = "tenPatch"
+    override val defaultVersion = "5.2.3"
+    override val url = "https://github.com/raeleus/TenPatch"
+    override val group = "com.github.raeleus"
+    override val name = "TenPatch"
 
-  override fun initiateDependencies(project: Project) {
-    addDependency(project, Core.ID, "com.github.raeleus.TenPatch:tenpatch")
+    override fun initiateDependencies(project: Project) {
+        addDependency(project, Core.ID, "com.github.raeleus.TenPatch:tenpatch")
 
-    addDependency(project, GWT.ID, "com.github.raeleus.TenPatch:tenpatch:sources")
-    addGwtInherit(project, "com.ray3k.tenpatch.tenpatch")
-  }
+        addDependency(project, GWT.ID, "com.github.raeleus.TenPatch:tenpatch:sources")
+        addGwtInherit(project, "com.ray3k.tenpatch.tenpatch")
+    }
 }
 
 /**
@@ -570,18 +570,18 @@ class TenPatch : ThirdPartyExtension() {
  */
 @Extension
 class Stripe : ThirdPartyExtension() {
-  override val id = "stripe"
-  override val defaultVersion = "2.0.0"
-  override val url = "https://github.com/raeleus/stripe"
-  override val group = "com.github.raeleus.stripe"
-  override val name = "Stripe"
+    override val id = "stripe"
+    override val defaultVersion = "2.0.0"
+    override val url = "https://github.com/raeleus/stripe"
+    override val group = "com.github.raeleus.stripe"
+    override val name = "Stripe"
 
-  override fun initiateDependencies(project: Project) {
-    addDependency(project, Core.ID, "com.github.raeleus.stripe:stripe")
+    override fun initiateDependencies(project: Project) {
+        addDependency(project, Core.ID, "com.github.raeleus.stripe:stripe")
 
-    addDependency(project, GWT.ID, "com.github.raeleus.stripe:stripe:sources")
-    addGwtInherit(project, "com.ray3k.stripe")
-  }
+        addDependency(project, GWT.ID, "com.github.raeleus.stripe:stripe:sources")
+        addGwtInherit(project, "com.ray3k.stripe")
+    }
 }
 
 /**
@@ -590,18 +590,18 @@ class Stripe : ThirdPartyExtension() {
  */
 @Extension
 class GdxGltf : ThirdPartyExtension() {
-  override val id = "gdxGltf"
-  override val defaultVersion = "172fe4b380"
-  override val repository = Repository.JitPack
-  override val url = "https://github.com/mgsx-dev/gdx-gltf"
-  override val group = "com.github.mgsx-dev"
-  override val name = "gdx-gltf"
+    override val id = "gdxGltf"
+    override val defaultVersion = "172fe4b380"
+    override val repository = Repository.JitPack
+    override val url = "https://github.com/mgsx-dev/gdx-gltf"
+    override val group = "com.github.mgsx-dev"
+    override val name = "gdx-gltf"
 
-  override fun initiateDependencies(project: Project) {
-    addDependency(project, Core.ID, "com.github.mgsx-dev.gdx-gltf:gltf")
-    addDependency(project, GWT.ID, "com.github.mgsx-dev.gdx-gltf:gltf:sources")
-    addGwtInherit(project, "GLTF")
-  }
+    override fun initiateDependencies(project: Project) {
+        addDependency(project, Core.ID, "com.github.mgsx-dev.gdx-gltf:gltf")
+        addDependency(project, GWT.ID, "com.github.mgsx-dev.gdx-gltf:gltf:sources")
+        addGwtInherit(project, "GLTF")
+    }
 }
 
 /**
@@ -610,32 +610,32 @@ class GdxGltf : ThirdPartyExtension() {
  */
 @Extension
 class HackLights : ThirdPartyExtension() {
-  override val id = "hackLights"
-  override val defaultVersion = "f0ba5deaff"
-  override val repository = Repository.JitPack
-  override val url = "https://github.com/aliasifk/HackLights"
-  override val group = "com.github.aliasifk"
-  override val name = "HackLights"
+    override val id = "hackLights"
+    override val defaultVersion = "f0ba5deaff"
+    override val repository = Repository.JitPack
+    override val url = "https://github.com/aliasifk/HackLights"
+    override val group = "com.github.aliasifk"
+    override val name = "HackLights"
 
-  override fun initiateDependencies(project: Project) {
-    addDependency(project, Core.ID, "com.github.aliasifk:HackLights")
-    addDependency(project, GWT.ID, "com.github.aliasifk:HackLights:sources")
-    addGwtInherit(project, "com.aliasifkhan.hackLights")
-    project.files.add(
-      CopiedFile(
-        projectName = Assets.ID,
-        original = path("generator", "assets", "lights.png"),
-        path = path("lights.png"),
-      ),
-    )
-    project.files.add(
-      CopiedFile(
-        projectName = Assets.ID,
-        original = path("generator", "assets", "lights.atlas"),
-        path = path("lights.atlas"),
-      ),
-    )
-  }
+    override fun initiateDependencies(project: Project) {
+        addDependency(project, Core.ID, "com.github.aliasifk:HackLights")
+        addDependency(project, GWT.ID, "com.github.aliasifk:HackLights:sources")
+        addGwtInherit(project, "com.aliasifkhan.hackLights")
+        project.files.add(
+            CopiedFile(
+                projectName = Assets.ID,
+                original = path("generator", "assets", "lights.png"),
+                path = path("lights.png"),
+            ),
+        )
+        project.files.add(
+            CopiedFile(
+                projectName = Assets.ID,
+                original = path("generator", "assets", "lights.atlas"),
+                path = path("lights.atlas"),
+            ),
+        )
+    }
 }
 
 /**
@@ -645,18 +645,18 @@ class HackLights : ThirdPartyExtension() {
  */
 @Extension
 class SpineRuntime : ThirdPartyExtension() {
-  override val id = "spineRuntime"
-  override val defaultVersion = "4.2.7"
-  override val url = "https://github.com/EsotericSoftware/spine-runtimes/tree/4.2/spine-libgdx"
-  override val group = "com.esotericsoftware.spine"
-  override val name = "spine-libgdx"
+    override val id = "spineRuntime"
+    override val defaultVersion = "4.2.7"
+    override val url = "https://github.com/EsotericSoftware/spine-runtimes/tree/4.2/spine-libgdx"
+    override val group = "com.esotericsoftware.spine"
+    override val name = "spine-libgdx"
 
-  override fun initiateDependencies(project: Project) {
-    addDependency(project, Core.ID, "com.esotericsoftware.spine:spine-libgdx")
+    override fun initiateDependencies(project: Project) {
+        addDependency(project, Core.ID, "com.esotericsoftware.spine:spine-libgdx")
 
-    addDependency(project, GWT.ID, "com.esotericsoftware.spine:spine-libgdx:sources")
-    addGwtInherit(project, "com.esotericsoftware.spine")
-  }
+        addDependency(project, GWT.ID, "com.esotericsoftware.spine:spine-libgdx:sources")
+        addGwtInherit(project, "com.esotericsoftware.spine")
+    }
 }
 
 /**
@@ -667,31 +667,31 @@ class SpineRuntime : ThirdPartyExtension() {
  */
 @Extension
 class ControllerUtils : ThirdPartyExtension() {
-  override val id = "controllerUtils"
-  override val defaultVersion = "2.2.1"
-  override val url = "https://github.com/MrStahlfelge/gdx-controllerutils"
-  override val group = "de.golfgl.gdxcontrollerutils"
-  override val name = "gdx-controllers-advanced"
+    override val id = "controllerUtils"
+    override val defaultVersion = "2.2.1"
+    override val url = "https://github.com/MrStahlfelge/gdx-controllerutils"
+    override val group = "de.golfgl.gdxcontrollerutils"
+    override val name = "gdx-controllers-advanced"
 
-  override fun initiateDependencies(project: Project) {
-    addDependency(project, Core.ID, "de.golfgl.gdxcontrollerutils:gdx-controllers-advanced")
-    addDependency(project, Lwjgl2.ID, "de.golfgl.gdxcontrollerutils:gdx-controllers-jamepad")
-    addDependency(project, Lwjgl3.ID, "de.golfgl.gdxcontrollerutils:gdx-controllers-jamepad")
-    addDependency(project, Android.ID, "de.golfgl.gdxcontrollerutils:gdx-controllers-android")
-    addDependency(project, IOS.ID, "de.golfgl.gdxcontrollerutils:gdx-controllers-iosrvm")
+    override fun initiateDependencies(project: Project) {
+        addDependency(project, Core.ID, "de.golfgl.gdxcontrollerutils:gdx-controllers-advanced")
+        addDependency(project, Lwjgl2.ID, "de.golfgl.gdxcontrollerutils:gdx-controllers-jamepad")
+        addDependency(project, Lwjgl3.ID, "de.golfgl.gdxcontrollerutils:gdx-controllers-jamepad")
+        addDependency(project, Android.ID, "de.golfgl.gdxcontrollerutils:gdx-controllers-android")
+        addDependency(project, IOS.ID, "de.golfgl.gdxcontrollerutils:gdx-controllers-iosrvm")
 
-    addSpecialDependency(
-      project,
-      GWT.ID,
-      "implementation(\"de.golfgl.gdxcontrollerutils:gdx-controllers-gwt:\$${id}Version:sources\"){exclude group: \"com.badlogicgames.gdx\", module: \"gdx-backend-gwt\"}",
-    )
-    addSpecialDependency(
-      project,
-      GWT.ID,
-      "implementation(\"de.golfgl.gdxcontrollerutils:gdx-controllers-advanced:\$${id}Version:sources\"){exclude group: \"com.badlogicgames.gdx\", module: \"gdx-backend-gwt\"}",
-    )
-    addGwtInherit(project, "com.badlogic.gdx.controllers.controllers-gwt")
-  }
+        addSpecialDependency(
+            project,
+            GWT.ID,
+            "implementation(\"de.golfgl.gdxcontrollerutils:gdx-controllers-gwt:\$${id}Version:sources\"){exclude group: \"com.badlogicgames.gdx\", module: \"gdx-backend-gwt\"}",
+        )
+        addSpecialDependency(
+            project,
+            GWT.ID,
+            "implementation(\"de.golfgl.gdxcontrollerutils:gdx-controllers-advanced:\$${id}Version:sources\"){exclude group: \"com.badlogicgames.gdx\", module: \"gdx-backend-gwt\"}",
+        )
+        addGwtInherit(project, "com.badlogic.gdx.controllers.controllers-gwt")
+    }
 }
 
 /**
@@ -702,18 +702,18 @@ class ControllerUtils : ThirdPartyExtension() {
  */
 @Extension
 class ControllerScene2D : ThirdPartyExtension() {
-  override val id = "controllerScene2D"
-  override val defaultVersion = "2.3.0"
-  override val url = "https://github.com/MrStahlfelge/gdx-controllerutils/wiki/Button-operable-Scene2d"
-  override val group = "de.golfgl.gdxcontrollerutils"
-  override val name = "gdx-controllerutils-scene2d"
+    override val id = "controllerScene2D"
+    override val defaultVersion = "2.3.0"
+    override val url = "https://github.com/MrStahlfelge/gdx-controllerutils/wiki/Button-operable-Scene2d"
+    override val group = "de.golfgl.gdxcontrollerutils"
+    override val name = "gdx-controllerutils-scene2d"
 
-  override fun initiateDependencies(project: Project) {
-    addDependency(project, Core.ID, "de.golfgl.gdxcontrollerutils:gdx-controllerutils-scene2d")
+    override fun initiateDependencies(project: Project) {
+        addDependency(project, Core.ID, "de.golfgl.gdxcontrollerutils:gdx-controllerutils-scene2d")
 
-    addDependency(project, GWT.ID, "de.golfgl.gdxcontrollerutils:gdx-controllerutils-scene2d:sources")
-    addGwtInherit(project, "de.golfgl.gdx.controllers.controller_scene2d")
-  }
+        addDependency(project, GWT.ID, "de.golfgl.gdxcontrollerutils:gdx-controllerutils-scene2d:sources")
+        addGwtInherit(project, "de.golfgl.gdx.controllers.controller_scene2d")
+    }
 }
 
 /**
@@ -723,18 +723,18 @@ class ControllerScene2D : ThirdPartyExtension() {
  */
 @Extension
 class ControllerMapping : ThirdPartyExtension() {
-  override val id = "controllerMapping"
-  override val defaultVersion = "2.3.0"
-  override val url = "https://github.com/MrStahlfelge/gdx-controllerutils/wiki/Configurable-Game-Controller-Mappings"
-  override val group = "de.golfgl.gdxcontrollerutils"
-  override val name = "gdx-controllerutils-mapping"
+    override val id = "controllerMapping"
+    override val defaultVersion = "2.3.0"
+    override val url = "https://github.com/MrStahlfelge/gdx-controllerutils/wiki/Configurable-Game-Controller-Mappings"
+    override val group = "de.golfgl.gdxcontrollerutils"
+    override val name = "gdx-controllerutils-mapping"
 
-  override fun initiateDependencies(project: Project) {
-    addDependency(project, Core.ID, "de.golfgl.gdxcontrollerutils:gdx-controllerutils-mapping")
+    override fun initiateDependencies(project: Project) {
+        addDependency(project, Core.ID, "de.golfgl.gdxcontrollerutils:gdx-controllerutils-mapping")
 
-    addDependency(project, GWT.ID, "de.golfgl.gdxcontrollerutils:gdx-controllerutils-mapping:sources")
-    Controllers().initiate(project)
-  }
+        addDependency(project, GWT.ID, "de.golfgl.gdxcontrollerutils:gdx-controllerutils-mapping:sources")
+        Controllers().initiate(project)
+    }
 }
 
 /**
@@ -744,20 +744,20 @@ class ControllerMapping : ThirdPartyExtension() {
  */
 @Extension
 class GdxVfxCore : ThirdPartyExtension() {
-  override val id = "gdxVfxCore"
-  override val defaultVersion = "0.5.4"
-  override val url = "https://github.com/crashinvaders/gdx-vfx"
-  override val group = "com.crashinvaders.vfx"
-  override val name = "gdx-vfx-core"
+    override val id = "gdxVfxCore"
+    override val defaultVersion = "0.5.4"
+    override val url = "https://github.com/crashinvaders/gdx-vfx"
+    override val group = "com.crashinvaders.vfx"
+    override val name = "gdx-vfx-core"
 
-  override fun initiateDependencies(project: Project) {
-    addDependency(project, Core.ID, "com.crashinvaders.vfx:gdx-vfx-core")
+    override fun initiateDependencies(project: Project) {
+        addDependency(project, Core.ID, "com.crashinvaders.vfx:gdx-vfx-core")
 
-    addDependency(project, GWT.ID, "com.crashinvaders.vfx:gdx-vfx-core:sources")
-    addDependency(project, GWT.ID, "com.crashinvaders.vfx:gdx-vfx-gwt:sources")
-    addGwtInherit(project, "com.crashinvaders.vfx.GdxVfxCore")
-    addGwtInherit(project, "com.crashinvaders.vfx.GdxVfxGwt")
-  }
+        addDependency(project, GWT.ID, "com.crashinvaders.vfx:gdx-vfx-core:sources")
+        addDependency(project, GWT.ID, "com.crashinvaders.vfx:gdx-vfx-gwt:sources")
+        addGwtInherit(project, "com.crashinvaders.vfx.GdxVfxCore")
+        addGwtInherit(project, "com.crashinvaders.vfx.GdxVfxGwt")
+    }
 }
 
 /**
@@ -767,19 +767,19 @@ class GdxVfxCore : ThirdPartyExtension() {
  */
 @Extension
 class GdxVfxStandardEffects : ThirdPartyExtension() {
-  override val id = "gdxVfxEffects"
-  override val defaultVersion = "0.5.4"
-  override val url = "https://github.com/crashinvaders/gdx-vfx"
-  override val group = "com.crashinvaders.vfx"
-  override val name = "gdx-vfx-effects"
+    override val id = "gdxVfxEffects"
+    override val defaultVersion = "0.5.4"
+    override val url = "https://github.com/crashinvaders/gdx-vfx"
+    override val group = "com.crashinvaders.vfx"
+    override val name = "gdx-vfx-effects"
 
-  override fun initiateDependencies(project: Project) {
-    GdxVfxCore().initiate(project)
-    addDependency(project, Core.ID, "com.crashinvaders.vfx:gdx-vfx-effects")
+    override fun initiateDependencies(project: Project) {
+        GdxVfxCore().initiate(project)
+        addDependency(project, Core.ID, "com.crashinvaders.vfx:gdx-vfx-effects")
 
-    addDependency(project, GWT.ID, "com.crashinvaders.vfx:gdx-vfx-effects:sources")
-    addGwtInherit(project, "com.crashinvaders.vfx.GdxVfxEffects")
-  }
+        addDependency(project, GWT.ID, "com.crashinvaders.vfx:gdx-vfx-effects:sources")
+        addGwtInherit(project, "com.crashinvaders.vfx.GdxVfxEffects")
+    }
 }
 
 /**
@@ -790,18 +790,18 @@ class GdxVfxStandardEffects : ThirdPartyExtension() {
  */
 @Extension
 class RegExodus : ThirdPartyExtension() {
-  override val id = "regExodus"
-  override val defaultVersion = "0.1.20"
-  override val url = "https://github.com/tommyettinger/RegExodus"
-  override val group = "com.github.tommyettinger"
-  override val name = "regexodus"
+    override val id = "regExodus"
+    override val defaultVersion = "0.1.20"
+    override val url = "https://github.com/tommyettinger/RegExodus"
+    override val group = "com.github.tommyettinger"
+    override val name = "regexodus"
 
-  override fun initiateDependencies(project: Project) {
-    addDependency(project, Core.ID, "com.github.tommyettinger:regexodus")
+    override fun initiateDependencies(project: Project) {
+        addDependency(project, Core.ID, "com.github.tommyettinger:regexodus")
 
-    addDependency(project, GWT.ID, "com.github.tommyettinger:regexodus:sources")
-    addGwtInherit(project, "regexodus.regexodus")
-  }
+        addDependency(project, GWT.ID, "com.github.tommyettinger:regexodus:sources")
+        addGwtInherit(project, "regexodus.regexodus")
+    }
 }
 
 /**
@@ -813,20 +813,20 @@ class RegExodus : ThirdPartyExtension() {
  */
 @Extension
 class VisUI : ThirdPartyExtension() {
-  override val id = "visUi"
+    override val id = "visUi"
 
-  // You may need to skip a check: VisUI.setSkipGdxVersionCheck(true);
-  override val defaultVersion = "1.5.7"
-  override val url = "https://github.com/kotcrab/vis-ui"
-  override val group = "com.kotcrab.vis"
-  override val name = "vis-ui"
+    // You may need to skip a check: VisUI.setSkipGdxVersionCheck(true);
+    override val defaultVersion = "1.5.7"
+    override val url = "https://github.com/kotcrab/vis-ui"
+    override val group = "com.kotcrab.vis"
+    override val name = "vis-ui"
 
-  override fun initiateDependencies(project: Project) {
-    addDependency(project, Core.ID, "com.kotcrab.vis:vis-ui")
+    override fun initiateDependencies(project: Project) {
+        addDependency(project, Core.ID, "com.kotcrab.vis:vis-ui")
 
-    addDependency(project, GWT.ID, "com.kotcrab.vis:vis-ui:sources")
-    addGwtInherit(project, "com.kotcrab.vis.vis-ui")
-  }
+        addDependency(project, GWT.ID, "com.kotcrab.vis:vis-ui:sources")
+        addGwtInherit(project, "com.kotcrab.vis.vis-ui")
+    }
 }
 
 /**
@@ -836,20 +836,20 @@ class VisUI : ThirdPartyExtension() {
  */
 @Extension
 class PieMenu : ThirdPartyExtension() {
-  override val id = "pieMenu"
-  override val defaultVersion = "5.0.0"
-  override val url = "https://github.com/payne911/PieMenu"
-  override val repository = Repository.JitPack
-  override val group = "com.github.payne911"
-  override val name = "PieMenu"
+    override val id = "pieMenu"
+    override val defaultVersion = "5.0.0"
+    override val url = "https://github.com/payne911/PieMenu"
+    override val repository = Repository.JitPack
+    override val group = "com.github.payne911"
+    override val name = "PieMenu"
 
-  override fun initiateDependencies(project: Project) {
-    addDependency(project, Core.ID, "com.github.payne911:PieMenu")
+    override fun initiateDependencies(project: Project) {
+        addDependency(project, Core.ID, "com.github.payne911:PieMenu")
 
-    addDependency(project, GWT.ID, "com.github.payne911:PieMenu:sources")
-    addGwtInherit(project, "PieMenu")
-    ShapeDrawer().initiate(project)
-  }
+        addDependency(project, GWT.ID, "com.github.payne911:PieMenu:sources")
+        addGwtInherit(project, "PieMenu")
+        ShapeDrawer().initiate(project)
+    }
 }
 
 /**
@@ -860,18 +860,18 @@ class PieMenu : ThirdPartyExtension() {
  */
 @Extension
 class JBump : ThirdPartyExtension() {
-  override val id = "jbump"
-  override val defaultVersion = "v1.0.2"
-  override val url = "https://github.com/implicit-invocation/jbump"
-  override val repository = Repository.JitPack
-  override val group = "com.github.implicit-invocation"
-  override val name = "jbump"
+    override val id = "jbump"
+    override val defaultVersion = "v1.0.2"
+    override val url = "https://github.com/implicit-invocation/jbump"
+    override val repository = Repository.JitPack
+    override val group = "com.github.implicit-invocation"
+    override val name = "jbump"
 
-  override fun initiateDependencies(project: Project) {
-    addDependency(project, Core.ID, "com.github.implicit-invocation:jbump")
-    addDependency(project, GWT.ID, "com.github.implicit-invocation:jbump:sources")
-    addGwtInherit(project, "com.dongbat.jbump")
-  }
+    override fun initiateDependencies(project: Project) {
+        addDependency(project, Core.ID, "com.github.implicit-invocation:jbump")
+        addDependency(project, GWT.ID, "com.github.implicit-invocation:jbump:sources")
+        addGwtInherit(project, "com.dongbat.jbump")
+    }
 }
 
 /**
@@ -880,15 +880,15 @@ class JBump : ThirdPartyExtension() {
  */
 @Extension
 class CommonsCollections : ThirdPartyExtension() {
-  override val id = "commonsCollections"
-  override val defaultVersion = "4.5.0"
-  override val url = "https://commons.apache.org/proper/commons-collections/"
-  override val group = "org.apache.commons"
-  override val name = "commons-collections4"
+    override val id = "commonsCollections"
+    override val defaultVersion = "4.5.0"
+    override val url = "https://commons.apache.org/proper/commons-collections/"
+    override val group = "org.apache.commons"
+    override val name = "commons-collections4"
 
-  override fun initiateDependencies(project: Project) {
-    addDependency(project, Core.ID, "org.apache.commons:commons-collections4")
-  }
+    override fun initiateDependencies(project: Project) {
+        addDependency(project, Core.ID, "org.apache.commons:commons-collections4")
+    }
 }
 
 /**
@@ -897,18 +897,18 @@ class CommonsCollections : ThirdPartyExtension() {
  */
 @Extension
 class Fory : ThirdPartyExtension() {
-  override val id = "fory"
-  override val defaultVersion = "0.14.0"
-  override val url = "https://fory.apache.org/"
+    override val id = "fory"
+    override val defaultVersion = "0.14.0"
+    override val url = "https://fory.apache.org/"
 
-  // was org.furyio before 0.5.0
-  // was org.apache.fury before 0.11.0
-  override val group = "org.apache.fory"
-  override val name = "fory-core"
+    // was org.furyio before 0.5.0
+    // was org.apache.fury before 0.11.0
+    override val group = "org.apache.fory"
+    override val name = "fory-core"
 
-  override fun initiateDependencies(project: Project) {
-    addDependency(project, Core.ID, "org.apache.fory:fory-core")
-  }
+    override fun initiateDependencies(project: Project) {
+        addDependency(project, Core.ID, "org.apache.fory:fory-core")
+    }
 }
 
 /**
@@ -917,67 +917,64 @@ class Fory : ThirdPartyExtension() {
  */
 @Extension
 class Kryo : ThirdPartyExtension() {
-  override val id = "kryo"
-  override val defaultVersion = "5.6.2"
-  override val url = "https://github.com/EsotericSoftware/kryo"
-  override val group = "com.esotericsoftware"
-  override val name = "kryo"
+    override val id = "kryo"
+    override val defaultVersion = "5.6.2"
+    override val url = "https://github.com/EsotericSoftware/kryo"
+    override val group = "com.esotericsoftware"
+    override val name = "kryo"
 
-  override fun initiateDependencies(project: Project) {
-    addDependency(project, Core.ID, "com.esotericsoftware:kryo")
-  }
+    override fun initiateDependencies(project: Project) {
+        addDependency(project, Core.ID, "com.esotericsoftware:kryo")
+    }
 }
 
 /**
  * A Java library that provides a clean and simple API for efficient network communication, using Kryo.
  * This is crykn's fork (AKA damios), which is much more up-to-date than the official repo.
- * @author Nathan Sweet
- * @author damios/crykn
  */
 @Extension
 class KryoNet : ThirdPartyExtension() {
-  override val id = "kryoNet"
-  override val defaultVersion = "2.22.9"
-  override val url = "https://github.com/crykn/kryonet"
-  override val repository = Repository.JitPack
-  override val group = "com.github.crykn"
-  override val name = "kryonet"
+    override val id = "kryoNet"
+    override val defaultVersion = "2.22.9"
+    override val url = "https://github.com/crykn/kryonet"
+    override val repository = Repository.JitPack
+    override val group = "com.github.crykn"
+    override val name = "kryonet"
 
-  override fun initiateDependencies(project: Project) {
-    addDependency(project, Core.ID, "com.github.crykn:kryonet")
-  }
+    override fun initiateDependencies(project: Project) {
+        addDependency(project, Core.ID, "com.github.crykn:kryonet")
+    }
 }
 
 /**
  * A small collection of some common and very basic utilities for libGDX games.
- * @author damios/crykn
  */
 @Extension
 class Guacamole : ThirdPartyExtension() {
-  override val id = "guacamole"
-  override val defaultVersion = "v0.3.6"
-  override val url = "https://github.com/crykn/guacamole"
-  override val repository = Repository.JitPack
-  override val group = "com.github.crykn"
-  override val name = "guacamole"
+    override val id = "guacamole"
+    override val defaultVersion = "v0.3.6"
+    override val url = "https://github.com/crykn/guacamole"
+    override val repository = Repository.JitPack
+    override val group = "com.github.crykn"
+    override val name = "guacamole"
 
-  override fun initiateDependencies(project: Project) {
-    addDependency(project, Core.ID, "com.github.crykn.guacamole:core")
-    addDependency(project, Core.ID, "com.github.crykn.guacamole:gdx")
-    addDependency(project, Lwjgl2.ID, "com.github.crykn.guacamole:gdx-desktop")
-    addDependency(project, Lwjgl3.ID, "com.github.crykn.guacamole:gdx-desktop")
-    addDependency(project, GWT.ID, "com.github.crykn.guacamole:core:sources")
-    addDependency(project, GWT.ID, "com.github.crykn.guacamole:gdx:sources")
-    addSpecialDependency(
-      project,
-      GWT.ID,
-      "implementation(\"com.github.crykn.guacamole:gdx-gwt:\$${id}Version:sources\"){exclude group: \"com.badlogicgames.gdx\", module: \"gdx-backend-gwt\"}",
-    )
-    addGwtInherit(project, "guacamole_gdx_gwt")
-    if (project.platforms.containsKey(GWT.ID)) {
-      Formic().initiate(project)
+    override fun initiateDependencies(project: Project) {
+        addDependency(project, Core.ID, "com.github.crykn.guacamole:core")
+        addDependency(project, Core.ID, "com.github.crykn.guacamole:gdx")
+        addDependency(project, Lwjgl2.ID, "com.github.crykn.guacamole:gdx-desktop")
+        addDependency(project, Lwjgl3.ID, "com.github.crykn.guacamole:gdx-desktop")
+        addDependency(project, GWT.ID, "com.github.crykn.guacamole:core:sources")
+        addDependency(project, GWT.ID, "com.github.crykn.guacamole:gdx:sources")
+        addSpecialDependency(
+            project,
+            GWT.ID,
+            "implementation(\"com.github.crykn.guacamole:gdx-gwt:\$${id}Version:sources\"){exclude group: \"com.badlogicgames.gdx\", module: \"gdx-backend-gwt\"}",
+        )
+        addGwtInherit(project, "guacamole_gdx_gwt")
+        if (project.platforms.containsKey(GWT.ID)) {
+            Formic().initiate(project)
+        }
     }
-  }
 }
 
 /**
@@ -986,36 +983,35 @@ class Guacamole : ThirdPartyExtension() {
  */
 @Extension
 class LibgdxOboe : ThirdPartyExtension() {
-  override val id = "libgdxOboe"
-  override val defaultVersion = "0.3.2.1"
-  override val url = "https://github.com/tommyettinger/libgdx-oboe"
-  override val group = "com.github.tommyettinger"
-  override val name = "libgdxoboe"
+    override val id = "libgdxOboe"
+    override val defaultVersion = "0.3.2.1"
+    override val url = "https://github.com/tommyettinger/libgdx-oboe"
+    override val group = "com.github.tommyettinger"
+    override val name = "libgdxoboe"
 
-  override fun initiateDependencies(project: Project) {
-    addDependency(project, Android.ID, "com.github.tommyettinger:libgdxoboe")
-  }
+    override fun initiateDependencies(project: Project) {
+        addDependency(project, Android.ID, "com.github.tommyettinger:libgdxoboe")
+    }
 }
 
 /**
  * A screen manager for libGDX supporting transitions.
- * @author damios/crykn
  */
 @Extension
 class LibgdxScreenManager : ThirdPartyExtension() {
-  override val id = "screenManager"
-  override val defaultVersion = "0.7.1"
-  override val url = "https://github.com/crykn/libgdx-screenmanager"
-  override val repository = Repository.JitPack
-  override val group = "com.github.crykn"
-  override val name = "libgdx-screenmanager"
+    override val id = "screenManager"
+    override val defaultVersion = "0.7.1"
+    override val url = "https://github.com/crykn/libgdx-screenmanager"
+    override val repository = Repository.JitPack
+    override val group = "com.github.crykn"
+    override val name = "libgdx-screenmanager"
 
-  override fun initiateDependencies(project: Project) {
-    addDependency(project, Core.ID, "com.github.crykn:libgdx-screenmanager")
-    addDependency(project, GWT.ID, "com.github.crykn:libgdx-screenmanager:sources")
-    addGwtInherit(project, "libgdx_screenmanager")
-    Guacamole().initiate(project)
-  }
+    override fun initiateDependencies(project: Project) {
+        addDependency(project, Core.ID, "com.github.crykn:libgdx-screenmanager")
+        addDependency(project, GWT.ID, "com.github.crykn:libgdx-screenmanager:sources")
+        addGwtInherit(project, "libgdx_screenmanager")
+        Guacamole().initiate(project)
+    }
 }
 
 /**
@@ -1024,16 +1020,16 @@ class LibgdxScreenManager : ThirdPartyExtension() {
  */
 @Extension
 class TuningFork : ThirdPartyExtension() {
-  override val id = "tuningFork"
-  override val defaultVersion = "4.4.0"
-  override val url = "https://github.com/Hangman/TuningFork"
-  override val repository = Repository.JitPack
-  override val group = "com.github.Hangman"
-  override val name = "TuningFork"
+    override val id = "tuningFork"
+    override val defaultVersion = "4.4.0"
+    override val url = "https://github.com/Hangman/TuningFork"
+    override val repository = Repository.JitPack
+    override val group = "com.github.Hangman"
+    override val name = "TuningFork"
 
-  override fun initiateDependencies(project: Project) {
-    addDependency(project, Lwjgl3.ID, "com.github.Hangman:TuningFork")
-  }
+    override fun initiateDependencies(project: Project) {
+        addDependency(project, Lwjgl3.ID, "com.github.Hangman:TuningFork")
+    }
 }
 
 /**
@@ -1042,19 +1038,19 @@ class TuningFork : ThirdPartyExtension() {
  */
 @Extension
 class TinyVG : ThirdPartyExtension() {
-  override val id = "tinyVG"
-  override val defaultVersion = "41f408420c"
-  override val url = "https://github.com/lyze237/gdx-TinyVG"
-  override val repository = Repository.JitPack
-  override val group = "com.github.lyze237"
-  override val name = "gdx-TinyVG"
+    override val id = "tinyVG"
+    override val defaultVersion = "41f408420c"
+    override val url = "https://github.com/lyze237/gdx-TinyVG"
+    override val repository = Repository.JitPack
+    override val group = "com.github.lyze237"
+    override val name = "gdx-TinyVG"
 
-  override fun initiateDependencies(project: Project) {
-    addDependency(project, Core.ID, "com.github.lyze237:gdx-TinyVG")
-    addDependency(project, GWT.ID, "com.github.lyze237:gdx-TinyVG:sources")
-    addGwtInherit(project, "dev.lyze.tinyvg")
-    ShapeDrawer().initiate(project)
-  }
+    override fun initiateDependencies(project: Project) {
+        addDependency(project, Core.ID, "com.github.lyze237:gdx-TinyVG")
+        addDependency(project, GWT.ID, "com.github.lyze237:gdx-TinyVG:sources")
+        addGwtInherit(project, "dev.lyze.tinyvg")
+        ShapeDrawer().initiate(project)
+    }
 }
 
 /**
@@ -1063,17 +1059,17 @@ class TinyVG : ThirdPartyExtension() {
  */
 @Extension
 class GdxPsx : ThirdPartyExtension() {
-  override val id = "gdxPsx"
-  override val defaultVersion = "1.0.1"
-  override val url = "https://github.com/bonenaut7/gdx-psx"
-  override val repository = Repository.JitPack
-  override val group = "com.github.bonenaut7.gdx-psx"
-  override val name = "gdx-psx-core"
+    override val id = "gdxPsx"
+    override val defaultVersion = "1.0.1"
+    override val url = "https://github.com/bonenaut7/gdx-psx"
+    override val repository = Repository.JitPack
+    override val group = "com.github.bonenaut7.gdx-psx"
+    override val name = "gdx-psx-core"
 
-  override fun initiateDependencies(project: Project) {
-    addDependency(project, Core.ID, "com.github.bonenaut7.gdx-psx:gdx-psx-core")
+    override fun initiateDependencies(project: Project) {
+        addDependency(project, Core.ID, "com.github.bonenaut7.gdx-psx:gdx-psx-core")
 //        addDependency(project, GWT.ID, "com.github.bonenaut7.gdx-psx:gdx-psx:sources")
-  }
+    }
 }
 
 /**
@@ -1082,18 +1078,18 @@ class GdxPsx : ThirdPartyExtension() {
  */
 @Extension
 class GdxFlexBox : ThirdPartyExtension() {
-  override val id = "flexBox"
-  override val defaultVersion = "818ccf2764"
-  override val url = "https://github.com/lyze237/gdx-FlexBox"
-  override val repository = Repository.JitPack
-  override val group = "com.github.lyze327"
-  override val name = "gdx-FlexBox"
+    override val id = "flexBox"
+    override val defaultVersion = "818ccf2764"
+    override val url = "https://github.com/lyze237/gdx-FlexBox"
+    override val repository = Repository.JitPack
+    override val group = "com.github.lyze327"
+    override val name = "gdx-FlexBox"
 
-  override fun initiateDependencies(project: Project) {
-    addDependency(project, Core.ID, "com.github.lyze237:gdx-FlexBox")
-    addDependency(project, GWT.ID, "com.github.lyze237:gdx-FlexBox:sources")
-    addGwtInherit(project, "dev.lyze.flexbox")
-  }
+    override fun initiateDependencies(project: Project) {
+        addDependency(project, Core.ID, "com.github.lyze237:gdx-FlexBox")
+        addDependency(project, GWT.ID, "com.github.lyze237:gdx-FlexBox:sources")
+        addGwtInherit(project, "dev.lyze.flexbox")
+    }
 }
 
 /**
@@ -1102,20 +1098,20 @@ class GdxFlexBox : ThirdPartyExtension() {
  */
 @Extension
 class GdxUnBox2D : ThirdPartyExtension() {
-  override val id = "unbox2d"
-  override val defaultVersion = "730eebd116"
-  override val url = "https://github.com/lyze237/gdx-UnBox2D"
-  override val repository = Repository.JitPack
-  override val group = "com.github.lyze327"
-  override val name = "gdx-UnBox2D"
+    override val id = "unbox2d"
+    override val defaultVersion = "730eebd116"
+    override val url = "https://github.com/lyze237/gdx-UnBox2D"
+    override val repository = Repository.JitPack
+    override val group = "com.github.lyze327"
+    override val name = "gdx-UnBox2D"
 
-  override fun initiateDependencies(project: Project) {
-    addDependency(project, Core.ID, "com.github.lyze237:gdx-UnBox2D")
-    addDependency(project, GWT.ID, "com.github.lyze237:gdx-UnBox2D:sources")
-    addGwtInherit(project, "dev.lyze.gdxUnBox2d")
-    Box2D().initiate(project)
-    ShapeDrawer().initiate(project)
-  }
+    override fun initiateDependencies(project: Project) {
+        addDependency(project, Core.ID, "com.github.lyze237:gdx-UnBox2D")
+        addDependency(project, GWT.ID, "com.github.lyze237:gdx-UnBox2D:sources")
+        addGwtInherit(project, "dev.lyze.gdxUnBox2d")
+        Box2D().initiate(project)
+        ShapeDrawer().initiate(project)
+    }
 }
 
 /**
@@ -1128,33 +1124,33 @@ class GdxUnBox2D : ThirdPartyExtension() {
  */
 @Extension
 class GdxBasisUniversal : ThirdPartyExtension() {
-  override val id = "gdxBasisUniversal"
-  override val defaultVersion = "1.0.2"
-  override val url = "https://github.com/crashinvaders/gdx-basis-universal"
-  override val group = "com.crashinvaders.basisu"
-  override val name = "basisu-wrapper"
+    override val id = "gdxBasisUniversal"
+    override val defaultVersion = "1.0.2"
+    override val url = "https://github.com/crashinvaders/gdx-basis-universal"
+    override val group = "com.crashinvaders.basisu"
+    override val name = "basisu-wrapper"
 
-  override fun initiateDependencies(project: Project) {
-    addDependency(project, Core.ID, "com.crashinvaders.basisu:basisu-wrapper")
-    addDependency(project, Core.ID, "com.crashinvaders.basisu:basisu-gdx")
-    addDependency(project, Lwjgl2.ID, "com.crashinvaders.basisu:basisu-wrapper:natives-desktop")
-    addDependency(project, Lwjgl3.ID, "com.crashinvaders.basisu:basisu-wrapper:natives-desktop")
-    addDependency(project, Headless.ID, "com.crashinvaders.basisu:basisu-wrapper:natives-desktop")
-    addDependency(project, IOS.ID, "com.crashinvaders.basisu:basisu-wrapper:natives-ios")
-    addNativeAndroidDependency(project, "com.crashinvaders.basisu:basisu-wrapper:natives-armeabi-v7a")
-    addNativeAndroidDependency(project, "com.crashinvaders.basisu:basisu-wrapper:natives-arm64-v8a")
-    addNativeAndroidDependency(project, "com.crashinvaders.basisu:basisu-wrapper:natives-x86")
-    addNativeAndroidDependency(project, "com.crashinvaders.basisu:basisu-wrapper:natives-x86_64")
-    addSpecialDependency(
-      project,
-      GWT.ID,
-      "implementation(\"com.crashinvaders.basisu:basisu-gdx-gwt:\$${id}Version:sources\"){exclude group: \"com.badlogicgames.gdx\", module: \"gdx-backend-gwt\"}",
-    )
-    addDependency(project, GWT.ID, "com.crashinvaders.basisu:basisu-gdx:sources")
-    addDependency(project, GWT.ID, "com.crashinvaders.basisu:basisu-wrapper:sources")
-    addDependency(project, GWT.ID, "com.crashinvaders.basisu:basisu-wrapper:natives-web")
-    addGwtInherit(project, "com.crashinvaders.basisu.BasisuGdxGwt")
-  }
+    override fun initiateDependencies(project: Project) {
+        addDependency(project, Core.ID, "com.crashinvaders.basisu:basisu-wrapper")
+        addDependency(project, Core.ID, "com.crashinvaders.basisu:basisu-gdx")
+        addDependency(project, Lwjgl2.ID, "com.crashinvaders.basisu:basisu-wrapper:natives-desktop")
+        addDependency(project, Lwjgl3.ID, "com.crashinvaders.basisu:basisu-wrapper:natives-desktop")
+        addDependency(project, Headless.ID, "com.crashinvaders.basisu:basisu-wrapper:natives-desktop")
+        addDependency(project, IOS.ID, "com.crashinvaders.basisu:basisu-wrapper:natives-ios")
+        addNativeAndroidDependency(project, "com.crashinvaders.basisu:basisu-wrapper:natives-armeabi-v7a")
+        addNativeAndroidDependency(project, "com.crashinvaders.basisu:basisu-wrapper:natives-arm64-v8a")
+        addNativeAndroidDependency(project, "com.crashinvaders.basisu:basisu-wrapper:natives-x86")
+        addNativeAndroidDependency(project, "com.crashinvaders.basisu:basisu-wrapper:natives-x86_64")
+        addSpecialDependency(
+            project,
+            GWT.ID,
+            "implementation(\"com.crashinvaders.basisu:basisu-gdx-gwt:\$${id}Version:sources\"){exclude group: \"com.badlogicgames.gdx\", module: \"gdx-backend-gwt\"}",
+        )
+        addDependency(project, GWT.ID, "com.crashinvaders.basisu:basisu-gdx:sources")
+        addDependency(project, GWT.ID, "com.crashinvaders.basisu:basisu-wrapper:sources")
+        addDependency(project, GWT.ID, "com.crashinvaders.basisu:basisu-wrapper:natives-web")
+        addGwtInherit(project, "com.crashinvaders.basisu.BasisuGdxGwt")
+    }
 }
 
 /**
@@ -1163,18 +1159,18 @@ class GdxBasisUniversal : ThirdPartyExtension() {
  */
 @Extension
 class Lombok : ThirdPartyExtension() {
-  override val id = "lombok"
-  override val defaultVersion = "1.18.38"
-  override val url = "https://projectlombok.org/"
-  override val group = "org.projectlombok"
-  override val name = "lombok"
+    override val id = "lombok"
+    override val defaultVersion = "1.18.38"
+    override val url = "https://projectlombok.org/"
+    override val group = "org.projectlombok"
+    override val name = "lombok"
 
-  override fun initiateDependencies(project: Project) {
-    addSpecialDependency(project, Core.ID, "compileOnly \"org.projectlombok:lombok:\$${id}Version\"")
-    addSpecialDependency(project, Core.ID, "annotationProcessor \"org.projectlombok:lombok:\$${id}Version\"")
-    project.rootGradle.buildDependencies.add("\"io.freefair.gradle:lombok-plugin:8.14\"")
-    project.rootGradle.plugins.add("io.freefair.lombok")
-  }
+    override fun initiateDependencies(project: Project) {
+        addSpecialDependency(project, Core.ID, "compileOnly \"org.projectlombok:lombok:\$${id}Version\"")
+        addSpecialDependency(project, Core.ID, "annotationProcessor \"org.projectlombok:lombok:\$${id}Version\"")
+        project.rootGradle.buildDependencies.add("\"io.freefair.gradle:lombok-plugin:8.14\"")
+        project.rootGradle.plugins.add("io.freefair.lombok")
+    }
 }
 
 /**
@@ -1183,21 +1179,21 @@ class Lombok : ThirdPartyExtension() {
  */
 @Extension
 class HyperLap2DRuntime : ThirdPartyExtension() {
-  override val id = "h2d"
-  override val defaultVersion = "0.1.4"
-  override val url = "https://github.com/rednblackgames/hyperlap2d-runtime-libgdx"
-  override val group = "games.rednblack.hyperlap2d"
-  override val name = "runtime-libgdx"
+    override val id = "h2d"
+    override val defaultVersion = "0.1.4"
+    override val url = "https://github.com/rednblackgames/hyperlap2d-runtime-libgdx"
+    override val group = "games.rednblack.hyperlap2d"
+    override val name = "runtime-libgdx"
 
-  override fun initiateDependencies(project: Project) {
-    addDependency(project, Core.ID, "games.rednblack.hyperlap2d:runtime-libgdx")
-    addDependency(project, GWT.ID, "games.rednblack.hyperlap2d:runtime-libgdx:sources")
-    addGwtInherit(project, "HyperLap2D")
+    override fun initiateDependencies(project: Project) {
+        addDependency(project, Core.ID, "games.rednblack.hyperlap2d:runtime-libgdx")
+        addDependency(project, GWT.ID, "games.rednblack.hyperlap2d:runtime-libgdx:sources")
+        addGwtInherit(project, "HyperLap2D")
 
-    Box2D().initiate(project)
-    Freetype().initiate(project)
-    ArtemisOdb().initiate(project)
-  }
+        Box2D().initiate(project)
+        Freetype().initiate(project)
+        ArtemisOdb().initiate(project)
+    }
 }
 
 /**
@@ -1206,19 +1202,19 @@ class HyperLap2DRuntime : ThirdPartyExtension() {
  */
 @Extension
 class HyperLap2DSpineExtension : ThirdPartyExtension() {
-  override val id = "h2dSpineExtension"
-  override val defaultVersion = "0.1.4"
-  override val url = "https://github.com/rednblackgames/h2d-libgdx-spine-extension"
-  override val group = "games.rednblack.hyperlap2d"
-  override val name = "libgdx-spine-extension"
+    override val id = "h2dSpineExtension"
+    override val defaultVersion = "0.1.4"
+    override val url = "https://github.com/rednblackgames/h2d-libgdx-spine-extension"
+    override val group = "games.rednblack.hyperlap2d"
+    override val name = "libgdx-spine-extension"
 
-  override fun initiateDependencies(project: Project) {
-    addDependency(project, Core.ID, "games.rednblack.hyperlap2d:libgdx-spine-extension")
-    addDependency(project, GWT.ID, "games.rednblack.hyperlap2d:libgdx-spine-extension:sources")
-    addGwtInherit(project, "HyperLap2D.spine")
+    override fun initiateDependencies(project: Project) {
+        addDependency(project, Core.ID, "games.rednblack.hyperlap2d:libgdx-spine-extension")
+        addDependency(project, GWT.ID, "games.rednblack.hyperlap2d:libgdx-spine-extension:sources")
+        addGwtInherit(project, "HyperLap2D.spine")
 
-    SpineRuntime().initiate(project)
-  }
+        SpineRuntime().initiate(project)
+    }
 }
 
 /**
@@ -1227,18 +1223,18 @@ class HyperLap2DSpineExtension : ThirdPartyExtension() {
  */
 @Extension
 class HyperLap2DTinyVGExtension : ThirdPartyExtension() {
-  override val id = "h2dTinyVGExtension"
-  override val defaultVersion = "0.1.4"
-  override val url = "https://github.com/rednblackgames/h2d-libgdx-tinyvg-extension"
-  override val group = "games.rednblack.hyperlap2d"
-  override val name = "libgdx-tinyvg-extension"
+    override val id = "h2dTinyVGExtension"
+    override val defaultVersion = "0.1.4"
+    override val url = "https://github.com/rednblackgames/h2d-libgdx-tinyvg-extension"
+    override val group = "games.rednblack.hyperlap2d"
+    override val name = "libgdx-tinyvg-extension"
 
-  override fun initiateDependencies(project: Project) {
-    addDependency(project, Core.ID, "games.rednblack.hyperlap2d:libgdx-tinyvg-extension")
-    addDependency(project, GWT.ID, "games.rednblack.hyperlap2d:libgdx-tinyvg-extension:sources")
+    override fun initiateDependencies(project: Project) {
+        addDependency(project, Core.ID, "games.rednblack.hyperlap2d:libgdx-tinyvg-extension")
+        addDependency(project, GWT.ID, "games.rednblack.hyperlap2d:libgdx-tinyvg-extension:sources")
 
-    TinyVG().initiate(project)
-  }
+        TinyVG().initiate(project)
+    }
 }
 
 /**
@@ -1247,18 +1243,18 @@ class HyperLap2DTinyVGExtension : ThirdPartyExtension() {
  */
 @Extension
 class HyperLap2DTypingLabelExtension : ThirdPartyExtension() {
-  override val id = "h2dTypingLabelExtension"
-  override val defaultVersion = "0.1.6"
-  override val url = "https://github.com/rednblackgames/h2d-libgdx-typinglabel-extension"
-  override val group = "games.rednblack.hyperlap2d"
-  override val name = "libgdx-typinglabel-extension"
+    override val id = "h2dTypingLabelExtension"
+    override val defaultVersion = "0.1.6"
+    override val url = "https://github.com/rednblackgames/h2d-libgdx-typinglabel-extension"
+    override val group = "games.rednblack.hyperlap2d"
+    override val name = "libgdx-typinglabel-extension"
 
-  override fun initiateDependencies(project: Project) {
-    addDependency(project, Core.ID, "games.rednblack.hyperlap2d:libgdx-typinglabel-extension")
-    addDependency(project, GWT.ID, "games.rednblack.hyperlap2d:libgdx-typinglabel-extension:sources")
+    override fun initiateDependencies(project: Project) {
+        addDependency(project, Core.ID, "games.rednblack.hyperlap2d:libgdx-typinglabel-extension")
+        addDependency(project, GWT.ID, "games.rednblack.hyperlap2d:libgdx-typinglabel-extension:sources")
 
-    TextraTypist().initiate(project)
-  }
+        TextraTypist().initiate(project)
+    }
 }
 
 /**
@@ -1267,35 +1263,35 @@ class HyperLap2DTypingLabelExtension : ThirdPartyExtension() {
  */
 @Extension
 class GdxMiniAudio : ThirdPartyExtension() {
-  override val id = "miniaudio"
-  override val defaultVersion = "0.7"
-  override val url = "https://github.com/rednblackgames/gdx-miniaudio"
-  override val group = "games.rednblack.miniaudio"
-  override val name = "miniaudio"
+    override val id = "miniaudio"
+    override val defaultVersion = "0.7"
+    override val url = "https://github.com/rednblackgames/gdx-miniaudio"
+    override val group = "games.rednblack.miniaudio"
+    override val name = "miniaudio"
 
-  override fun initiateDependencies(project: Project) {
-    addDependency(project, Core.ID, "games.rednblack.miniaudio:miniaudio")
-    addDependency(project, Lwjgl3.ID, "games.rednblack.miniaudio:miniaudio:natives-desktop")
-    addDependency(project, IOS.ID, "games.rednblack.miniaudio:miniaudio:natives-ios")
-    addNativeAndroidDependency(project, "games.rednblack.miniaudio:miniaudio:natives-armeabi-v7a")
-    addNativeAndroidDependency(project, "games.rednblack.miniaudio:miniaudio:natives-arm64-v8a")
-    addNativeAndroidDependency(project, "games.rednblack.miniaudio:miniaudio:natives-x86")
-    addNativeAndroidDependency(project, "games.rednblack.miniaudio:miniaudio:natives-x86_64")
-  }
-
-  override fun addNativeAndroidDependency(
-    project: Project,
-    dependency: String,
-  ) {
-    if (dependency.count { it == ':' } > 1) {
-      super.addNativeAndroidDependency(
-        project,
-        dependency.substringBeforeLast(':') + ":\$${id}Version:" + dependency.substringAfterLast(':'),
-      )
-    } else {
-      super.addNativeAndroidDependency(project, dependency + ":\$${id}Version")
+    override fun initiateDependencies(project: Project) {
+        addDependency(project, Core.ID, "games.rednblack.miniaudio:miniaudio")
+        addDependency(project, Lwjgl3.ID, "games.rednblack.miniaudio:miniaudio:natives-desktop")
+        addDependency(project, IOS.ID, "games.rednblack.miniaudio:miniaudio:natives-ios")
+        addNativeAndroidDependency(project, "games.rednblack.miniaudio:miniaudio:natives-armeabi-v7a")
+        addNativeAndroidDependency(project, "games.rednblack.miniaudio:miniaudio:natives-arm64-v8a")
+        addNativeAndroidDependency(project, "games.rednblack.miniaudio:miniaudio:natives-x86")
+        addNativeAndroidDependency(project, "games.rednblack.miniaudio:miniaudio:natives-x86_64")
     }
-  }
+
+    override fun addNativeAndroidDependency(
+        project: Project,
+        dependency: String,
+    ) {
+        if (dependency.count { it == ':' } > 1) {
+            super.addNativeAndroidDependency(
+                project,
+                dependency.substringBeforeLast(':') + ":\$${id}Version:" + dependency.substringAfterLast(':'),
+            )
+        } else {
+            super.addNativeAndroidDependency(project, dependency + ":\$${id}Version")
+        }
+    }
 }
 
 /**
@@ -1305,18 +1301,18 @@ class GdxMiniAudio : ThirdPartyExtension() {
  */
 @Extension
 class UniversalTween : ThirdPartyExtension() {
-  override val id = "universalTween"
-  override val defaultVersion = "6.3.3"
-  override val url = "https://github.com/mini2Dx/universal-tween-engine"
-  override val group = "org.mini2Dx"
-  override val name = "universal-tween-engine"
+    override val id = "universalTween"
+    override val defaultVersion = "6.3.3"
+    override val url = "https://github.com/mini2Dx/universal-tween-engine"
+    override val group = "org.mini2Dx"
+    override val name = "universal-tween-engine"
 
-  override fun initiateDependencies(project: Project) {
-    addDependency(project, Core.ID, "org.mini2Dx:universal-tween-engine")
+    override fun initiateDependencies(project: Project) {
+        addDependency(project, Core.ID, "org.mini2Dx:universal-tween-engine")
 
-    addDependency(project, GWT.ID, "org.mini2Dx:universal-tween-engine:sources")
-    addGwtInherit(project, "aurelienribon.tweenengine")
-  }
+        addDependency(project, GWT.ID, "org.mini2Dx:universal-tween-engine:sources")
+        addGwtInherit(project, "aurelienribon.tweenengine")
+    }
 }
 
 /**
@@ -1325,18 +1321,18 @@ class UniversalTween : ThirdPartyExtension() {
  */
 @Extension
 class Crux : ThirdPartyExtension() {
-  override val id = "crux"
-  override val defaultVersion = "0.1.3"
-  override val url = "https://github.com/tommyettinger/crux"
-  override val group = "com.github.tommyettinger"
-  override val name = "crux"
+    override val id = "crux"
+    override val defaultVersion = "0.1.3"
+    override val url = "https://github.com/tommyettinger/crux"
+    override val group = "com.github.tommyettinger"
+    override val name = "crux"
 
-  override fun initiateDependencies(project: Project) {
-    addDependency(project, Core.ID, "com.github.tommyettinger:crux")
+    override fun initiateDependencies(project: Project) {
+        addDependency(project, Core.ID, "com.github.tommyettinger:crux")
 
-    addDependency(project, GWT.ID, "com.github.tommyettinger:crux:sources")
-    addGwtInherit(project, "com.github.tommyettinger.crux")
-  }
+        addDependency(project, GWT.ID, "com.github.tommyettinger:crux:sources")
+        addGwtInherit(project, "com.github.tommyettinger.crux")
+    }
 }
 
 /**
@@ -1345,20 +1341,20 @@ class Crux : ThirdPartyExtension() {
  */
 @Extension
 class Gdcrux : ThirdPartyExtension() {
-  override val id = "gdcrux"
-  override val defaultVersion = "0.1.2"
-  override val url = "https://github.com/tommyettinger/gdcrux"
-  override val group = "com.github.tommyettinger"
-  override val name = "gdcrux"
+    override val id = "gdcrux"
+    override val defaultVersion = "0.1.2"
+    override val url = "https://github.com/tommyettinger/gdcrux"
+    override val group = "com.github.tommyettinger"
+    override val name = "gdcrux"
 
-  override fun initiateDependencies(project: Project) {
-    addDependency(project, Core.ID, "com.github.tommyettinger:gdcrux")
+    override fun initiateDependencies(project: Project) {
+        addDependency(project, Core.ID, "com.github.tommyettinger:gdcrux")
 
-    addDependency(project, GWT.ID, "com.github.tommyettinger:gdcrux:sources")
-    addGwtInherit(project, "com.github.tommyettinger.gdcrux")
+        addDependency(project, GWT.ID, "com.github.tommyettinger:gdcrux:sources")
+        addGwtInherit(project, "com.github.tommyettinger.gdcrux")
 
-    Crux().initiate(project)
-  }
+        Crux().initiate(project)
+    }
 }
 
 /**
@@ -1367,21 +1363,21 @@ class Gdcrux : ThirdPartyExtension() {
  */
 @Extension
 class Gand : ThirdPartyExtension() {
-  override val id = "gand"
-  override val defaultVersion = "0.3.6"
-  override val url = "https://github.com/tommyettinger/gand"
-  override val group = "com.github.tommyettinger"
-  override val name = "gand"
+    override val id = "gand"
+    override val defaultVersion = "0.3.6"
+    override val url = "https://github.com/tommyettinger/gand"
+    override val group = "com.github.tommyettinger"
+    override val name = "gand"
 
-  override fun initiateDependencies(project: Project) {
-    addDependency(project, Core.ID, "com.github.tommyettinger:gand")
+    override fun initiateDependencies(project: Project) {
+        addDependency(project, Core.ID, "com.github.tommyettinger:gand")
 
-    addDependency(project, GWT.ID, "com.github.tommyettinger:gand:sources")
-    addGwtInherit(project, "com.github.tommyettinger.gand")
+        addDependency(project, GWT.ID, "com.github.tommyettinger:gand:sources")
+        addGwtInherit(project, "com.github.tommyettinger.gand")
 
-    Crux().initiate(project)
-    Gdcrux().initiate(project)
-  }
+        Crux().initiate(project)
+        Gdcrux().initiate(project)
+    }
 }
 
 /**
@@ -1390,18 +1386,18 @@ class Gand : ThirdPartyExtension() {
  */
 @Extension
 class Cringe : ThirdPartyExtension() {
-  override val id = "cringe"
-  override val defaultVersion = "0.3.0"
-  override val url = "https://github.com/tommyettinger/cringe"
-  override val group = "com.github.tommyettinger"
-  override val name = "cringe"
+    override val id = "cringe"
+    override val defaultVersion = "0.3.0"
+    override val url = "https://github.com/tommyettinger/cringe"
+    override val group = "com.github.tommyettinger"
+    override val name = "cringe"
 
-  override fun initiateDependencies(project: Project) {
-    addDependency(project, Core.ID, "com.github.tommyettinger:cringe")
+    override fun initiateDependencies(project: Project) {
+        addDependency(project, Core.ID, "com.github.tommyettinger:cringe")
 
-    addDependency(project, GWT.ID, "com.github.tommyettinger:cringe:sources")
-    addGwtInherit(project, "com.github.tommyettinger.cringe")
-  }
+        addDependency(project, GWT.ID, "com.github.tommyettinger:cringe:sources")
+        addGwtInherit(project, "com.github.tommyettinger.cringe")
+    }
 }
 
 /**
@@ -1411,18 +1407,18 @@ class Cringe : ThirdPartyExtension() {
  */
 @Extension
 class Digital : ThirdPartyExtension() {
-  override val id = "digital"
-  override val defaultVersion = "0.9.7"
-  override val url = "https://github.com/tommyettinger/digital"
-  override val group = "com.github.tommyettinger"
-  override val name = "digital"
+    override val id = "digital"
+    override val defaultVersion = "0.9.7"
+    override val url = "https://github.com/tommyettinger/digital"
+    override val group = "com.github.tommyettinger"
+    override val name = "digital"
 
-  override fun initiateDependencies(project: Project) {
-    addDependency(project, Core.ID, "com.github.tommyettinger:digital")
+    override fun initiateDependencies(project: Project) {
+        addDependency(project, Core.ID, "com.github.tommyettinger:digital")
 
-    addDependency(project, GWT.ID, "com.github.tommyettinger:digital:sources")
-    addGwtInherit(project, "com.github.tommyettinger.digital")
-  }
+        addDependency(project, GWT.ID, "com.github.tommyettinger:digital:sources")
+        addGwtInherit(project, "com.github.tommyettinger.digital")
+    }
 }
 
 /**
@@ -1431,18 +1427,18 @@ class Digital : ThirdPartyExtension() {
  */
 @Extension
 class Funderby : ThirdPartyExtension() {
-  override val id = "funderby"
-  override val defaultVersion = "0.1.2"
-  override val url = "https://github.com/tommyettinger/funderby"
-  override val group = "com.github.tommyettinger"
-  override val name = "funderby"
+    override val id = "funderby"
+    override val defaultVersion = "0.1.2"
+    override val url = "https://github.com/tommyettinger/funderby"
+    override val group = "com.github.tommyettinger"
+    override val name = "funderby"
 
-  override fun initiateDependencies(project: Project) {
-    addDependency(project, Core.ID, "com.github.tommyettinger:funderby")
+    override fun initiateDependencies(project: Project) {
+        addDependency(project, Core.ID, "com.github.tommyettinger:funderby")
 
-    addDependency(project, GWT.ID, "com.github.tommyettinger:funderby:sources")
-    addGwtInherit(project, "com.github.tommyettinger.funderby")
-  }
+        addDependency(project, GWT.ID, "com.github.tommyettinger:funderby:sources")
+        addGwtInherit(project, "com.github.tommyettinger.funderby")
+    }
 }
 
 /**
@@ -1451,20 +1447,20 @@ class Funderby : ThirdPartyExtension() {
  */
 @Extension
 class Juniper : ThirdPartyExtension() {
-  override val id = "juniper"
-  override val defaultVersion = "0.8.5"
-  override val url = "https://github.com/tommyettinger/juniper"
-  override val group = "com.github.tommyettinger"
-  override val name = "juniper"
+    override val id = "juniper"
+    override val defaultVersion = "0.8.5"
+    override val url = "https://github.com/tommyettinger/juniper"
+    override val group = "com.github.tommyettinger"
+    override val name = "juniper"
 
-  override fun initiateDependencies(project: Project) {
-    addDependency(project, Core.ID, "com.github.tommyettinger:juniper")
+    override fun initiateDependencies(project: Project) {
+        addDependency(project, Core.ID, "com.github.tommyettinger:juniper")
 
-    addDependency(project, GWT.ID, "com.github.tommyettinger:juniper:sources")
-    addGwtInherit(project, "com.github.tommyettinger.juniper")
+        addDependency(project, GWT.ID, "com.github.tommyettinger:juniper:sources")
+        addGwtInherit(project, "com.github.tommyettinger.juniper")
 
-    Digital().initiate(project)
-  }
+        Digital().initiate(project)
+    }
 }
 
 /**
@@ -1473,21 +1469,21 @@ class Juniper : ThirdPartyExtension() {
  */
 @Extension
 class Jdkgdxds : ThirdPartyExtension() {
-  override val id = "jdkgdxds"
-  override val defaultVersion = "1.13.1"
-  override val url = "https://github.com/tommyettinger/jdkgdxds"
-  override val group = "com.github.tommyettinger"
-  override val name = "jdkgdxds"
+    override val id = "jdkgdxds"
+    override val defaultVersion = "1.13.1"
+    override val url = "https://github.com/tommyettinger/jdkgdxds"
+    override val group = "com.github.tommyettinger"
+    override val name = "jdkgdxds"
 
-  override fun initiateDependencies(project: Project) {
-    addDependency(project, Core.ID, "com.github.tommyettinger:jdkgdxds")
+    override fun initiateDependencies(project: Project) {
+        addDependency(project, Core.ID, "com.github.tommyettinger:jdkgdxds")
 
-    addDependency(project, GWT.ID, "com.github.tommyettinger:jdkgdxds:sources")
-    addGwtInherit(project, "com.github.tommyettinger.jdkgdxds")
+        addDependency(project, GWT.ID, "com.github.tommyettinger:jdkgdxds:sources")
+        addGwtInherit(project, "com.github.tommyettinger.jdkgdxds")
 
-    Funderby().initiate(project)
-    Digital().initiate(project)
-  }
+        Funderby().initiate(project)
+        Digital().initiate(project)
+    }
 }
 
 /**
@@ -1496,21 +1492,21 @@ class Jdkgdxds : ThirdPartyExtension() {
  */
 @Extension
 class JdkgdxdsInterop : ThirdPartyExtension() {
-  override val id = "jdkgdxdsInterop"
-  override val defaultVersion = "1.13.1.0"
-  override val url = "https://github.com/tommyettinger/jdkgdxds_interop"
-  override val group = "com.github.tommyettinger"
-  override val name = "jdkgdxds_interop"
+    override val id = "jdkgdxdsInterop"
+    override val defaultVersion = "1.13.1.0"
+    override val url = "https://github.com/tommyettinger/jdkgdxds_interop"
+    override val group = "com.github.tommyettinger"
+    override val name = "jdkgdxds_interop"
 
-  override fun initiateDependencies(project: Project) {
-    addDependency(project, Core.ID, "com.github.tommyettinger:jdkgdxds_interop")
+    override fun initiateDependencies(project: Project) {
+        addDependency(project, Core.ID, "com.github.tommyettinger:jdkgdxds_interop")
 
-    addDependency(project, GWT.ID, "com.github.tommyettinger:jdkgdxds_interop:sources")
-    addGwtInherit(project, "com.github.tommyettinger.jdkgdxds_interop")
+        addDependency(project, GWT.ID, "com.github.tommyettinger:jdkgdxds_interop:sources")
+        addGwtInherit(project, "com.github.tommyettinger.jdkgdxds_interop")
 
-    Jdkgdxds().initiate(project)
-    Juniper().initiate(project)
-  }
+        Jdkgdxds().initiate(project)
+        Juniper().initiate(project)
+    }
 }
 
 /**
@@ -1519,18 +1515,18 @@ class JdkgdxdsInterop : ThirdPartyExtension() {
  */
 @Extension
 class KryoRegExodus : ThirdPartyExtension() {
-  override val id = "kryoRegExodus"
-  override val defaultVersion = "0.1.20.1"
-  override val url = "https://github.com/tommyettinger/kryo-more"
-  override val group = "com.github.tommyettinger"
-  override val name = "kryo-regexodus"
+    override val id = "kryoRegExodus"
+    override val defaultVersion = "0.1.20.1"
+    override val url = "https://github.com/tommyettinger/kryo-more"
+    override val group = "com.github.tommyettinger"
+    override val name = "kryo-regexodus"
 
-  override fun initiateDependencies(project: Project) {
-    addDependency(project, Core.ID, "com.github.tommyettinger:kryo-regexodus")
+    override fun initiateDependencies(project: Project) {
+        addDependency(project, Core.ID, "com.github.tommyettinger:kryo-regexodus")
 
-    Kryo().initiate(project)
-    RegExodus().initiate(project)
-  }
+        Kryo().initiate(project)
+        RegExodus().initiate(project)
+    }
 }
 
 /**
@@ -1539,18 +1535,18 @@ class KryoRegExodus : ThirdPartyExtension() {
  */
 @Extension
 class KryoDigital : ThirdPartyExtension() {
-  override val id = "kryoDigital"
-  override val defaultVersion = "0.9.7.1"
-  override val url = "https://github.com/tommyettinger/kryo-more"
-  override val group = "com.github.tommyettinger"
-  override val name = "kryo-digital"
+    override val id = "kryoDigital"
+    override val defaultVersion = "0.9.7.1"
+    override val url = "https://github.com/tommyettinger/kryo-more"
+    override val group = "com.github.tommyettinger"
+    override val name = "kryo-digital"
 
-  override fun initiateDependencies(project: Project) {
-    addDependency(project, Core.ID, "com.github.tommyettinger:kryo-digital")
+    override fun initiateDependencies(project: Project) {
+        addDependency(project, Core.ID, "com.github.tommyettinger:kryo-digital")
 
-    Kryo().initiate(project)
-    Digital().initiate(project)
-  }
+        Kryo().initiate(project)
+        Digital().initiate(project)
+    }
 }
 
 /**
@@ -1559,19 +1555,19 @@ class KryoDigital : ThirdPartyExtension() {
  */
 @Extension
 class KryoJuniper : ThirdPartyExtension() {
-  override val id = "kryoJuniper"
-  override val defaultVersion = "0.8.5.1"
-  override val url = "https://github.com/tommyettinger/kryo-more"
-  override val group = "com.github.tommyettinger"
-  override val name = "kryo-juniper"
+    override val id = "kryoJuniper"
+    override val defaultVersion = "0.8.5.1"
+    override val url = "https://github.com/tommyettinger/kryo-more"
+    override val group = "com.github.tommyettinger"
+    override val name = "kryo-juniper"
 
-  override fun initiateDependencies(project: Project) {
-    addDependency(project, Core.ID, "com.github.tommyettinger:kryo-juniper")
+    override fun initiateDependencies(project: Project) {
+        addDependency(project, Core.ID, "com.github.tommyettinger:kryo-juniper")
 
-    Kryo().initiate(project)
-    Juniper().initiate(project)
-    KryoDigital().initiate(project)
-  }
+        Kryo().initiate(project)
+        Juniper().initiate(project)
+        KryoDigital().initiate(project)
+    }
 }
 
 /**
@@ -1580,19 +1576,19 @@ class KryoJuniper : ThirdPartyExtension() {
  */
 @Extension
 class KryoJdkgdxds : ThirdPartyExtension() {
-  override val id = "kryoJdkgdxds"
-  override val defaultVersion = "1.13.1.1"
-  override val url = "https://github.com/tommyettinger/kryo-more"
-  override val group = "com.github.tommyettinger"
-  override val name = "kryo-jdkgdxds"
+    override val id = "kryoJdkgdxds"
+    override val defaultVersion = "1.13.1.1"
+    override val url = "https://github.com/tommyettinger/kryo-more"
+    override val group = "com.github.tommyettinger"
+    override val name = "kryo-jdkgdxds"
 
-  override fun initiateDependencies(project: Project) {
-    addDependency(project, Core.ID, "com.github.tommyettinger:kryo-jdkgdxds")
+    override fun initiateDependencies(project: Project) {
+        addDependency(project, Core.ID, "com.github.tommyettinger:kryo-jdkgdxds")
 
-    Kryo().initiate(project)
-    Jdkgdxds().initiate(project)
-    KryoDigital().initiate(project)
-  }
+        Kryo().initiate(project)
+        Jdkgdxds().initiate(project)
+        KryoDigital().initiate(project)
+    }
 }
 
 /**
@@ -1601,18 +1597,18 @@ class KryoJdkgdxds : ThirdPartyExtension() {
  */
 @Extension
 class KryoCringe : ThirdPartyExtension() {
-  override val id = "kryoCringe"
-  override val defaultVersion = "0.3.0.1"
-  override val url = "https://github.com/tommyettinger/kryo-more"
-  override val group = "com.github.tommyettinger"
-  override val name = "kryo-cringe"
+    override val id = "kryoCringe"
+    override val defaultVersion = "0.3.0.1"
+    override val url = "https://github.com/tommyettinger/kryo-more"
+    override val group = "com.github.tommyettinger"
+    override val name = "kryo-cringe"
 
-  override fun initiateDependencies(project: Project) {
-    addDependency(project, Core.ID, "com.github.tommyettinger:kryo-cringe")
+    override fun initiateDependencies(project: Project) {
+        addDependency(project, Core.ID, "com.github.tommyettinger:kryo-cringe")
 
-    Kryo().initiate(project)
-    Cringe().initiate(project)
-  }
+        Kryo().initiate(project)
+        Cringe().initiate(project)
+    }
 }
 
 /**
@@ -1621,18 +1617,18 @@ class KryoCringe : ThirdPartyExtension() {
  */
 @Extension
 class KryoGand : ThirdPartyExtension() {
-  override val id = "kryoGand"
-  override val defaultVersion = "0.3.6.1"
-  override val url = "https://github.com/tommyettinger/kryo-more"
-  override val group = "com.github.tommyettinger"
-  override val name = "kryo-gand"
+    override val id = "kryoGand"
+    override val defaultVersion = "0.3.6.1"
+    override val url = "https://github.com/tommyettinger/kryo-more"
+    override val group = "com.github.tommyettinger"
+    override val name = "kryo-gand"
 
-  override fun initiateDependencies(project: Project) {
-    addDependency(project, Core.ID, "com.github.tommyettinger:kryo-gand")
+    override fun initiateDependencies(project: Project) {
+        addDependency(project, Core.ID, "com.github.tommyettinger:kryo-gand")
 
-    Kryo().initiate(project)
-    Gand().initiate(project)
-  }
+        Kryo().initiate(project)
+        Gand().initiate(project)
+    }
 }
 
 /**
@@ -1641,17 +1637,17 @@ class KryoGand : ThirdPartyExtension() {
  */
 @Extension
 class KryoLibgdx : ThirdPartyExtension() {
-  override val id = "kryoLibgdx"
-  override val defaultVersion = "1.14.0.1"
-  override val url = "https://github.com/tommyettinger/kryo-more"
-  override val group = "com.github.tommyettinger"
-  override val name = "kryo-libgdx"
+    override val id = "kryoLibgdx"
+    override val defaultVersion = "1.14.0.1"
+    override val url = "https://github.com/tommyettinger/kryo-more"
+    override val group = "com.github.tommyettinger"
+    override val name = "kryo-libgdx"
 
-  override fun initiateDependencies(project: Project) {
-    addDependency(project, Core.ID, "com.github.tommyettinger:kryo-libgdx")
+    override fun initiateDependencies(project: Project) {
+        addDependency(project, Core.ID, "com.github.tommyettinger:kryo-libgdx")
 
-    Kryo().initiate(project)
-  }
+        Kryo().initiate(project)
+    }
 }
 
 /**
@@ -1660,17 +1656,17 @@ class KryoLibgdx : ThirdPartyExtension() {
  */
 @Extension
 class TantrumLibgdx : ThirdPartyExtension() {
-  override val id = "tantrumLibgdx"
-  override val defaultVersion = "1.14.0.19"
-  override val url = "https://github.com/tommyettinger/tantrum"
-  override val group = "com.github.tommyettinger"
-  override val name = "tantrum-libgdx"
+    override val id = "tantrumLibgdx"
+    override val defaultVersion = "1.14.0.19"
+    override val url = "https://github.com/tommyettinger/tantrum"
+    override val group = "com.github.tommyettinger"
+    override val name = "tantrum-libgdx"
 
-  override fun initiateDependencies(project: Project) {
-    addDependency(project, Core.ID, "com.github.tommyettinger:tantrum-libgdx")
+    override fun initiateDependencies(project: Project) {
+        addDependency(project, Core.ID, "com.github.tommyettinger:tantrum-libgdx")
 
-    Fory().initiate(project)
-  }
+        Fory().initiate(project)
+    }
 }
 
 /**
@@ -1679,18 +1675,18 @@ class TantrumLibgdx : ThirdPartyExtension() {
  */
 @Extension
 class TantrumRegExodus : ThirdPartyExtension() {
-  override val id = "tantrumRegExodus"
-  override val defaultVersion = "0.1.20.19"
-  override val url = "https://github.com/tommyettinger/tantrum"
-  override val group = "com.github.tommyettinger"
-  override val name = "tantrum-regexodus"
+    override val id = "tantrumRegExodus"
+    override val defaultVersion = "0.1.20.19"
+    override val url = "https://github.com/tommyettinger/tantrum"
+    override val group = "com.github.tommyettinger"
+    override val name = "tantrum-regexodus"
 
-  override fun initiateDependencies(project: Project) {
-    addDependency(project, Core.ID, "com.github.tommyettinger:tantrum-regexodus")
+    override fun initiateDependencies(project: Project) {
+        addDependency(project, Core.ID, "com.github.tommyettinger:tantrum-regexodus")
 
-    Fory().initiate(project)
-    RegExodus().initiate(project)
-  }
+        Fory().initiate(project)
+        RegExodus().initiate(project)
+    }
 }
 
 /**
@@ -1699,18 +1695,18 @@ class TantrumRegExodus : ThirdPartyExtension() {
  */
 @Extension
 class TantrumDigital : ThirdPartyExtension() {
-  override val id = "tantrumDigital"
-  override val defaultVersion = "0.9.7.19"
-  override val url = "https://github.com/tommyettinger/tantrum"
-  override val group = "com.github.tommyettinger"
-  override val name = "tantrum-digital"
+    override val id = "tantrumDigital"
+    override val defaultVersion = "0.9.7.19"
+    override val url = "https://github.com/tommyettinger/tantrum"
+    override val group = "com.github.tommyettinger"
+    override val name = "tantrum-digital"
 
-  override fun initiateDependencies(project: Project) {
-    addDependency(project, Core.ID, "com.github.tommyettinger:tantrum-digital")
+    override fun initiateDependencies(project: Project) {
+        addDependency(project, Core.ID, "com.github.tommyettinger:tantrum-digital")
 
-    Fory().initiate(project)
-    Digital().initiate(project)
-  }
+        Fory().initiate(project)
+        Digital().initiate(project)
+    }
 }
 
 /**
@@ -1719,19 +1715,19 @@ class TantrumDigital : ThirdPartyExtension() {
  */
 @Extension
 class TantrumJdkgdxds : ThirdPartyExtension() {
-  override val id = "tantrumJdkgdxds"
-  override val defaultVersion = "1.13.1.19"
-  override val url = "https://github.com/tommyettinger/tantrum"
-  override val group = "com.github.tommyettinger"
-  override val name = "tantrum-jdkgdxds"
+    override val id = "tantrumJdkgdxds"
+    override val defaultVersion = "1.13.1.19"
+    override val url = "https://github.com/tommyettinger/tantrum"
+    override val group = "com.github.tommyettinger"
+    override val name = "tantrum-jdkgdxds"
 
-  override fun initiateDependencies(project: Project) {
-    addDependency(project, Core.ID, "com.github.tommyettinger:tantrum-jdkgdxds")
+    override fun initiateDependencies(project: Project) {
+        addDependency(project, Core.ID, "com.github.tommyettinger:tantrum-jdkgdxds")
 
-    Fory().initiate(project)
-    Jdkgdxds().initiate(project)
-    TantrumDigital().initiate(project)
-  }
+        Fory().initiate(project)
+        Jdkgdxds().initiate(project)
+        TantrumDigital().initiate(project)
+    }
 }
 
 /**
@@ -1740,18 +1736,18 @@ class TantrumJdkgdxds : ThirdPartyExtension() {
  */
 @Extension
 class GameJoltApi : ThirdPartyExtension() {
-  override val id = "gameJoltApi"
-  override val defaultVersion = "0.0.6"
-  override val url = "https://github.com/raeleus/game-jolt-api"
-  override val group = "com.github.raeleus"
-  override val name = "game-jolt-api"
+    override val id = "gameJoltApi"
+    override val defaultVersion = "0.0.6"
+    override val url = "https://github.com/raeleus/game-jolt-api"
+    override val group = "com.github.raeleus"
+    override val name = "game-jolt-api"
 
-  override fun initiateDependencies(project: Project) {
-    addDependency(project, Core.ID, "com.github.raeleus:game-jolt-api")
+    override fun initiateDependencies(project: Project) {
+        addDependency(project, Core.ID, "com.github.raeleus:game-jolt-api")
 
-    addDependency(project, GWT.ID, "com.github.raeleus:game-jolt-api:sources")
-    addGwtInherit(project, "com.github.raeleus.gamejoltapi")
-  }
+        addDependency(project, GWT.ID, "com.github.raeleus:game-jolt-api:sources")
+        addGwtInherit(project, "com.github.raeleus.gamejoltapi")
+    }
 }
 
 /**
@@ -1760,15 +1756,15 @@ class GameJoltApi : ThirdPartyExtension() {
  */
 @Extension
 class TexturePackerOnly : ThirdPartyExtension() {
-  override val id = "texturePackerOnly"
-  override val defaultVersion = "1.14.0.0"
-  override val url = "https://github.com/tommyettinger/libgdx-texturepacker"
-  override val group = "com.github.tommyettinger"
-  override val name = "libgdx-texturepacker"
+    override val id = "texturePackerOnly"
+    override val defaultVersion = "1.14.0.0"
+    override val url = "https://github.com/tommyettinger/libgdx-texturepacker"
+    override val group = "com.github.tommyettinger"
+    override val name = "libgdx-texturepacker"
 
-  override fun initiateDependencies(project: Project) {
-    addDependency(project, Core.ID, "com.github.tommyettinger:libgdx-texturepacker")
-  }
+    override fun initiateDependencies(project: Project) {
+        addDependency(project, Core.ID, "com.github.tommyettinger:libgdx-texturepacker")
+    }
 }
 
 /**
@@ -1777,15 +1773,15 @@ class TexturePackerOnly : ThirdPartyExtension() {
  */
 @Extension
 class TextureUnpackerOnly : ThirdPartyExtension() {
-  override val id = "textureUnpackerOnly"
-  override val defaultVersion = "1.14.0.0"
-  override val url = "https://github.com/tommyettinger/libgdx-texturepacker"
-  override val group = "com.github.tommyettinger"
-  override val name = "libgdx-textureunpacker"
+    override val id = "textureUnpackerOnly"
+    override val defaultVersion = "1.14.0.0"
+    override val url = "https://github.com/tommyettinger/libgdx-texturepacker"
+    override val group = "com.github.tommyettinger"
+    override val name = "libgdx-textureunpacker"
 
-  override fun initiateDependencies(project: Project) {
-    addDependency(project, Core.ID, "com.github.tommyettinger:libgdx-textureunpacker")
-  }
+    override fun initiateDependencies(project: Project) {
+        addDependency(project, Core.ID, "com.github.tommyettinger:libgdx-textureunpacker")
+    }
 }
 
 //

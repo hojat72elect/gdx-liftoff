@@ -8,20 +8,20 @@ import gdx.liftoff.data.project.Project
  * Basic interface for Kotlin project templates. Adds a Kotlin launcher for each platform.
  */
 interface KotlinTemplate : Template {
-  override val applicationListenerExtension: String
-    get() = "kt"
-  override val launcherExtension: String
-    get() = "kt"
-  override val defaultSourceFolder: String
-    get() = path("src", "main", "kotlin")
+    override val applicationListenerExtension: String
+        get() = "kt"
+    override val launcherExtension: String
+        get() = "kt"
+    override val defaultSourceFolder: String
+        get() = path("src", "main", "kotlin")
 
-  override fun apply(project: Project) {
-    super.apply(project)
-    project.languages.selectLanguage<Kotlin>()
-  }
+    override fun apply(project: Project) {
+        super.apply(project)
+        project.languages.selectLanguage<Kotlin>()
+    }
 
-  override fun getLwjgl2LauncherContent(project: Project): String =
-    """@file:JvmName("Lwjgl2Launcher")
+    override fun getLwjgl2LauncherContent(project: Project): String =
+        """@file:JvmName("Lwjgl2Launcher")
 
 package ${project.basic.rootPackage}.lwjgl2
 
@@ -43,8 +43,8 @@ fun main() {
 }
 """
 
-  override fun getAndroidLauncherContent(project: Project): String =
-    """package ${project.basic.rootPackage}.android
+    override fun getAndroidLauncherContent(project: Project): String =
+        """package ${project.basic.rootPackage}.android
 
 import android.os.Bundle
 
@@ -64,8 +64,8 @@ class AndroidLauncher : AndroidApplication() {
 }
 """
 
-  override fun getHeadlessLauncherContent(project: Project): String =
-    """@file:JvmName("HeadlessLauncher")
+    override fun getHeadlessLauncherContent(project: Project): String =
+        """@file:JvmName("HeadlessLauncher")
 
 package ${project.basic.rootPackage}.headless
 
@@ -82,8 +82,8 @@ fun main() {
 }
 """
 
-  override fun getIOSMOELauncherContent(project: Project): String =
-    """package ${project.basic.rootPackage}
+    override fun getIOSMOELauncherContent(project: Project): String =
+        """package ${project.basic.rootPackage}
 
 import apple.uikit.c.UIKit
 import com.badlogic.gdx.backends.iosmoe.IOSApplication
@@ -113,8 +113,8 @@ fun main() {
         null, IOSLauncher::class.java.name)
 }"""
 
-  override fun getIOSMOESVMRegistrationContent(project: Project): String =
-    """package ${project.basic.rootPackage}
+    override fun getIOSMOESVMRegistrationContent(project: Project): String =
+        """package ${project.basic.rootPackage}
 
 import org.graalvm.nativeimage.hosted.Feature
 import org.graalvm.nativeimage.hosted.RuntimeJNIAccess
@@ -144,8 +144,8 @@ class SVMRegistrationFeature : Feature {
     }
 }"""
 
-  override fun getLwjgl3LauncherContent(project: Project): String =
-    """@file:JvmName("Lwjgl3Launcher")
+    override fun getLwjgl3LauncherContent(project: Project): String =
+        """@file:JvmName("Lwjgl3Launcher")
 
 package ${project.basic.rootPackage}.lwjgl3
 
@@ -187,23 +187,8 @@ fun main() {
 }
 """
 
-  override fun getLwjgl3StartupContent(project: Project): String =
-    """
-/*
- * Copyright 2020 damios
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at:
- * https://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-//Note, the above license and copyright applies to this file only.
+    override fun getLwjgl3StartupContent(project: Project): String =
+        """
 package ${project.basic.rootPackage}.lwjgl3
 
 import com.badlogic.gdx.Version
@@ -224,7 +209,6 @@ import java.util.*
  * outside the Latin alphabet, a common cause of startup crashes.
  *
  * [Based on this java-gaming.org post by kappa](https://jvm-gaming.org/t/starting-jvm-on-mac-with-xstartonfirstthread-programmatically/57547)
- * @author damios
  */
 class StartupHelper private constructor() {
     init {
@@ -364,8 +348,8 @@ class StartupHelper private constructor() {
 }
 """
 
-  override fun getIOSLauncherContent(project: Project): String =
-    """@file:JvmName("IOSLauncher")
+    override fun getIOSLauncherContent(project: Project): String =
+        """@file:JvmName("IOSLauncher")
 
 package ${project.basic.rootPackage}
 
@@ -395,8 +379,8 @@ class IOSLauncher : IOSApplication.Delegate() {
     }
 }"""
 
-  override fun getGwtLauncherContent(project: Project): String =
-    """package ${project.basic.rootPackage}.gwt;
+    override fun getGwtLauncherContent(project: Project): String =
+        """package ${project.basic.rootPackage}.gwt;
 
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.backends.gwt.GwtApplication;
@@ -419,8 +403,8 @@ public class GwtLauncher extends GwtApplication {
 }
 """
 
-  override fun getServerLauncherContent(project: Project) =
-    """@file:JvmName("ServerLauncher")
+    override fun getServerLauncherContent(project: Project) =
+        """@file:JvmName("ServerLauncher")
 
 package ${project.basic.rootPackage}.server
 
@@ -430,8 +414,8 @@ fun main() {
 }
 """
 
-  override fun getTeaVMLauncherContent(project: Project): String =
-    """@file:JvmName("TeaVMLauncher")
+    override fun getTeaVMLauncherContent(project: Project): String =
+        """@file:JvmName("TeaVMLauncher")
 
 package ${project.basic.rootPackage}.teavm
 
@@ -453,8 +437,8 @@ fun main() {
 }
 """
 
-  override fun getTeaVMBuilderContent(project: Project) =
-    """package ${project.basic.rootPackage}.teavm
+    override fun getTeaVMBuilderContent(project: Project) =
+        """package ${project.basic.rootPackage}.teavm
 
 import java.io.File
 import com.github.xpenatan.gdx.backends.teavm.config.AssetFileHandle

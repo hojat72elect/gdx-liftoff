@@ -9,23 +9,23 @@ import gdx.liftoff.views.GdxPlatform
  */
 @GdxPlatform
 class Server : Platform {
-  companion object {
-    const val ID = "server"
-    const val ORDER = Lwjgl2.ORDER + 1
-  }
+    companion object {
+        const val ID = "server"
+        const val ORDER = Lwjgl2.ORDER + 1
+    }
 
-  override val id = ID
-  override val description = "A separate application without access to the `core` module."
-  override val order = ORDER
-  override val isStandard = false
+    override val id = ID
+    override val description = "A separate application without access to the `core` module."
+    override val order = ORDER
+    override val isStandard = false
 
-  override fun createGradleFile(project: Project): GradleFile = ServerGradleFile(project)
+    override fun createGradleFile(project: Project): GradleFile = ServerGradleFile(project)
 
-  override fun initiate(project: Project) {
-    // Server project has no additional dependencies.
+    override fun initiate(project: Project) {
+        // Server project has no additional dependencies.
 
-    addGradleTaskDescription(project, "run", "runs the $id application.")
-  }
+        addGradleTaskDescription(project, "run", "runs the $id application.")
+    }
 }
 
 /**
@@ -33,10 +33,10 @@ class Server : Platform {
  * with "run" task.
  */
 class ServerGradleFile(
-  val project: Project,
+    val project: Project,
 ) : GradleFile(Server.ID) {
-  override fun getContent(): String =
-    """apply plugin: 'application'
+    override fun getContent(): String =
+        """apply plugin: 'application'
 ${if (project.rootGradle.plugins.contains("kotlin")) "apply plugin: 'org.jetbrains.kotlin.jvm'\n" else ""}
 
 java.sourceCompatibility = ${project.advanced.serverJavaVersion}
@@ -44,14 +44,16 @@ java.targetCompatibility = ${project.advanced.serverJavaVersion}
 if (JavaVersion.current().isJava9Compatible()) {
         compileJava.options.release.set(${project.advanced.serverJavaVersion})
 }
-${if (project.rootGradle.plugins.contains(
-        "kotlin",
-      )
-    ) {
-      "kotlin.compilerOptions.jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_" + (if (project.advanced.serverJavaVersion == "8") "1_8" else project.advanced.serverJavaVersion) + ")\n"
-    } else {
-      ""
-    }}
+${
+            if (project.rootGradle.plugins.contains(
+                    "kotlin",
+                )
+            ) {
+                "kotlin.compilerOptions.jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_" + (if (project.advanced.serverJavaVersion == "8") "1_8" else project.advanced.serverJavaVersion) + ")\n"
+            } else {
+                ""
+            }
+        }
 application.mainClass = '${project.basic.rootPackage}.server.ServerLauncher'
 eclipse.project.name = appName + '-server'
 

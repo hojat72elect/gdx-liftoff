@@ -8,21 +8,21 @@ import gdx.liftoff.data.project.Project
  * Gradle file of the root project. Manages build script and global settings.
  */
 class RootGradleFile(
-  val project: Project,
+    val project: Project,
 ) : GradleFile("") {
-  val plugins = mutableSetOf<String>()
-  private val buildRepositories = mutableSetOf<String>()
+    val plugins = mutableSetOf<String>()
+    private val buildRepositories = mutableSetOf<String>()
 
-  init {
-    buildRepositories.add("mavenCentral()")
-    buildRepositories.add("gradlePluginPortal()")
-    buildRepositories.add("mavenLocal()")
-    buildRepositories.add("google()")
-    buildRepositories.add("maven { url = 'https://central.sonatype.com/repository/maven-snapshots/' }")
-  }
+    init {
+        buildRepositories.add("mavenCentral()")
+        buildRepositories.add("gradlePluginPortal()")
+        buildRepositories.add("mavenLocal()")
+        buildRepositories.add("google()")
+        buildRepositories.add("maven { url = 'https://central.sonatype.com/repository/maven-snapshots/' }")
+    }
 
-  override fun getContent(): String =
-    """buildscript {
+    override fun getContent(): String =
+        """buildscript {
   repositories {
 ${buildRepositories.joinToString(separator = "\n") { "    $it" }}
   }
@@ -44,11 +44,13 @@ allprojects {
   }
 }
 
-configure(subprojects${if (project.hasPlatform(Android.ID)) {
-      " - project(':android')"
-    } else {
-      ""
-    }}) {
+configure(subprojects${
+            if (project.hasPlatform(Android.ID)) {
+                " - project(':android')"
+            } else {
+                ""
+            }
+        }) {
 ${plugins.joinToString(separator = "\n") { "  apply plugin: '$it'" }}
   java.sourceCompatibility = ${project.advanced.javaVersion}
 
@@ -74,24 +76,28 @@ ${plugins.joinToString(separator = "\n") { "  apply plugin: '$it'" }}
 
   compileJava {
     options.incremental = true
-  }${if (plugins.contains("kotlin")) {
-      """
+  }${
+            if (plugins.contains("kotlin")) {
+                """
   compileKotlin.compilerOptions.jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_${
-        if (project.advanced.javaVersion.removePrefix("1.") == "8") {
-          "1_8"
-        } else {
-          project.advanced.javaVersion.removePrefix("1.")
-        }})
+                    if (project.advanced.javaVersion.removePrefix("1.") == "8") {
+                        "1_8"
+                    } else {
+                        project.advanced.javaVersion.removePrefix("1.")
+                    }
+                })
   compileTestKotlin.compilerOptions.jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_${
-        if (project.advanced.javaVersion.removePrefix("1.") == "8") {
-          "1_8"
-        } else {
-          project.advanced.javaVersion.removePrefix("1.")
-        }})
+                    if (project.advanced.javaVersion.removePrefix("1.") == "8") {
+                        "1_8"
+                    } else {
+                        project.advanced.javaVersion.removePrefix("1.")
+                    }
+                })
   """
-    } else {
-      ""
-    }}
+            } else {
+                ""
+            }
+        }
 }
 
 subprojects {
@@ -103,11 +109,12 @@ subprojects {
     mavenLocal()
     maven { url = 'https://central.sonatype.com/repository/maven-snapshots/' }
     maven { url = 'https://jitpack.io' }${
-      if (project.hasPlatform(TeaVM.ID)) {
-        "\n    maven { url = 'https://teavm.org/maven/repository/' }"
-      } else {
-        ""
-      }}
+            if (project.hasPlatform(TeaVM.ID)) {
+                "\n    maven { url = 'https://teavm.org/maven/repository/' }"
+            } else {
+                ""
+            }
+        }
   }
 }
 

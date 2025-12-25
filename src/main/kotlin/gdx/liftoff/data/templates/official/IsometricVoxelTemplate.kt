@@ -17,40 +17,40 @@ import gdx.liftoff.views.ProjectTemplate
 @ProjectTemplate(official = true)
 @Suppress("unused") // Referenced via reflection.
 class IsometricVoxelTemplate : Template {
-  override val id = "isometricVoxel"
-  override val description: String
-    get() =
-      "A sample project implementing an isometric pixel-art game with procedural terrain. " +
-        "Includes launchers for each platform and a small but winnable game."
+    override val id = "isometricVoxel"
+    override val description: String
+        get() =
+            "A sample project implementing an isometric pixel-art game with procedural terrain. " +
+                    "Includes launchers for each platform and a small but winnable game."
 
-  override fun apply(project: Project) {
-    super.apply(project)
-    arrayOf(
-      "Cozette-License.txt",
-      "CozetteOutlined-standard.fnt",
-      "isometric-trpg.atlas",
-      "isometric-trpg.json",
-      "isometric-trpg.png",
-      "isometric-trpg-License.txt",
-      "Komiku - Road 4 Fight.ogg",
-      "Komiku - Road 4 Fight - License.txt",
-      "Skin-License.txt",
-    ).forEach {
-      project.files.add(
-        CopiedFile(
-          projectName = Assets.ID,
-          path = path(it),
-          original = path("generator", "templates", "isometric-voxel", it),
-        ),
-      )
-    }
-    addSourceFile(
-      project = project,
-      platform = Core.ID,
-      packageName = project.basic.rootPackage,
-      fileName = "LocalMap.java",
-      content =
-        """package ${project.basic.rootPackage};
+    override fun apply(project: Project) {
+        super.apply(project)
+        arrayOf(
+            "Cozette-License.txt",
+            "CozetteOutlined-standard.fnt",
+            "isometric-trpg.atlas",
+            "isometric-trpg.json",
+            "isometric-trpg.png",
+            "isometric-trpg-License.txt",
+            "Komiku - Road 4 Fight.ogg",
+            "Komiku - Road 4 Fight - License.txt",
+            "Skin-License.txt",
+        ).forEach {
+            project.files.add(
+                CopiedFile(
+                    projectName = Assets.ID,
+                    path = path(it),
+                    original = path("generator", "templates", "isometric-voxel", it),
+                ),
+            )
+        }
+        addSourceFile(
+            project = project,
+            platform = Core.ID,
+            packageName = project.basic.rootPackage,
+            fileName = "LocalMap.java",
+            content =
+                """package ${project.basic.rootPackage};
 
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -624,14 +624,14 @@ public class LocalMap {
     }
 }
 """,
-    )
-    addSourceFile(
-      project = project,
-      platform = Core.ID,
-      packageName = project.basic.rootPackage,
-      fileName = "IsoSprite.java",
-      content =
-        """package ${project.basic.rootPackage};
+        )
+        addSourceFile(
+            project = project,
+            platform = Core.ID,
+            packageName = project.basic.rootPackage,
+            fileName = "IsoSprite.java",
+            content =
+                """package ${project.basic.rootPackage};
 
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -940,14 +940,14 @@ public class IsoSprite implements Comparable<IsoSprite> {
     }
 }
 """,
-    )
-    addSourceFile(
-      project = project,
-      platform = Core.ID,
-      packageName = project.basic.rootPackage,
-      fileName = "AnimatedIsoSprite.java",
-      content =
-        """package ${project.basic.rootPackage};
+        )
+        addSourceFile(
+            project = project,
+            platform = Core.ID,
+            packageName = project.basic.rootPackage,
+            fileName = "AnimatedIsoSprite.java",
+            content =
+                """package ${project.basic.rootPackage};
 
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -1081,15 +1081,15 @@ public class AnimatedIsoSprite extends IsoSprite {
     }
 }
 """,
-    )
-    // util folder
-    addSourceFile(
-      project = project,
-      platform = Core.ID,
-      packageName = project.basic.rootPackage + ".util",
-      fileName = "HasPosition3D.java",
-      content =
-        """package ${project.basic.rootPackage}.util;
+        )
+        // util folder
+        addSourceFile(
+            project = project,
+            platform = Core.ID,
+            packageName = project.basic.rootPackage + ".util",
+            fileName = "HasPosition3D.java",
+            content =
+                """package ${project.basic.rootPackage}.util;
 
 import com.badlogic.gdx.math.Vector3;
 
@@ -1105,14 +1105,14 @@ public interface HasPosition3D {
     Vector3 getPosition();
 }
 """,
-    )
-    addSourceFile(
-      project = project,
-      platform = Core.ID,
-      packageName = project.basic.rootPackage + ".util",
-      fileName = "MathSupport.java",
-      content =
-        """package ${project.basic.rootPackage}.util;
+        )
+        addSourceFile(
+            project = project,
+            platform = Core.ID,
+            packageName = project.basic.rootPackage + ".util",
+            fileName = "MathSupport.java",
+            content =
+                """package ${project.basic.rootPackage}.util;
 
 import com.badlogic.gdx.math.GridPoint2;
 
@@ -1298,14 +1298,14 @@ public final class MathSupport {
 
 }
 """,
-    )
-    addSourceFile(
-      project = project,
-      platform = Core.ID,
-      packageName = project.basic.rootPackage + ".util",
-      fileName = "MiniNoise.java",
-      content =
-        """package ${project.basic.rootPackage}.util;
+        )
+        addSourceFile(
+            project = project,
+            platform = Core.ID,
+            packageName = project.basic.rootPackage + ".util",
+            fileName = "MiniNoise.java",
+            content =
+                """package ${project.basic.rootPackage}.util;
 
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.NumberUtils;
@@ -3198,14 +3198,14 @@ public class MiniNoise {
     }
 }
 """,
-    )
-    addSourceFile(
-      project = project,
-      platform = Core.ID,
-      packageName = project.basic.rootPackage + ".util",
-      fileName = "VoxelCollider.java",
-      content =
-        """package ${project.basic.rootPackage}.util;
+        )
+        addSourceFile(
+            project = project,
+            platform = Core.ID,
+            packageName = project.basic.rootPackage + ".util",
+            fileName = "VoxelCollider.java",
+            content =
+                """package ${project.basic.rootPackage}.util;
 
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
@@ -3306,15 +3306,15 @@ public class VoxelCollider<T extends HasPosition3D> {
     }
 }
 """,
-    )
-    // game folder
-    addSourceFile(
-      project = project,
-      platform = Core.ID,
-      packageName = project.basic.rootPackage + ".game",
-      fileName = "AssetData.java",
-      content =
-        """package ${project.basic.rootPackage}.game;
+        )
+        // game folder
+        addSourceFile(
+            project = project,
+            platform = Core.ID,
+            packageName = project.basic.rootPackage + ".game",
+            fileName = "AssetData.java",
+            content =
+                """package ${project.basic.rootPackage}.game;
 
 import com.badlogic.gdx.utils.*;
 import ${project.basic.rootPackage}.LocalMap;
@@ -3948,14 +3948,14 @@ public final class AssetData {
 
 }
 """,
-    )
-    addSourceFile(
-      project = project,
-      platform = Core.ID,
-      packageName = project.basic.rootPackage + ".game",
-      fileName = "Mover.java",
-      content =
-        """package ${project.basic.rootPackage}.game;
+        )
+        addSourceFile(
+            project = project,
+            platform = Core.ID,
+            packageName = project.basic.rootPackage + ".game",
+            fileName = "Mover.java",
+            content =
+                """package ${project.basic.rootPackage}.game;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -4501,11 +4501,11 @@ public class Mover implements HasPosition3D {
     }
 }
 """,
-    )
-  }
+        )
+    }
 
-  override fun getApplicationListenerContent(project: Project): String =
-    """package ${project.basic.rootPackage};
+    override fun getApplicationListenerContent(project: Project): String =
+        """package ${project.basic.rootPackage};
 
 import com.badlogic.gdx.Application;
 import com.badlogic.gdx.ApplicationAdapter;

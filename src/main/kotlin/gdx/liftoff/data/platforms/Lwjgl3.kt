@@ -12,56 +12,56 @@ import gdx.liftoff.views.GdxPlatform
  */
 @GdxPlatform
 class Lwjgl3 : Platform {
-  companion object {
-    const val ID = "lwjgl3"
-    const val ORDER = Core.ORDER + 1
-  }
+    companion object {
+        const val ID = "lwjgl3"
+        const val ORDER = Core.ORDER + 1
+    }
 
-  override val id = ID
-  override val description = "Primary desktop platform using LWJGL3; was called 'desktop' in older docs."
-  override val order = ORDER
+    override val id = ID
+    override val description = "Primary desktop platform using LWJGL3; was called 'desktop' in older docs."
+    override val order = ORDER
 
-  // override val isStandard = true
-  override fun createGradleFile(project: Project): GradleFile = Lwjgl3GradleFile(project)
+    // override val isStandard = true
+    override fun createGradleFile(project: Project): GradleFile = Lwjgl3GradleFile(project)
 
-  override fun initiate(project: Project) {
-    // Adding game icons:
-    arrayOf(16, 32, 64, 128)
-      .map { "libgdx$it.png" }
-      .forEach { icon ->
-        project.files.add(
-          CopiedFile(
-            projectName = ID,
-            path = path("src", "main", "resources", icon),
-            original = path("icons", icon),
-          ),
+    override fun initiate(project: Project) {
+        // Adding game icons:
+        arrayOf(16, 32, 64, 128)
+            .map { "libgdx$it.png" }
+            .forEach { icon ->
+                project.files.add(
+                    CopiedFile(
+                        projectName = ID,
+                        path = path("src", "main", "resources", icon),
+                        original = path("icons", icon),
+                    ),
+                )
+            }
+        arrayOf("logo.png", "logo.ico", "logo.icns")
+            .forEach { icon ->
+                project.files.add(
+                    CopiedFile(
+                        projectName = ID,
+                        path = path("icons", icon),
+                        original = path("icons", icon),
+                    ),
+                )
+            }
+
+        addGradleTaskDescription(project, "run", "starts the application.")
+        addGradleTaskDescription(
+            project,
+            "jar",
+            "builds application's runnable jar, which can be found at `$id/build/libs`.",
         )
-      }
-    arrayOf("logo.png", "logo.ico", "logo.icns")
-      .forEach { icon ->
+        project.properties["graalHelperVersion"] = "2.0.1"
+
         project.files.add(
-          CopiedFile(
-            projectName = ID,
-            path = path("icons", icon),
-            original = path("icons", icon),
-          ),
-        )
-      }
-
-    addGradleTaskDescription(project, "run", "starts the application.")
-    addGradleTaskDescription(
-      project,
-      "jar",
-      "builds application's runnable jar, which can be found at `$id/build/libs`.",
-    )
-    project.properties["graalHelperVersion"] = "2.0.1"
-
-    project.files.add(
-      SourceFile(
-        projectName = Lwjgl3.ID,
-        fileName = "nativeimage.gradle",
-        content =
-"""
+            SourceFile(
+                projectName = ID,
+                fileName = "nativeimage.gradle",
+                content =
+                    """
 project(":lwjgl3") {
   apply plugin: "org.graalvm.buildtools.native"
 
@@ -116,27 +116,27 @@ project(":lwjgl3") {
   }
 }
 """,
-      ),
-    )
-  }
+            ),
+        )
+    }
 }
 
 /**
  * Gradle file of the LWJGL3 project.
  */
 class Lwjgl3GradleFile(
-  val project: Project,
+    val project: Project,
 ) : GradleFile(Lwjgl3.ID) {
-  init {
-    dependencies.add("project(':${Core.ID}')")
-    addDependency("com.badlogicgames.gdx:gdx-backend-lwjgl3:\$gdxVersion")
-    addDependency("com.badlogicgames.gdx:gdx-lwjgl3-angle:\$gdxVersion")
-    addDependency("com.badlogicgames.gdx:gdx-platform:\$gdxVersion:natives-desktop")
-  }
+    init {
+        dependencies.add("project(':${Core.ID}')")
+        addDependency("com.badlogicgames.gdx:gdx-backend-lwjgl3:\$gdxVersion")
+        addDependency("com.badlogicgames.gdx:gdx-lwjgl3-angle:\$gdxVersion")
+        addDependency("com.badlogicgames.gdx:gdx-platform:\$gdxVersion:natives-desktop")
+    }
 
-  // language=groovy
-  override fun getContent(): String =
-    """
+    // language=groovy
+    override fun getContent(): String =
+        """
 buildscript {
   repositories {
     gradlePluginPortal()
@@ -164,24 +164,26 @@ java.targetCompatibility = ${project.advanced.desktopJavaVersion}
 if (JavaVersion.current().isJava9Compatible()) {
         compileJava.options.release.set(${project.advanced.desktopJavaVersion})
 }
-${if (project.rootGradle.plugins.contains(
-        "kotlin",
-      )
-    ) {
-      "kotlin.compilerOptions.jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_" + (if (project.advanced.desktopJavaVersion == "8") "1_8" else project.advanced.desktopJavaVersion) + ")\n"
-    } else {
-      ""
-    }}
+${
+            if (project.rootGradle.plugins.contains(
+                    "kotlin",
+                )
+            ) {
+                "kotlin.compilerOptions.jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_" + (if (project.advanced.desktopJavaVersion == "8") "1_8" else project.advanced.desktopJavaVersion) + ")\n"
+            } else {
+                ""
+            }
+        }
 dependencies {
 ${joinDependencies(dependencies)}
   if(enableGraalNative == 'true') {
     implementation "io.github.berstanio:gdx-svmhelper-backend-lwjgl3:${'$'}graalHelperVersion"
 """ +
-      (if (project.extensions.isSelected("gdx-box2d")) "      implementation \"io.github.berstanio:gdx-svmhelper-extension-box2d:\$graalHelperVersion\"\n" else "") +
-      (if (project.extensions.isSelected("gdx-bullet")) "      implementation \"io.github.berstanio:gdx-svmhelper-extension-bullet:\$graalHelperVersion\"\n" else "") +
-      (if (project.extensions.isSelected("gdx-controllers-lwjgl3")) "      implementation \"io.github.berstanio:gdx-svmhelper-extension-controllers-lwjgl3:\$graalHelperVersion\"\n" else "") +
-      (if (project.extensions.isSelected("gdx-freetype")) "      implementation \"io.github.berstanio:gdx-svmhelper-extension-freetype:\$graalHelperVersion\"\n" else "") +
-      """
+                (if (project.extensions.isSelected("gdx-box2d")) "      implementation \"io.github.berstanio:gdx-svmhelper-extension-box2d:\$graalHelperVersion\"\n" else "") +
+                (if (project.extensions.isSelected("gdx-bullet")) "      implementation \"io.github.berstanio:gdx-svmhelper-extension-bullet:\$graalHelperVersion\"\n" else "") +
+                (if (project.extensions.isSelected("gdx-controllers-lwjgl3")) "      implementation \"io.github.berstanio:gdx-svmhelper-extension-controllers-lwjgl3:\$graalHelperVersion\"\n" else "") +
+                (if (project.extensions.isSelected("gdx-freetype")) "      implementation \"io.github.berstanio:gdx-svmhelper-extension-freetype:\$graalHelperVersion\"\n" else "") +
+                """
     }
 }
 
@@ -206,8 +208,8 @@ jar {
   exclude('META-INF/INDEX.LIST', 'META-INF/*.SF', 'META-INF/*.DSA', 'META-INF/*.RSA')
   dependencies {
     exclude('META-INF/INDEX.LIST', 'META-INF/maven/**'""" +
-      (if (project.advanced.gdxVersion == "1.13.0") " 'windows/x86/**'" else "") +
-"""
+                (if (project.advanced.gdxVersion == "1.13.0") " 'windows/x86/**'" else "") +
+                """
 )
   }
 // setting the manifest makes the JAR runnable.

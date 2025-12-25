@@ -37,6 +37,8 @@ import com.ray3k.stripe.CollapsibleGroup.CollapseType;
 import com.ray3k.stripe.PopTable;
 import com.ray3k.stripe.ScaleContainer;
 
+import java.util.Collections;
+
 import gdx.liftoff.ui.UserData;
 
 /**
@@ -221,9 +223,7 @@ public class TemplatesDialog extends PopTable {
             if (!checkBox.isChecked()) return;
 
             UserData.template = templateName;
-            for (String requiredThirdPartyLib : requiredThirdPartyLibs) {
-                UserData.thirdPartyLibs.add(requiredThirdPartyLib);
-            }
+            Collections.addAll(UserData.thirdPartyLibs, requiredThirdPartyLibs);
         });
 
         Label label = new Label(description, skin, "description");
