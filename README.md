@@ -1,3 +1,7 @@
+**I managed to fully merge this project into my own fork of LibGDX, that's why this repo was archived.**
+
+**I'm going to delete this repo on 26th December 2030; or maybe even sooner.**
+
 [![Build status](https://github.com/libgdx/gdx-liftoff/workflows/build/badge.svg)](https://github.com/libgdx/gdx-liftoff/actions/workflows/build.yml)
 
 # 🚀 gdx-liftoff 🚀
